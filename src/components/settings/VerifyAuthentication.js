@@ -47,7 +47,7 @@ let createToken = async (
         }
       `,
       variables: {
-        tokenType: "CHANGE_EMAIL",
+        tokenType: props.tokenType,
         passwordCertificate,
         webAuthnCertificate,
       },
@@ -151,7 +151,6 @@ let verifyPassword = async (props, setPasswordError, password, setLoading) => {
     if (e.message === "GraphQL error: Wrong password") {
       setPasswordError("Wrong password")
     } else {
-      console.log(e, props)
       setPasswordError("Unexpected error")
     }
   } finally {

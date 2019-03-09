@@ -260,8 +260,7 @@ class GraphQLFetcher extends Component {
 
     this.props.userData.subscribeToMore({
       document: userUpdatedSubscription,
-      updateQuery: console.log
-    })
+  })
 
     const userDeletedSubscription = gql`
       subscription {

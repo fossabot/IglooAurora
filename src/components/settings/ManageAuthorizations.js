@@ -566,6 +566,7 @@ class AuthDialog extends React.Component {
           otherDialogOpen={this.state.authDialogOpen}
           client={this.props.client}
           user={this.props.user}
+          tokenType="MANAGE_PERMANENT_TOKENS"
         />
         <Dialog
           open={

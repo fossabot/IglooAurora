@@ -158,6 +158,7 @@ class ChangeMailDialog extends React.Component {
           otherDialogOpen={this.state.mailDialogOpen}
           client={this.props.client}
           user={this.props.user}
+          tokenType="CHANGE_EMAIL"
         />
         <Dialog
           open={this.state.mailDialogOpen}
