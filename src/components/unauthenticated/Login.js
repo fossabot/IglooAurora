@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import gql from "graphql-tag"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import Button from "@material-ui/core/Button"
@@ -423,34 +423,37 @@ class Login extends Component {
       payload.response.clientDataJSON = ab2str(res.response.clientDataJSON)
       payload.response.signature = ab2str(res.response.signature)
 
-      try{
-      const verifyWebAuthnMutation = await this.props.client.mutate({
-        mutation: gql`
-          mutation($jwtChallenge: String!, $challengeResponse: String!) {
-            verifyWebAuthn(
-              jwtChallenge: $jwtChallenge
-              challengeResponse: $challengeResponse
-            )
-          }
-        `,
-        variables: {
-          challengeResponse: JSON.stringify(payload),
-          jwtChallenge: jwtChallenge,
-        },
-      })
+      try {
+        const verifyWebAuthnMutation = await this.props.client.mutate({
+          mutation: gql`
+            mutation($jwtChallenge: String!, $challengeResponse: String!) {
+              verifyWebAuthn(
+                jwtChallenge: $jwtChallenge
+                challengeResponse: $challengeResponse
+              )
+            }
+          `,
+          variables: {
+            challengeResponse: JSON.stringify(payload),
+            jwtChallenge: jwtChallenge,
+          },
+        })
 
-      this.setState({
-        webAuthnCertificate: verifyWebAuthnMutation.data.verifyWebAuthn,
-      })
+        this.setState({
+          webAuthnCertificate: verifyWebAuthnMutation.data.verifyWebAuthn,
+        })
 
-      if (
-        !this.state.user.secondaryAuthenticationMethods[0] ||
-        this.state.showSecondFactor
-      ) {
-        this.signIn()
-      } else {
-        this.setState({ showSecondFactor: true, })
-      }}finally{ this.setState({showLoading: false })}
+        if (
+          !this.state.user.secondaryAuthenticationMethods[0] ||
+          this.state.showSecondFactor
+        ) {
+          this.signIn()
+        } else {
+          this.setState({ showSecondFactor: true })
+        }
+      } finally {
+        this.setState({ showLoading: false })
+      }
     }
 
     navigator.credentials
@@ -555,7 +558,9 @@ class Login extends Component {
                     }
               }
               onClick={() =>
-                this.setState(oldState => ({ counter: oldState.counter + 1 }))
+                this.setState(oldState => ({
+                  counter: oldState.counter + 1,
+                }))
               }
             />
           )}
@@ -946,7 +951,8 @@ class Login extends Component {
                       this.state.user.primaryAuthenticationMethods.includes(
                         "WEBAUTHN"
                       ) &&
-                      navigator.credentials  && window.location.host ==="aurora.igloo.ooo" && (
+                      navigator.credentials &&
+                      window.location.host === "aurora.igloo.ooo" && (
                         <IconButton
                           onClick={this.signInWebauthn}
                           disabled={
@@ -992,6 +998,14 @@ class Login extends Component {
                             }
                           />
                         </IconButton>
+                      )}
+                    {this.state.user &&
+                      !this.state.user.primaryAuthenticationMethods[0] && (
+                        <Fragment>
+                          <Typography style={this.props.mobile?{ marginBottom: "16px",color:"white" }:{ marginBottom: "16px",color:"black" }} variant="h6">
+                            Look for a log in email in your inbox
+                          </Typography>
+                        </Fragment>
                       )}
                   </div>
                   <div style={{ textAlign: "right" }}>
@@ -1144,27 +1158,30 @@ class Login extends Component {
                         </MuiThemeProvider>
                       )
 
-                    if (error) return <Typography
-                variant="h5"
-                style={
-                  typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                    ? {
-                      textAlign: "center",
-                      marginTop: "32px",
-                      marginBottom: "32px",
-                      color: "white",
-                    }
-                    : {
-                      textAlign: "center",
-                      marginTop: "32px",
-                      marginBottom: "32px",
-                    }
-                }
-          className="notSelectable defaultCursor"
-              >
-                Unexpected error
-          </Typography>
+                    if (error)
+                      return (
+                        <Typography
+                          variant="h5"
+                          style={
+                            typeof Storage !== "undefined" &&
+                            localStorage.getItem("nightMode") === "true"
+                              ? {
+                                  textAlign: "center",
+                                  marginTop: "32px",
+                                  marginBottom: "32px",
+                                  color: "white",
+                                }
+                              : {
+                                  textAlign: "center",
+                                  marginTop: "32px",
+                                  marginBottom: "32px",
+                                }
+                          }
+                          className="notSelectable defaultCursor"
+                        >
+                          Unexpected error
+                        </Typography>
+                      )
 
                     if (data) {
                       this.setState({ user: data.user })
@@ -1388,7 +1405,8 @@ class Login extends Component {
                             this.state.user.primaryAuthenticationMethods.includes(
                               "WEBAUTHN"
                             ) &&
-                            navigator.credentials && window.location.host ==="aurora.igloo.ooo" && (
+                            navigator.credentials &&
+                            window.location.host === "aurora.igloo.ooo" && (
                               <IconButton
                                 onClick={this.signInWebauthn}
                                 disabled={
@@ -1495,7 +1513,9 @@ class Login extends Component {
                                       ? {
                                           overrides: {
                                             MuiCircularProgress: {
-                                              colorPrimary: { color: "#fff" },
+                                              colorPrimary: {
+                                                color: "#fff",
+                                              },
                                             },
                                           },
                                         }
@@ -1695,7 +1715,9 @@ class Login extends Component {
                               this.props.password
                             ) {
                               this.verifyPassword()
-                              this.setState({ showSecondFactorLoading: true })
+                              this.setState({
+                                showSecondFactorLoading: true,
+                              })
                             }
                           }
                         }}
@@ -1776,7 +1798,10 @@ class Login extends Component {
                             <InputAdornment position="end">
                               <IconButton
                                 onClick={() =>
-                                  this.setState({ code: "", codeEmpty: true })
+                                  this.setState({
+                                    code: "",
+                                    codeEmpty: true,
+                                  })
                                 }
                                 tabIndex="-1"
                                 style={
@@ -1797,7 +1822,8 @@ class Login extends Component {
                     this.state.user.secondaryAuthenticationMethods.includes(
                       "WEBAUTHN"
                     ) &&
-                    navigator.credentials && window.location.host ==="aurora.igloo.ooo" && (
+                    navigator.credentials &&
+                    window.location.host === "aurora.igloo.ooo" && (
                       <IconButton
                         onClick={this.signInWebauthn}
                         disabled={
@@ -1935,7 +1961,9 @@ class Login extends Component {
                                   : {
                                       overrides: {
                                         MuiCircularProgress: {
-                                          colorPrimary: { color: "#0083ff" },
+                                          colorPrimary: {
+                                            color: "#0083ff",
+                                          },
                                         },
                                       },
                                     }

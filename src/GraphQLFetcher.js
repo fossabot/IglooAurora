@@ -240,6 +240,8 @@ class GraphQLFetcher extends Component {
           email
           pendingEnvironmentShareCount
           pendingOwnerChangeCount
+          primaryAuthenticationMethods
+          secondaryAuthenticationMethods
           settings {
             timeFormat
             dateFormat
@@ -258,6 +260,7 @@ class GraphQLFetcher extends Component {
 
     this.props.userData.subscribeToMore({
       document: userUpdatedSubscription,
+      updateQuery: console.log
     })
 
     const userDeletedSubscription = gql`

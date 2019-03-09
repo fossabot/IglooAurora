@@ -84,7 +84,7 @@ const allDialogsClosed = {
   serverOpen: false,
   verifyOpen: false,
   mailingOpen: false,
-  authenticationOpen: false
+  authenticationOpen: false,
 }
 
 class SettingsDialog extends React.Component {
@@ -1360,13 +1360,12 @@ class SettingsDialog extends React.Component {
           client={this.props.client}
           forceUpdate={() => this.props.forceUpdate()}
           logOut={this.props.logOut}
+          user={this.props.userData.user}
         />
         <ManageAuthorizations
-          open={
-            this.props.isOpen && this.state.authDialogOpen
-          }
-          close={()=>this.setState({authDialogOpen:false})}
-          userData={this.props.userData}
+          open={this.props.isOpen && this.state.authDialogOpen}
+          close={() => this.setState({ authDialogOpen: false })}
+          user={this.props.userData.user}
           client={this.props.client}
           logOut={this.props.logOut}
         />
@@ -1459,7 +1458,12 @@ class SettingsDialog extends React.Component {
           open={this.props.isOpen && this.state.mailingOpen}
           close={() => this.setState({ mailingOpen: false })}
         />
-        <AuthenticationOptions open={this.state.authenticationOpen} close={()=>this.setState({authenticationOpen:false})} client={this.props.client}  user={user}/>
+        <AuthenticationOptions
+          open={this.state.authenticationOpen}
+          close={() => this.setState({ authenticationOpen: false })}
+          client={this.props.client}
+          user={user}
+        />
       </React.Fragment>
     )
   }

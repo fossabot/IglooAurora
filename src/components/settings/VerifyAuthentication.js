@@ -149,15 +149,10 @@ let verifyPassword = async (props, setPasswordError, password, setLoading) => {
     createToken(props, passwordCertificate, "", setLoading)
   } catch (e) {
     if (e.message === "GraphQL error: Wrong password") {
-      this.props.changePasswordError("Wrong password")
-    } else if (
-      e.message ===
-      "GraphQL error: User doesn't exist. Use `signUp` to create one"
-    ) {
-      this.props.changeEmailError("This account doesn't exist")
-      this.props.changeSignupEmail(this.props.email)
+      setPasswordError("Wrong password")
     } else {
-      this.props.changeEmailError("Unexpected error")
+      console.log(e, props)
+      setPasswordError("Unexpected error")
     }
   } finally {
     setLoading(false)
