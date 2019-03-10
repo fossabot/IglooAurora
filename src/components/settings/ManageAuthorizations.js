@@ -164,7 +164,7 @@ class AuthDialog extends React.Component {
 
     this.client = new ApolloClient({
       // By default, this client will send queries to the
-      //  `/graphql` endpoint on the same host
+      //  `/graphql` endpoint on the same address
       link,
       cache: new InMemoryCache({ fragmentMatcher }),
     })
@@ -246,7 +246,7 @@ class AuthDialog extends React.Component {
 
     this.client = new ApolloClient({
       // By default, this client will send queries to the
-      //  `/graphql` endpoint on the same host
+      //  `/graphql` endpoint on the same address
       link,
       cache: new InMemoryCache({ fragmentMatcher }),
     })
@@ -311,7 +311,7 @@ class AuthDialog extends React.Component {
 
     this.client = new ApolloClient({
       // By default, this client will send queries to the
-      //  `/graphql` endpoint on the same host
+      //  `/graphql` endpoint on the same address
       link,
       cache: new InMemoryCache({ fragmentMatcher }),
     })

@@ -11,6 +11,7 @@ import iglooTitle from "./styles/assets/iglooTitle.svg"
 import Helmet from "react-helmet"
 import ChangeServer from "./components/settings/ChangeServer"
 import EmailVerification from "./EmailVerification"
+import { ApolloProvider } from "react-apollo"
 
 export default class UnAuthenticatedMain extends Component {
   state = {
@@ -39,7 +40,7 @@ export default class UnAuthenticatedMain extends Component {
 
     this.client = new ApolloClient({
       // By default, this client will send queries to the
-      //  `/graphql` endpoint on the same host
+      //  `/graphql` endpoint on the same address
       link,
       cache: new InMemoryCache(),
     })
@@ -122,7 +123,9 @@ export default class UnAuthenticatedMain extends Component {
                     setToken={token => this.setState({ token })}
                   />
                 ) : (
-                  <EmailVerification token={this.state.token} />
+                  <ApolloProvider client={this.client}>
+                    <EmailVerification token={this.state.token} />
+                  </ApolloProvider>
                 )}
               </div>
             </div>
@@ -207,8 +210,10 @@ export default class UnAuthenticatedMain extends Component {
               </Paper>
             </div>
           )
-        ) : (
-          <EmailVerification token={this.state.token} />
+          ) : (
+            <ApolloProvider client={this.client}>
+              <EmailVerification token={this.state.token} />
+            </ApolloProvider>
         )}
         <ChangeServer
           open={this.state.changeServerOpen}

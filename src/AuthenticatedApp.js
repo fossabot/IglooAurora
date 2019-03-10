@@ -36,13 +36,13 @@ class AuthenticatedApp extends Component {
 
     const httpLink = new HttpLink({
       uri:
-      typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
-        ? (localStorage.getItem("serverUnsecure") === "true"
-            ? "http://"
-            : "https://") +
-          localStorage.getItem("server") +
-          "/graphql"
-        : `https://bering.igloo.ooo/graphql`,
+        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          ? (localStorage.getItem("serverUnsecure") === "true"
+              ? "http://"
+              : "https://") +
+            localStorage.getItem("server") +
+            "/graphql"
+          : `https://bering.igloo.ooo/graphql`,
       headers: {
         Authorization: "Bearer " + bearer,
       },
@@ -64,7 +64,7 @@ class AuthenticatedApp extends Component {
 
     this.client = new ApolloClient({
       // By default, this client will send queries to the
-      //  `/graphql` endpoint on the same host
+      //  `/graphql` endpoint on the same address
       link,
       cache: new InMemoryCache({ fragmentMatcher }),
     })
@@ -93,13 +93,14 @@ class AuthenticatedApp extends Component {
 
       const httpLink = new HttpLink({
         uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
-          ? (localStorage.getItem("serverUnsecure") === "true"
-              ? "http://"
-              : "https://") +
-            localStorage.getItem("server") +
-            "/graphql"
-          : `https://bering.igloo.ooo/graphql`,
+          typeof Storage !== "undefined" &&
+          localStorage.getItem("server") !== ""
+            ? (localStorage.getItem("serverUnsecure") === "true"
+                ? "http://"
+                : "https://") +
+              localStorage.getItem("server") +
+              "/graphql"
+            : `https://bering.igloo.ooo/graphql`,
         headers: {
           Authorization: "Bearer " + bearer,
         },
@@ -121,7 +122,7 @@ class AuthenticatedApp extends Component {
 
       this.client = new ApolloClient({
         // By default, this client will send queries to the
-        //  `/graphql` endpoint on the same host
+        //  `/graphql` endpoint on the same address
         link,
         cache: new InMemoryCache({ fragmentMatcher }),
       })

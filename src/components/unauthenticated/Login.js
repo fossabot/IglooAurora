@@ -189,6 +189,7 @@ class Login extends Component {
                 name
                 primaryAuthenticationMethods
                 secondaryAuthenticationMethods
+                emailIsVerified
               }
             }
           `,
@@ -228,7 +229,12 @@ class Login extends Component {
           )
         }
 
-        this.setState({ redirectToPassword: true, user })
+        this.setState({ user })
+
+        if (!user.emailIsVerified && !user.primaryAuthenticationMethods[0]) {
+     this.setState({redirectToVerification: true,})   }else{
+          this.setState({redirectToPassword: true,})
+        }
       } catch (e) {
         if (e.message === "GraphQL error: User not found") {
           this.props.changeEmailError("This account doesn't exist")
@@ -512,9 +518,15 @@ class Login extends Component {
     }
 
     if (this.state.redirectToPassword) {
-      this.setState({ redirectToPassword: null })
+      this.setState({ redirectToPassword: false })
 
       return <Redirect to={"/login?user=" + this.state.user.id} />
+    }
+
+    if (this.state.redirectToVerification) {
+      this.setState({redirectToVerification:false})
+
+      return <Redirect push to={"/verify?user="+this.state.user.id} />
     }
 
     return (

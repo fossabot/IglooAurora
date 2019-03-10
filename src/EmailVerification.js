@@ -16,8 +16,11 @@ import { WebSocketLink } from "apollo-link-ws"
 import { split } from "apollo-link"
 import { getMainDefinition } from "apollo-utilities"
 import introspectionQueryResultData from "./fragmentTypes.json"
+import querystringify from "querystringify"
+import { graphql } from "react-apollo"
+import CenteredSpinner from "./components/CenteredSpinner"
 
-export default class PasswordVerification extends Component {
+class EmailVerification extends Component {
   state = { redirect: false, isMobile: false }
 
   resendEmail = async () => {
@@ -72,7 +75,7 @@ export default class PasswordVerification extends Component {
 
       this.client = new ApolloClient({
         // By default, this client will send queries to the
-        //  `/graphql` endpoint on the same host
+        //  `/graphql` endpoint on the same address
         link,
         cache: new InMemoryCache({ fragmentMatcher }),
       })
@@ -109,76 +112,167 @@ export default class PasswordVerification extends Component {
   }
 
   render() {
+    const { loading, user, error } = this.props.userData
+
     document.body.style.backgroundColor = "#0057cb"
 
-    if (!this.props.token) return <Redirect to="/" />
+    if (!querystringify.parse("?" + window.location.href.split("?")[1]).user)
+      return <Redirect to="/" />
 
-    return (
-      <div
-        style={{
-          position: "absolute",
-          margin: "auto",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          maxWidth: "332px",
-          maxHeight: "395px",
-          textAlign: "center",
-          padding: "0 32px",
-          backgroundColor: "#0057cb",
-        }}
-        className="notSelectable defaultCursor"
-      >
-        <img
-          src={logo}
-          alt="Igloo logo"
-          className="notSelectable nonDraggable"
-          draggable="false"
+    if (error)
+      return (
+        <div
           style={{
-            maxWidth: "192px",
-            marginBottom: "72px",
-            marginLeft: "auto",
-            marginRight: "auto",
+            position: "absolute",
+            margin: "auto",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            maxWidth: "332px",
+            maxHeight: "395px",
+            textAlign: "center",
+            padding: "0 32px",
+            backgroundColor: "#0057cb",
           }}
-        />
-        <Typography
-          variant={this.state.isMobile ? "h5" : "h4"}
-          style={{ color: "white", marginTop: "16px", marginBottom: "32px" }}
+          className="notSelectable defaultCursor"
         >
-          Look for a log in link in your inbox
-        </Typography>
-        <MuiThemeProvider
-          theme={createMuiTheme({
-            palette: {
-              primary: { main: "#fff" },
-            },
-          })}
+          <Typography
+            variant="h5"
+            className="notSelectable defaultCursor"
+            style={{
+              textAlign: "center",
+              marginTop: "32px",
+              marginBottom: "32px",
+              color: "white",
+            }}
+          >
+            Unexpected error
+          </Typography>
+        </div>
+      )
+
+    if (loading)
+      return (
+        <div
+          style={{
+            position: "absolute",
+            margin: "auto",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            maxWidth: "332px",
+            maxHeight: "395px",
+            textAlign: "center",
+            padding: "0 32px",
+            backgroundColor: "#0057cb",
+          }}
+          className="notSelectable defaultCursor"
         >
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ marginBottom: "8px" }}
-            fullWidth
-            onClick={this.resendEmail}
+          <MuiThemeProvider
+            theme={createMuiTheme({
+              overrides: {
+                MuiCircularProgress: {
+                  colorPrimary: { color: "#fff" },
+                },
+              },
+            })}
           >
-            Resend email
-          </Button>
-          <br />
-          <Button
-            color="primary"
-            component={Link}
-            to={
-              !JSON.parse(localStorage.getItem("accountList"))[0]
-                ? "/signup"
-                : "/signup?from=accounts"
-            }
-            fullWidth
+            <CenteredSpinner large style={{ paddingTop: "96px" }} />
+          </MuiThemeProvider>
+        </div>
+      )
+
+    if (user)
+      return (
+        <div
+          style={{
+            position: "absolute",
+            margin: "auto",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            maxWidth: "332px",
+            maxHeight: "395px",
+            textAlign: "center",
+            padding: "0 32px",
+            backgroundColor: "#0057cb",
+          }}
+          className="notSelectable defaultCursor"
+        >
+          <img
+            src={logo}
+            alt="Igloo logo"
+            className="notSelectable nonDraggable"
+            draggable="false"
+            style={{
+              maxWidth: "192px",
+              marginBottom: "72px",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          />
+          <Typography
+            variant={this.state.isMobile ? "h5" : "h4"}
+            style={{ color: "white", marginTop: "16px", marginBottom: "32px" }}
           >
-            Go back
-          </Button>
-        </MuiThemeProvider>
-      </div>
-    )
+            Look for a log in link in your inbox
+          </Typography>
+          <MuiThemeProvider
+            theme={createMuiTheme({
+              palette: {
+                primary: { main: "#fff" },
+              },
+            })}
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ marginBottom: "8px" }}
+              fullWidth
+              onClick={this.resendEmail}
+            >
+              Resend email
+            </Button>
+            <br />
+            <Button
+              color="primary"
+              component={Link}
+              to={
+                !JSON.parse(localStorage.getItem("accountList"))[0]
+                  ? "/signup"
+                  : "/signup?from=accounts"
+              }
+              fullWidth
+            >
+              Go back
+            </Button>
+          </MuiThemeProvider>
+        </div>
+      )
   }
 }
+
+export default graphql(
+  gql`
+    query($id: ID!) {
+      user(id: $id) {
+        id
+        emailIsVerified
+        primaryAuthenticationMethods
+      }
+    }
+  `,
+  {
+    name: "userData",
+    options: {
+      variables: {
+        id:
+          querystringify.parse("?" + window.location.href.split("?")[1]) &&
+          querystringify.parse("?" + window.location.href.split("?")[1]).user,
+      },
+    },
+  }
+)(EmailVerification)
