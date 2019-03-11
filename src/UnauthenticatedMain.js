@@ -73,26 +73,28 @@ export default class UnAuthenticatedMain extends Component {
             >
               <div>
                 {this.props.isLogin ? (
-                  <Login
-                    mobile
-                    client={this.client}
-                    signIn={this.props.signIn}
-                    goToSignup={() => this.setState({ slideIndex: 0 })}
-                    password={this.props.password}
-                    changePassword={this.props.changePassword}
-                    passwordError={this.props.passwordError}
-                    changePasswordError={this.props.changePasswordError}
-                    email={this.props.email}
-                    changeEmail={this.props.changeEmail}
-                    emailError={this.props.emailError}
-                    changeEmailError={this.props.changeEmailError}
-                    changeSignupEmail={this.props.changeSignupEmail}
-                    openChangeServer={() =>
-                      this.setState({ changeServerOpen: true })
-                    }
-                    forceUpdate={() => this.props.forceUpdate()}
-                    changeBearer={this.props.changeBearer}
-                  />
+                  <ApolloProvider client={this.client}>
+                    <Login
+                      mobile
+                      client={this.client}
+                      signIn={this.props.signIn}
+                      goToSignup={() => this.setState({ slideIndex: 0 })}
+                      password={this.props.password}
+                      changePassword={this.props.changePassword}
+                      passwordError={this.props.passwordError}
+                      changePasswordError={this.props.changePasswordError}
+                      email={this.props.email}
+                      changeEmail={this.props.changeEmail}
+                      emailError={this.props.emailError}
+                      changeEmailError={this.props.changeEmailError}
+                      changeSignupEmail={this.props.changeSignupEmail}
+                      openChangeServer={() =>
+                        this.setState({ changeServerOpen: true })
+                      }
+                      forceUpdate={() => this.props.forceUpdate()}
+                      changeBearer={this.props.changeBearer}
+                    />
+                  </ApolloProvider>
                 ) : this.props.isAccountSwitcher ? (
                   <AccountSwitcher
                     mobile
@@ -179,21 +181,23 @@ export default class UnAuthenticatedMain extends Component {
                   </div>
                 </div>
                 {this.props.isLogin ? (
-                  <Login
-                    client={this.client}
-                    isDialog={false}
-                    signIn={this.props.signIn}
-                    password={this.props.password}
-                    changePassword={this.props.changePassword}
-                    passwordError={this.props.passwordError}
-                    changePasswordError={this.props.changePasswordError}
-                    email={this.props.email}
-                    changeEmail={this.props.changeEmail}
-                    emailError={this.props.emailError}
-                    changeEmailError={this.props.changeEmailError}
-                    changeSignupEmail={this.props.changeSignupEmail}
-                    changeBearer={this.props.changeBearer}
-                  />
+                  <ApolloProvider client={this.client}>
+                    <Login
+                      client={this.client}
+                      isDialog={false}
+                      signIn={this.props.signIn}
+                      password={this.props.password}
+                      changePassword={this.props.changePassword}
+                      passwordError={this.props.passwordError}
+                      changePasswordError={this.props.changePasswordError}
+                      email={this.props.email}
+                      changeEmail={this.props.changeEmail}
+                      emailError={this.props.emailError}
+                      changeEmailError={this.props.changeEmailError}
+                      changeSignupEmail={this.props.changeSignupEmail}
+                      changeBearer={this.props.changeBearer}
+                    />
+                  </ApolloProvider>
                 ) : this.props.isAccountSwitcher ? (
                   <AccountSwitcher
                     signIn={this.props.signIn}

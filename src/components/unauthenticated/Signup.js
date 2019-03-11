@@ -308,6 +308,7 @@ export default class Signup extends Component {
                 email
                 name
                 profileIconColor
+                emailIsVerified
               }
             }
           }
@@ -459,6 +460,7 @@ export default class Signup extends Component {
                 email
                 name
                 profileIconColor
+                emailIsVerified
               }
             }
           }

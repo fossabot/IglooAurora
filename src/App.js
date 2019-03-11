@@ -596,6 +596,7 @@ class App extends Component {
             (currentAccountList.filter(
               account => account.id === localStorage.getItem("userId")
             )[0].token = "")
+
         localStorage.setItem("accountList", JSON.stringify(currentAccountList))
 
         localStorage.setItem("userId", "")
@@ -750,7 +751,8 @@ class App extends Component {
             <Route
               path="/login"
               render={() =>
-                this.state.bearer ? (
+                this.state.bearer && !querystringify.parse("?" + window.location.href.split("?")[1])
+      .certificate ? (
                   <Redirect to="/" />
                 ) : (
                   <UnauthenticatedMain

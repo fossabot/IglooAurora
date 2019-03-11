@@ -28,10 +28,8 @@ export default class AccountSwitcher extends Component {
       tapCounter: 0,
     }
 
-    this.signIn = this.signIn.bind(this)
     this.recover = this.recover.bind(this)
 
-    this.signIn = this.signIn.bind(this)
     this.recover = this.recover.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
   }
@@ -47,53 +45,6 @@ export default class AccountSwitcher extends Component {
 
   updateWindowDimensions() {
     this.setState({ height: window.innerHeight })
-  }
-
-  async signIn() {
-    try {
-      this.props.changePasswordError("")
-      this.props.changeEmailError("")
-      const loginMutation = await this.props.client.mutate({
-        mutation: gql`
-          mutation($email: String!, $password: String!) {
-            logIn(email: $email, password: $password) {
-              token
-              user {
-                id
-                email
-                name
-                profileIconColor
-              }
-            }
-          }
-        `,
-        variables: {
-          email: this.props.email,
-          password: this.props.password,
-        },
-      })
-
-      this.props.signIn(
-        loginMutation.data.logIn.token,
-        loginMutation.data.logIn.user
-      )
-
-      this.props.changePassword("")
-    } catch (e) {
-      this.setState({ showLoading: false })
-
-      if (e.message === "GraphQL error: Wrong password") {
-        this.props.changePasswordError("Wrong password")
-      } else if (
-        e.message ===
-        "GraphQL error: User doesn't exist. Use `signUp` to create one"
-      ) {
-        this.props.changeEmailError("This account doesn't exist")
-        this.props.changeSignupEmail(this.props.email)
-      } else {
-        this.props.changeEmailError("Unexpected error")
-      }
-    }
   }
 
   async recover(recoveryEmail) {
@@ -216,7 +167,9 @@ export default class AccountSwitcher extends Component {
                     to={
                       account.token
                         ? "/?user=" + account.id
-                        : "/login?user=" + account.id
+                        : account.emailIsVerified
+                        ? "/login?user=" + account.id
+                        : "/verify?user=" + account.id
                     }
                   >
                     <Avatar

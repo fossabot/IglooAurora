@@ -198,7 +198,7 @@ class Login extends Component {
           },
         })
 
-        if (
+if (
           JSON.parse(localStorage.getItem("accountList")).find(
             account => account.id === user.id
           )
@@ -229,11 +229,25 @@ class Login extends Component {
           )
         }
 
+        if (!user.primaryAuthenticationMethods[0]) {
+          await this.props.client.mutate({
+            mutation: gql`
+              mutation SendLogInEmail($email: String!) {
+                sendLogInEmail(email: $email)
+              }
+            `,
+            variables: {
+              email: user.email,
+            },
+          })
+        }
+
         this.setState({ user })
 
         if (!user.emailIsVerified && !user.primaryAuthenticationMethods[0]) {
-     this.setState({redirectToVerification: true,})   }else{
-          this.setState({redirectToPassword: true,})
+          this.setState({ redirectToVerification: true })
+        } else {
+          this.setState({ redirectToPassword: true })
         }
       } catch (e) {
         if (e.message === "GraphQL error: User not found") {
@@ -326,7 +340,7 @@ class Login extends Component {
     }
   }
 
-  signIn = async () => {
+  signIn = async emailCertificate => {
     try {
       this.props.changePasswordError("")
       this.props.changeEmailError("")
@@ -336,11 +350,13 @@ class Login extends Component {
             $passwordCertificate: String
             $webAuthnCertificate: String
             $totpCertificate: String
+            $emailCertificate: String
           ) {
             logIn(
               passwordCertificate: $passwordCertificate
               webAuthnCertificate: $webAuthnCertificate
               totpCertificate: $totpCertificate
+              emailCertificate: $emailCertificate
             ) {
               token
               user {
@@ -348,6 +364,7 @@ class Login extends Component {
                 email
                 name
                 profileIconColor
+                emailIsVerified
               }
             }
           }
@@ -356,6 +373,7 @@ class Login extends Component {
           passwordCertificate: this.state.passwordCertificate,
           webAuthnCertificate: this.state.webAuthnCertificate,
           totpCertificate: this.state.totpCertificate,
+          emailCertificate,
         },
       })
 
@@ -374,6 +392,10 @@ class Login extends Component {
       }
     } catch (e) {
       this.setState({ showLoading: false })
+
+if (emailCertificate) {
+  this.setState({redirect:true})
+}
 
       if (e.message === "GraphQL error: Wrong password") {
         this.props.changePasswordError("Wrong password")
@@ -520,13 +542,57 @@ class Login extends Component {
     if (this.state.redirectToPassword) {
       this.setState({ redirectToPassword: false })
 
-      return <Redirect to={"/login?user=" + this.state.user.id} />
+      return <Redirect push to={"/login?user=" + this.state.user.id} />
     }
 
     if (this.state.redirectToVerification) {
-      this.setState({redirectToVerification:false})
+      this.setState({ redirectToVerification: false })
 
-      return <Redirect push to={"/verify?user="+this.state.user.id} />
+      return <Redirect push to={"/verify?user=" + this.state.user.id} />
+    }
+
+    if (
+      querystringify.parse("?" + window.location.href.split("?")[1]) &&
+      querystringify.parse("?" + window.location.href.split("?")[1]).certificate
+    ) {
+      if (!this.state.emailLogInRunning) {
+        this.setState({ emailLogInRunning: true })
+        this.signIn(
+          querystringify.parse("?" + window.location.href.split("?")[1])
+            .certificate
+        )
+      }
+
+      return (
+        <div
+          style={{
+            position: "absolute",
+            margin: "auto",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            maxWidth: "332px",
+            maxHeight: "395px",
+            textAlign: "center",
+            padding: "0 32px",
+            backgroundColor: "#0057cb",
+          }}
+          className="notSelectable defaultCursor"
+        >
+          <MuiThemeProvider
+            theme={createMuiTheme({
+              overrides: {
+                MuiCircularProgress: {
+                  colorPrimary: { color: "#fff" },
+                },
+              },
+            })}
+          >
+            <CenteredSpinner large style={{ paddingTop: "96px" }} />
+          </MuiThemeProvider>
+        </div>
+      )
     }
 
     return (
@@ -1014,7 +1080,14 @@ class Login extends Component {
                     {this.state.user &&
                       !this.state.user.primaryAuthenticationMethods[0] && (
                         <Fragment>
-                          <Typography style={this.props.mobile?{ marginBottom: "16px",color:"white" }:{ marginBottom: "16px",color:"black" }} variant="h6">
+                          <Typography
+                            style={
+                              this.props.mobile
+                                ? { marginBottom: "16px", color: "white" }
+                                : { marginBottom: "16px", color: "black" }
+                            }
+                            variant="h6"
+                          >
                             Look for a log in email in your inbox
                           </Typography>
                         </Fragment>
@@ -1196,6 +1269,9 @@ class Login extends Component {
                       )
 
                     if (data) {
+                      if (!data.user.emailIsVerified && !data.user.primaryAuthenticationMethods[0]) {
+                        this.setState({ redirectToVerification: true })}
+
                       this.setState({ user: data.user })
                     }
 
