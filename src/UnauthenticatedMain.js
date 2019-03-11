@@ -12,6 +12,7 @@ import Helmet from "react-helmet"
 import ChangeServer from "./components/settings/ChangeServer"
 import EmailVerification from "./EmailVerification"
 import { ApolloProvider } from "react-apollo"
+import querystringify from "querystringify"
 
 export default class UnAuthenticatedMain extends Component {
   state = {
@@ -124,7 +125,17 @@ export default class UnAuthenticatedMain extends Component {
                   />
                 ) : (
                   <ApolloProvider client={this.client}>
-                    <EmailVerification token={this.state.token} />
+                    <EmailVerification
+                      token={this.state.token}
+                      userId={
+                        querystringify.parse(
+                          "?" + window.location.href.split("?")[1]
+                        ) &&
+                        querystringify.parse(
+                          "?" + window.location.href.split("?")[1]
+                        ).user
+                      }
+                    />
                   </ApolloProvider>
                 )}
               </div>
@@ -210,10 +221,19 @@ export default class UnAuthenticatedMain extends Component {
               </Paper>
             </div>
           )
-          ) : (
-            <ApolloProvider client={this.client}>
-              <EmailVerification token={this.state.token} />
-            </ApolloProvider>
+        ) : (
+          <ApolloProvider client={this.client}>
+            <EmailVerification
+              token={this.state.token}
+              userId={
+                querystringify.parse(
+                  "?" + window.location.href.split("?")[1]
+                ) &&
+                querystringify.parse("?" + window.location.href.split("?")[1])
+                  .user
+              }
+            />
+          </ApolloProvider>
         )}
         <ChangeServer
           open={this.state.changeServerOpen}

@@ -216,7 +216,11 @@ class EmailVerification extends Component {
           />
           <Typography
             variant={this.state.isMobile ? "h5" : "h4"}
-            style={{ color: "white", marginTop: "16px", marginBottom: "32px" }}
+            style={{
+              color: "white",
+              marginTop: "16px",
+              marginBottom: "32px",
+            }}
           >
             Look for a log in link in your inbox
           </Typography>
@@ -232,21 +236,12 @@ class EmailVerification extends Component {
               color="primary"
               style={{ marginBottom: "8px" }}
               fullWidth
-              onClick={this.resendEmail}
+              onClick={this.props.ResendVerificationEmail}
             >
               Resend email
             </Button>
             <br />
-            <Button
-              color="primary"
-              component={Link}
-              to={
-                !JSON.parse(localStorage.getItem("accountList"))[0]
-                  ? "/signup"
-                  : "/signup?from=accounts"
-              }
-              fullWidth
-            >
+            <Button color="primary" component={Link} to="/accounts" fullWidth>
               Go back
             </Button>
           </MuiThemeProvider>
@@ -267,12 +262,17 @@ export default graphql(
   `,
   {
     name: "userData",
-    options: {
-      variables: {
-        id:
-          querystringify.parse("?" + window.location.href.split("?")[1]) &&
-          querystringify.parse("?" + window.location.href.split("?")[1]).user,
-      },
-    },
+    options: ({ userId }) => ({ variables: { id: userId } }),
   }
-)(EmailVerification)
+)(
+  graphql(
+    gql`
+      mutation ResendVerificationEmail {
+        resendVerificationEmail
+      }
+    `,
+    {
+      name: "ResendVerificationEmail",
+    }
+  )(EmailVerification)
+)
