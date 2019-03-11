@@ -167,9 +167,10 @@ export default class AccountSwitcher extends Component {
                     to={
                       account.token
                         ? "/?user=" + account.id
-                        : account.emailIsVerified
-                        ? "/login?user=" + account.id
-                        : "/verify?user=" + account.id
+                        : !account.emailIsVerified &&
+                          !account.primaryAuthenticationMethods[0]
+                        ? "/verify?user=" + account.id
+                        : "/login?user=" + account.id
                     }
                   >
                     <Avatar

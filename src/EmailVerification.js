@@ -111,6 +111,20 @@ class EmailVerification extends Component {
     window.removeEventListener("resize", this.updateDimensions.bind(this))
   }
 
+  resendVerificationEmailMutation = email => {
+    this.props.ResendVerificationEmail({
+      variables: {
+        email,
+      },
+      optimisticResponse: {
+        __typename: "Mutation",
+        resendVerificationEmail: {
+          email,
+        },
+      },
+    })
+  }
+
   render() {
     const { loading, user, error } = this.props.userData
 
@@ -236,7 +250,7 @@ class EmailVerification extends Component {
               color="primary"
               style={{ marginBottom: "8px" }}
               fullWidth
-              onClick={this.props.ResendVerificationEmail}
+              onClick={() => this.resendVerificationEmailMutation(user.email)}
             >
               Resend email
             </Button>
@@ -255,6 +269,7 @@ export default graphql(
     query($id: ID!) {
       user(id: $id) {
         id
+        email
         emailIsVerified
         primaryAuthenticationMethods
       }
@@ -267,8 +282,8 @@ export default graphql(
 )(
   graphql(
     gql`
-      mutation ResendVerificationEmail {
-        resendVerificationEmail
+      mutation ResendVerificationEmail($email: String!) {
+        resendVerificationEmail(email: $email)
       }
     `,
     {

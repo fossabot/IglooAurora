@@ -365,6 +365,7 @@ if (
                 name
                 profileIconColor
                 emailIsVerified
+                primaryAuthenticationMethods
               }
             }
           }
@@ -1104,7 +1105,18 @@ if (emailCertificate) {
                               color: "#0083ff",
                             }
                       }
-                      onClick={() => this.setState({ logInEmailOpen: true })}
+                      onClick={() => {this.setState({ logInEmailOpen: true })
+
+           this.props.client.mutate({
+            mutation: gql`
+              mutation SendLogInEmail($email: String!) {
+                sendLogInEmail(email: $email)
+              }
+            `,
+            variables: {
+              email: this.state.user.email,
+            },
+          })}}
                     >
                       Can't log in?
                     </MUILink>
@@ -2101,4 +2113,4 @@ if (emailCertificate) {
   }
 }
 
-export default Login
+export default (Login)

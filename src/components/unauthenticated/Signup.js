@@ -309,7 +309,7 @@ export default class Signup extends Component {
                 name
                 profileIconColor
                 emailIsVerified
-              }
+         primaryAuthenticationMethods     }
             }
           }
         `,
@@ -461,7 +461,7 @@ export default class Signup extends Component {
                 name
                 profileIconColor
                 emailIsVerified
-              }
+           primaryAuthenticationMethods   }
             }
           }
         `,
@@ -1059,7 +1059,7 @@ export default class Signup extends Component {
                       button
                       style={{ paddingLeft: "24px" }}
                       component={Link}
-                        to={this.state.user&& ("/verify?user" + this.state.user.id)}
+                        to={this.state.user? ("/verify?user" + this.state.user.id):""}
                     >
                       <ListItemIcon>
                         <MailOutline />
