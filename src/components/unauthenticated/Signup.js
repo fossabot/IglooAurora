@@ -208,6 +208,14 @@ export default class Signup extends Component {
           mutation($email: String!, $name: String!) {
             signUp(email: $email, name: $name) {
               changeAuthenticationToken
+              user {
+                id
+                email
+                name
+                profileIconColor
+                emailIsVerified
+                primaryAuthenticationMethods
+              }
             }
           }
         `,

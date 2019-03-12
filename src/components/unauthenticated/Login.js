@@ -1,4 +1,4 @@
-import React, { Component,  } from "react"
+import React, { Component } from "react"
 import gql from "graphql-tag"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import Button from "@material-ui/core/Button"
@@ -130,7 +130,6 @@ class Login extends Component {
       isMailEmpty: false,
       isPasswordEmpty: false,
       showLoading: false,
-      redirect: false,
       counter: 0,
       code: "",
     }
@@ -198,7 +197,7 @@ class Login extends Component {
           },
         })
 
-if (
+        if (
           JSON.parse(localStorage.getItem("accountList")).find(
             account => account.id === user.id
           )
@@ -242,7 +241,7 @@ if (
           })
         }
 
-        this.setState({ user,redirectToPassword: true  })
+        this.setState({ user, redirectToPassword: true })
       } catch (e) {
         if (e.message === "GraphQL error: User not found") {
           this.props.changeEmailError("This account doesn't exist")
@@ -498,8 +497,6 @@ if (
                 .user
           )[0].email
         )
-      } else {
-        this.setState({ redirect: true })
       }
     }
   }
@@ -520,11 +517,6 @@ if (
     if (this.props.mobile && this.state.counter === 7) {
       this.setState({ counter: 0 })
       this.props.openChangeServer()
-    }
-
-    if (this.state.redirect) {
-      this.setState({ redirect: false })
-      return <Redirect to="/login" />
     }
 
     if (this.state.redirectToPassword) {
@@ -1017,16 +1009,16 @@ if (
                       )}
                     {this.state.user &&
                       !this.state.user.primaryAuthenticationMethods[0] && (
-                          <Typography
-                            style={
-                              this.props.mobile
-                                ? { marginBottom: "16px", color: "white" }
-                                : { marginBottom: "16px", color: "black" }
-                            }
-                            variant="h6"
-                          >
-                            Look for a log in email in your inbox
-                          </Typography>
+                        <Typography
+                          style={
+                            this.props.mobile
+                              ? { marginBottom: "16px", color: "white" }
+                              : { marginBottom: "16px", color: "black" }
+                          }
+                          variant="h6"
+                        >
+                          Look for a log in email in your inbox
+                        </Typography>
                       )}
                   </div>
                   <div style={{ textAlign: "right" }}>
@@ -1040,18 +1032,20 @@ if (
                               color: "#0083ff",
                             }
                       }
-                      onClick={() => {this.setState({ logInEmailOpen: true })
+                      onClick={() => {
+                        this.setState({ logInEmailOpen: true })
 
-           this.props.client.mutate({
-            mutation: gql`
-              mutation SendLogInEmail($email: String!) {
-                sendLogInEmail(email: $email)
-              }
-            `,
-            variables: {
-              email: this.state.user.email,
-            },
-          })}}
+                        this.props.client.mutate({
+                          mutation: gql`
+                            mutation SendLogInEmail($email: String!) {
+                              sendLogInEmail(email: $email)
+                            }
+                          `,
+                          variables: {
+                            email: this.state.user.email,
+                          },
+                        })
+                      }}
                     >
                       Can't log in?
                     </MUILink>
@@ -1151,8 +1145,8 @@ if (
                 <Query
                   client={this.props.client}
                   query={gql`
-                    query($email: String) {
-                      user(email: $email) {
+                    query($email: String, $id: ID) {
+                      user(email: $email, id: $id) {
                         id
                         email
                         profileIconColor
@@ -1162,17 +1156,25 @@ if (
                       }
                     }
                   `}
-                  variables={{ email: this.props.email }}
-                      onCompleted={data => !data.user.primaryAuthenticationMethods[0] && this.props.client.mutate({
-                        mutation: gql`
-              mutation SendLogInEmail($email: String!) {
-                sendLogInEmail(email: $email)
-              }
-            `,
-                        variables: {
-                          email: data.user.email,
-                        },
-                      })}
+                  variables={{
+                    email: this.props.email,
+                    id: querystringify.parse(
+                      "?" + window.location.href.split("?")[1]
+                    ).user,
+                  }}
+                  onCompleted={data =>
+                    !data.user.primaryAuthenticationMethods[0] &&
+                    this.props.client.mutate({
+                      mutation: gql`
+                        mutation SendLogInEmail($email: String!) {
+                          sendLogInEmail(email: $email)
+                        }
+                      `,
+                      variables: {
+                        email: data.user.email,
+                      },
+                    })
+                  }
                 >
                   {({ loading, error, data }) => {
                     if (loading)
@@ -1232,7 +1234,10 @@ if (
                     return (
                       <div>
                         <ListItem
-                          style={{ padding: "0", marginBottom: "24px" }}
+                          style={{
+                            padding: "0",
+                            marginBottom: "24px",
+                          }}
                         >
                           <Avatar
                             style={{
@@ -1255,7 +1260,7 @@ if (
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).profileIconColor) ||
-                                this.state.user.profileIconColor,
+                                (this.state.user && this.state.user.profileIconColor),
                             }}
                           >
                             {this.getInitials(
@@ -1277,7 +1282,7 @@ if (
                                       "?" + window.location.href.split("?")[1]
                                     ).user
                                 ).name) ||
-                                this.state.user.name
+                               (this.state.user && this.state.user.name)
                             )}
                           </Avatar>
                           <ListItemText
@@ -1307,15 +1312,21 @@ if (
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).name) ||
-                                  this.state.user.name}
+                               (this.state.user && this.state.user.name)}
                               </font>
                             }
                             secondary={
                               <font
                                 style={
                                   this.props.mobile
-                                    ? { color: "white", opacity: 0.72 }
-                                    : { color: "black", opacity: 0.72 }
+                                    ? {
+                                        color: "white",
+                                        opacity: 0.72,
+                                      }
+                                    : {
+                                        color: "black",
+                                        opacity: 0.72,
+                                      }
                                 }
                               >
                                 {(JSON.parse(
@@ -1336,7 +1347,7 @@ if (
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).email) ||
-                                  this.state.user.email}
+                                 (this.state.user && this.state.user.email)}
                               </font>
                             }
                           />
@@ -1347,7 +1358,7 @@ if (
                               ? {}
                               : this.state.user &&
                                 JSON.stringify(
-                                  this.state.user.primaryAuthenticationMethods
+                                  this.state.user && this.state.user.primaryAuthenticationMethods
                                 ) !== '["WEBAUTHN"]'
                               ? { height: "237px" }
                               : { height: "289px" }
@@ -1392,7 +1403,9 @@ if (
                                       this.props.password
                                     ) {
                                       this.verifyPassword()
-                                      this.setState({ showLoading: true })
+                                      this.setState({
+                                        showLoading: true,
+                                      })
                                     }
                                   }
                                 }}
@@ -1402,7 +1415,9 @@ if (
                                     : this.props.passwordError) || " "
                                 }
                                 InputLabelProps={
-                                  this.state.name && { shrink: true }
+                                  this.state.name && {
+                                    shrink: true,
+                                  }
                                 }
                                 InputProps={{
                                   endAdornment: this.props.password ? (
@@ -1418,7 +1433,9 @@ if (
                                           this.handleMouseDownPassword
                                         }
                                         tabIndex="-1"
-                                        style={{ color: "black" }}
+                                        style={{
+                                          color: "black",
+                                        }}
                                       >
                                         {/* fix for ToggleIcon glitch on Edge */}
                                         {document.documentMode ||
@@ -1478,8 +1495,14 @@ if (
                                   style={
                                     this.props.email
                                       ? this.props.mobile
-                                        ? { height: "48px", width: "48px" }
-                                        : { height: "48px", width: "48px" }
+                                        ? {
+                                            height: "48px",
+                                            width: "48px",
+                                          }
+                                        : {
+                                            height: "48px",
+                                            width: "48px",
+                                          }
                                       : this.props.mobile
                                       ? {
                                           height: "48px",
@@ -1508,7 +1531,9 @@ if (
                                   }
                             }
                             onClick={() =>
-                              this.setState({ logInEmailOpen: true })
+                              this.setState({
+                                logInEmailOpen: true,
+                              })
                             }
                           >
                             Can't log in?
@@ -1518,7 +1543,9 @@ if (
                               this.props.mobile
                                 ? createMuiTheme({
                                     palette: {
-                                      primary: { main: "#fff" },
+                                      primary: {
+                                        main: "#fff",
+                                      },
                                     },
                                   })
                                 : ""
@@ -1531,7 +1558,9 @@ if (
                               primary={true}
                               fullWidth={true}
                               onClick={() => {
-                                this.setState({ showLoading: true })
+                                this.setState({
+                                  showLoading: true,
+                                })
                                 this.verifyPassword()
                               }}
                               style={{ margin: "8px 0" }}
@@ -1582,12 +1611,16 @@ if (
                               this.props.mobile
                                 ? {
                                     palette: {
-                                      primary: { main: "#fff" },
+                                      primary: {
+                                        main: "#fff",
+                                      },
                                     },
                                   }
                                 : {
                                     palette: {
-                                      primary: { main: "#0083ff" },
+                                      primary: {
+                                        main: "#0083ff",
+                                      },
                                     },
                                   }
                             )}
@@ -2055,4 +2088,4 @@ if (
   }
 }
 
-export default (Login)
+export default Login

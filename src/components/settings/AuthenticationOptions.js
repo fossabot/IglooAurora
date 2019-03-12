@@ -397,7 +397,7 @@ class AuthenticationOptions extends React.Component {
 
     try {
       this.setState({ showTotpLoading: true })
-      this.client.mutate({
+      await this.client.mutate({
         mutation: gql`
           mutation($code: String!, $secret: String!) {
             setTotp(code: $code, secret: $secret)
@@ -1097,6 +1097,7 @@ class AuthenticationOptions extends React.Component {
                     <TextField
                       id="totp-code"
                       label="Six-digit code"
+                      type="number"
                       value={this.state.code}
                       variant="outlined"
                       error={this.state.codeEmpty || this.state.codeError}

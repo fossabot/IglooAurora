@@ -202,7 +202,7 @@ export default function VerifyAuthentication(props) {
           }}
           onKeyPress={event => {
             if (event.key === "Enter" && password !== "")
-              createToken(props, password, setLoading, setPasswordError)
+         verifyPassword(props, setPasswordError, password, setLoading)
           }}
           style={{
             width: "100%",
