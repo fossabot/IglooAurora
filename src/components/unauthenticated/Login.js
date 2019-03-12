@@ -242,13 +242,7 @@ if (
           })
         }
 
-        this.setState({ user })
-
-        if (!user.emailIsVerified && !user.primaryAuthenticationMethods[0]) {
-          this.setState({ redirectToVerification: true })
-        } else {
-          this.setState({ redirectToPassword: true })
-        }
+        this.setState({ user,redirectToPassword: true  })
       } catch (e) {
         if (e.message === "GraphQL error: User not found") {
           this.props.changeEmailError("This account doesn't exist")
@@ -340,7 +334,7 @@ if (
     }
   }
 
-  signIn = async emailCertificate => {
+  signIn = async () => {
     try {
       this.props.changePasswordError("")
       this.props.changeEmailError("")
@@ -350,13 +344,11 @@ if (
             $passwordCertificate: String
             $webAuthnCertificate: String
             $totpCertificate: String
-            $emailCertificate: String
           ) {
             logIn(
               passwordCertificate: $passwordCertificate
               webAuthnCertificate: $webAuthnCertificate
               totpCertificate: $totpCertificate
-              emailCertificate: $emailCertificate
             ) {
               token
               user {
@@ -374,7 +366,6 @@ if (
           passwordCertificate: this.state.passwordCertificate,
           webAuthnCertificate: this.state.webAuthnCertificate,
           totpCertificate: this.state.totpCertificate,
-          emailCertificate,
         },
       })
 
@@ -393,10 +384,6 @@ if (
       }
     } catch (e) {
       this.setState({ showLoading: false })
-
-if (emailCertificate) {
-  this.setState({redirect:true})
-}
 
       if (e.message === "GraphQL error: Wrong password") {
         this.props.changePasswordError("Wrong password")
@@ -544,56 +531,6 @@ if (emailCertificate) {
       this.setState({ redirectToPassword: false })
 
       return <Redirect push to={"/login?user=" + this.state.user.id} />
-    }
-
-    if (this.state.redirectToVerification) {
-      this.setState({ redirectToVerification: false })
-
-      return <Redirect push to={"/verify?user=" + this.state.user.id} />
-    }
-
-    if (
-      querystringify.parse("?" + window.location.href.split("?")[1]) &&
-      querystringify.parse("?" + window.location.href.split("?")[1]).certificate
-    ) {
-      if (!this.state.emailLogInRunning) {
-        this.setState({ emailLogInRunning: true })
-        this.signIn(
-          querystringify.parse("?" + window.location.href.split("?")[1])
-            .certificate
-        )
-      }
-
-      return (
-        <div
-          style={{
-            position: "absolute",
-            margin: "auto",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            maxWidth: "332px",
-            maxHeight: "395px",
-            textAlign: "center",
-            padding: "0 32px",
-            backgroundColor: "#0057cb",
-          }}
-          className="notSelectable defaultCursor"
-        >
-          <MuiThemeProvider
-            theme={createMuiTheme({
-              overrides: {
-                MuiCircularProgress: {
-                  colorPrimary: { color: "#fff" },
-                },
-              },
-            })}
-          >
-            <CenteredSpinner large style={{ paddingTop: "96px" }} />
-          </MuiThemeProvider>
-        </div>
-      )
     }
 
     return (
@@ -1226,6 +1163,16 @@ if (emailCertificate) {
                     }
                   `}
                   variables={{ email: this.props.email }}
+                      onCompleted={data => !data.user.primaryAuthenticationMethods[0] && this.props.client.mutate({
+                        mutation: gql`
+              mutation SendLogInEmail($email: String!) {
+                sendLogInEmail(email: $email)
+              }
+            `,
+                        variables: {
+                          email: data.user.email,
+                        },
+                      })}
                 >
                   {({ loading, error, data }) => {
                     if (loading)
@@ -1279,9 +1226,6 @@ if (emailCertificate) {
                       )
 
                     if (data) {
-                      if (!data.user.emailIsVerified && !data.user.primaryAuthenticationMethods[0]) {
-                        this.setState({ redirectToVerification: true })}
-
                       this.setState({ user: data.user })
                     }
 

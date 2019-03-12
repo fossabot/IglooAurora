@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component,Fragment } from "react"
 import { ApolloClient } from "apollo-client"
 import { HttpLink } from "apollo-link-http"
 import { InMemoryCache } from "apollo-cache-inmemory"
@@ -11,6 +11,12 @@ import iglooTitle from "./styles/assets/iglooTitle.svg"
 import Helmet from "react-helmet"
 import ChangeServer from "./components/settings/ChangeServer"
 import { ApolloProvider } from "react-apollo"
+import querystringify from "querystringify"
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
+import CenteredSpinner from "./components/CenteredSpinner"
+import gql from "graphql-tag"
+import { Redirect } from "react-router-dom"
 
 export default class UnAuthenticatedMain extends Component {
   state = {
@@ -19,6 +25,49 @@ export default class UnAuthenticatedMain extends Component {
     changeServerOpen: false,
     showAccountSwitcher: true,
     token: "",
+  }
+
+  signIn = async emailCertificate => {
+    try {
+      this.props.changePasswordError("")
+      this.props.changeEmailError("")
+      const loginMutation = await this.client.mutate({
+        mutation: gql`
+          mutation($emailCertificate: String) {
+            logIn(emailCertificate: $emailCertificate) {
+              token
+              user {
+                id
+                email
+                name
+                profileIconColor
+                emailIsVerified
+                primaryAuthenticationMethods
+              }
+            }
+          }
+        `,
+        variables: {
+          emailCertificate,
+        },
+      })
+
+      if (querystringify.parse("?" + window.location.href.split("?")[1]).to) {
+        window.location.href =
+          querystringify.parse("?" + window.location.href.split("?")[1]).to +
+          "?token=" +
+          loginMutation.data.logIn.token
+      } else {
+        this.props.signIn(
+          loginMutation.data.logIn.token,
+          loginMutation.data.logIn.user
+        )
+
+        this.props.changePassword("")
+      }
+    } catch (e) {
+      this.setState({ redirect: true })
+    }
   }
 
   render() {
@@ -44,6 +93,49 @@ export default class UnAuthenticatedMain extends Component {
       cache: new InMemoryCache(),
     })
 
+    if (
+      window.location.pathname === "/login" &&
+      querystringify.parse("?" + window.location.href.split("?")[1]) &&
+      querystringify.parse("?" + window.location.href.split("?")[1]).certificate
+    ) {
+      if (!this.state.emailLogInRunning) {
+        this.setState({ emailLogInRunning: true })
+        this.signIn(
+          querystringify.parse("?" + window.location.href.split("?")[1])
+            .certificate
+        )
+      }
+
+      return (<Fragment>
+        <div
+          style={{
+            position: "absolute",
+            margin: "auto",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            textAlign: "center",
+            padding: "0 32px",
+            backgroundColor: "#0057cb",
+          }}
+          className="notSelectable defaultCursor"
+        >
+          <MuiThemeProvider
+            theme={createMuiTheme({
+              overrides: {
+                MuiCircularProgress: {
+                  colorPrimary: { color: "#fff" },
+                },
+              },
+            })}
+          >
+            <CenteredSpinner large style={{ paddingTop: "96px" }} />
+          </MuiThemeProvider>
+        </div>
+      {this.state.redirect && <Redirect push to="/login" />}</Fragment>)
+    }
+
     return (
       <React.Fragment>
         <Helmet>
@@ -52,9 +144,7 @@ export default class UnAuthenticatedMain extends Component {
               ? "Igloo Aurora - Log in"
               : this.props.isAccountSwitcher
               ? "Igloo Aurora - Accounts"
-              : this.props.isSignup
-              ? "Igloo Aurora - Sign up"
-              : "Igloo Aurora - Verify your email"}
+              : "Igloo Aurora - Sign up"}
           </title>
         </Helmet>
         {this.props.mobile ? (

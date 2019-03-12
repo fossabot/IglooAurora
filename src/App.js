@@ -817,40 +817,6 @@ class App extends Component {
                 )
               }
             />
-            <Route
-              path="/verify"
-              render={() =>
-                this.state.bearer ? (
-                  <Redirect to="/" />
-                ) : (
-                  <UnauthenticatedMain
-                    signIn={signIn}
-                    mobile={this.state.isMobile}
-                    name={this.state.name}
-                    changeName={name => this.setState({ name })}
-                    password={this.state.signupPassword}
-                    changePassword={signupPassword =>
-                      this.setState({ signupPassword })
-                    }
-                    passwordError={this.state.loginPasswordError}
-                    changePasswordError={loginPasswordError =>
-                      this.setState({ loginPasswordError })
-                    }
-                    email={this.state.signupEmail}
-                    changeEmail={signupEmail => this.setState({ signupEmail })}
-                    emailError={this.state.signupEmailError}
-                    changeEmailError={signupEmailError =>
-                      this.setState({ signupEmailError })
-                    }
-                    changeLoginEmail={loginEmail =>
-                      this.setState({ loginEmail })
-                    }
-                    forceUpdate={() => this.forceUpdate()}
-                    changeBearer={bearer => this.setState({ bearer })}
-                  />
-                )
-              }
-            />
             <Route render={() => <Error404 isMobile={this.state.isMobile} />} />
           </Switch>
         </Online>
