@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react"
+import React, { Component,  } from "react"
 import gql from "graphql-tag"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import Button from "@material-ui/core/Button"
@@ -1080,7 +1080,6 @@ if (emailCertificate) {
                       )}
                     {this.state.user &&
                       !this.state.user.primaryAuthenticationMethods[0] && (
-                        <Fragment>
                           <Typography
                             style={
                               this.props.mobile
@@ -1091,7 +1090,6 @@ if (emailCertificate) {
                           >
                             Look for a log in email in your inbox
                           </Typography>
-                        </Fragment>
                       )}
                   </div>
                   <div style={{ textAlign: "right" }}>

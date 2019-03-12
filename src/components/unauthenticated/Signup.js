@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
-import { Link } from "react-router-dom"
+import { Link,Redirect } from "react-router-dom"
 import ToggleIcon from "material-ui-toggle-icon"
 import CenteredSpinner from "../CenteredSpinner"
 import Clear from "@material-ui/icons/Clear"
@@ -309,7 +309,8 @@ export default class Signup extends Component {
                 name
                 profileIconColor
                 emailIsVerified
-         primaryAuthenticationMethods     }
+                primaryAuthenticationMethods
+              }
             }
           }
         `,
@@ -461,7 +462,8 @@ export default class Signup extends Component {
                 name
                 profileIconColor
                 emailIsVerified
-           primaryAuthenticationMethods   }
+                primaryAuthenticationMethods
+              }
             }
           }
         `,
@@ -501,6 +503,84 @@ export default class Signup extends Component {
       .then(sendResponse)
   }
 
+  enableMailAuthentication = () => {
+    const wsLink = new WebSocketLink({
+      uri:
+        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          ? (localStorage.getItem("serverUnsecure") === "true"
+            ? "ws://"
+            : "wss://") +
+          localStorage.getItem("server") +
+          "/subscriptions"
+          : `wss://bering.igloo.ooo/subscriptions`,
+      options: {
+        reconnect: true,
+        connectionParams: {
+          Authorization: "Bearer " + this.state.changeAuthenticationToken,
+        },
+      },
+    })
+
+    const httpLink = new HttpLink({
+      uri:
+        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          ? (localStorage.getItem("serverUnsecure") === "true"
+            ? "http://"
+            : "https://") +
+          localStorage.getItem("server") +
+          "/graphql"
+          : `https://bering.igloo.ooo/graphql`,
+      headers: {
+        Authorization: "Bearer " + this.state.changeAuthenticationToken,
+      },
+    })
+
+    const link = split(
+      // split based on operation type
+      ({ query }) => {
+        const { kind, operation } = getMainDefinition(query)
+        return kind === "OperationDefinition" && operation === "subscription"
+      },
+      wsLink,
+      httpLink
+    )
+
+    const fragmentMatcher = new IntrospectionFragmentMatcher({
+      introspectionQueryResultData,
+    })
+
+    this.client = new ApolloClient({
+      // By default, this client will send queries to the
+      //  `/graphql` endpoint on the same address
+      link,
+      cache: new InMemoryCache({ fragmentMatcher }),
+    })
+
+      this.client.mutate({
+        mutation: gql`
+          mutation changeAuthenticationSettings(
+            $primaryAuthenticationMethods: [PrimaryAuthenticationMethod!]!
+            $secondaryAuthenticationMethods: [SecondaryAuthenticationMethod!]!
+          ) {
+            changeAuthenticationSettings(
+              primaryAuthenticationMethods: $primaryAuthenticationMethods
+              secondaryAuthenticationMethods: $secondaryAuthenticationMethods
+            ) {
+              id
+              primaryAuthenticationMethods
+              secondaryAuthenticationMethods
+            }
+          }
+        `,
+        variables: {
+          primaryAuthenticationMethods: [],
+          secondaryAuthenticationMethods: [],
+        },
+      })
+
+      this.setState({redirectToLogin:true})
+  }
+
   handleClickCancelEmail = () => {
     this.props.changeEmail("")
     this.setState({ isMailEmpty: true })
@@ -533,6 +613,12 @@ export default class Signup extends Component {
     let scoreText = ""
     let passwordColor = ""
     let passwordTheme = this.props.mobile ? mobileTheme : desktopTheme
+
+if (this.state.redirectToLogin) {
+  this.setState({redirectToLogin:false})
+
+  return <Redirect push to={this.state.user?"/login?user="+ this.state.user.id:"/"}/>
+}
 
     if (this.props.mobile && this.state.counter === 7) {
       this.setState({ counter: 0 })
@@ -861,7 +947,8 @@ export default class Signup extends Component {
                         buttonStyle={{ backgroundColor: "#0083ff" }}
                         disabled={
                           this.state.showSignUpLoading ||
-                          !this.props.name || !this.state.isEmailValid ||
+                          !this.props.name ||
+                          !this.state.isEmailValid ||
                           this.state.showLoading ||
                           !this.state.coppaCheckbox
                         }
@@ -1058,8 +1145,7 @@ export default class Signup extends Component {
                     <ListItem
                       button
                       style={{ paddingLeft: "24px" }}
-                      component={Link}
-                        to={this.state.user? ("/verify?user" + this.state.user.id):""}
+                      onClick={this.enableMailAuthentication}
                     >
                       <ListItemIcon>
                         <MailOutline />
