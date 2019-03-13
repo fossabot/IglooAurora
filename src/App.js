@@ -640,26 +640,29 @@ class App extends Component {
     }
 
     if (
-      querystringify.parse("?" + window.location.href.split("?")[1]).user &&
+      querystringify.parse(window.location.search).user &&
       localStorage.getItem("accountList") &&
       JSON.parse(localStorage.getItem("accountList")).find(
         account =>
           account.id ===
-          querystringify.parse("?" + window.location.href.split("?")[1]).user
+          querystringify.parse(window.location.search).user
       ) &&
       window.location.pathname === "/"
     ) {
       localStorage.setItem(
         "userId",
-        querystringify.parse("?" + window.location.href.split("?")[1]).user
+        querystringify.parse(window.location.search).user
       )
+
       this.setState({
         bearer: JSON.parse(localStorage.getItem("accountList")).find(
           account =>
             account.id ===
-            querystringify.parse("?" + window.location.href.split("?")[1]).user
+            querystringify.parse(window.location.search).user
         ).token,
       })
+
+      return <Redirect to="/" />
     }
 
     return (
@@ -751,8 +754,11 @@ class App extends Component {
             <Route
               path="/login"
               render={() =>
-                this.state.bearer && !querystringify.parse("?" + window.location.href.split("?")[1])
-      .certificate ? (
+                this.state.bearer &&
+                !querystringify.parse(window.location.search)
+                  .certificate &&
+                !querystringify.parse(window.location.search)
+                  .user ? (
                   <Redirect to="/" />
                 ) : (
                   <UnauthenticatedMain
@@ -823,7 +829,9 @@ class App extends Component {
         <Offline>
           <OfflineScreen isMobile={this.state.isMobile} />
         </Offline>
-        {this.state.redirect && <Redirect push to={"/login?user="+this.state.userId} />}
+        {this.state.redirect && (
+          <Redirect push to={"/login?user=" + this.state.userId} />
+        )}
       </MuiThemeProvider>
     )
   }

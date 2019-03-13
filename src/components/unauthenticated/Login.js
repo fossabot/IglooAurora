@@ -368,9 +368,9 @@ class Login extends Component {
         },
       })
 
-      if (querystringify.parse("?" + window.location.href.split("?")[1]).to) {
+      if (querystringify.parse(window.location.search).to) {
         window.location.href =
-          querystringify.parse("?" + window.location.href.split("?")[1]).to +
+          querystringify.parse(window.location.search).to +
           "?token=" +
           loginMutation.data.logIn.token
       } else {
@@ -479,21 +479,21 @@ class Login extends Component {
   componentWillMount() {
     //gets the user field from the query parameters
     if (
-      querystringify.parse("?" + window.location.href.split("?")[1]).user &&
+      querystringify.parse(window.location.search).user &&
       localStorage.getItem("accountList")
     ) {
       if (
         JSON.parse(localStorage.getItem("accountList")).some(
           account =>
             account.id ===
-            querystringify.parse("?" + window.location.href.split("?")[1]).user
+            querystringify.parse(window.location.search).user
         )
       ) {
         this.props.changeEmail(
           JSON.parse(localStorage.getItem("accountList")).filter(
             account =>
               account.id ===
-              querystringify.parse("?" + window.location.href.split("?")[1])
+              querystringify.parse(window.location.search)
                 .user
           )[0].email
         )
@@ -593,7 +593,7 @@ class Login extends Component {
             >
               Log in
             </Typography>
-            {!querystringify.parse("?" + window.location.href.split("?")[1])
+            {!querystringify.parse(window.location.search)
               .user ? (
               <React.Fragment>
                 <TextField
@@ -768,7 +768,7 @@ class Login extends Component {
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ) &&
                             JSON.parse(
@@ -777,7 +777,7 @@ class Login extends Component {
                               user =>
                                 user.id ===
                                 querystringify.parse(
-                                  "?" + window.location.href.split("?")[1]
+                                  window.location.search
                                 ).user
                             ).profileIconColor) ||
                           this.state.user.profileIconColor,
@@ -788,14 +788,14 @@ class Login extends Component {
                           user =>
                             user.id ===
                             querystringify.parse(
-                              "?" + window.location.href.split("?")[1]
+                              window.location.search
                             ).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ).name) ||
                           this.state.user.name
@@ -816,7 +816,7 @@ class Login extends Component {
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ) &&
                             JSON.parse(
@@ -825,7 +825,7 @@ class Login extends Component {
                               user =>
                                 user.id ===
                                 querystringify.parse(
-                                  "?" + window.location.href.split("?")[1]
+                                  window.location.search
                                 ).user
                             ).name) ||
                             this.state.user.name}
@@ -845,7 +845,7 @@ class Login extends Component {
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ) &&
                             JSON.parse(
@@ -854,7 +854,7 @@ class Login extends Component {
                               user =>
                                 user.id ===
                                 querystringify.parse(
-                                  "?" + window.location.href.split("?")[1]
+                                  window.location.search
                                 ).user
                             ).email) ||
                             this.state.user.email}
@@ -863,17 +863,18 @@ class Login extends Component {
                     />
                   </ListItem>
                   <div
-                      style={
-                        this.props.mobile
-                          ? {}
-                          : this.state.user && (
+                    style={
+                      this.props.mobile
+                        ? {}
+                        : this.state.user &&
+                          (JSON.stringify(
+                            this.state.user.primaryAuthenticationMethods
+                          ) === '["WEBAUTHN"]' ||
                             JSON.stringify(
                               this.state.user.primaryAuthenticationMethods
-                            ) === '["WEBAUTHN"]' || JSON.stringify(
-                              this.state.user.primaryAuthenticationMethods
-                            ) === '[]')
-                            ? { height: "289px" }
-                            : { height: "237px" }
+                            ) === "[]")
+                        ? { height: "289px" }
+                        : { height: "237px" }
                     }
                   >
                     {this.state.user &&
@@ -1156,24 +1157,44 @@ class Login extends Component {
               ) : (
                 <Query
                   client={this.props.client}
-                  query={gql`
-                    query($email: String, $id: ID) {
-                      user(email: $email, id: $id) {
-                        id
-                        email
-                        profileIconColor
-                        name
-                        primaryAuthenticationMethods
-                        secondaryAuthenticationMethods
-                      }
-                    }
-                  `}
-                  variables={{
-                    email: this.props.email,
-                    id: querystringify.parse(
-                      "?" + window.location.href.split("?")[1]
-                    ).user,
-                  }}
+                  query={
+                    this.props.email
+                      ? gql`
+                          query($email: String) {
+                            user(email: $email) {
+                              id
+                              email
+                              profileIconColor
+                              name
+                              primaryAuthenticationMethods
+                              secondaryAuthenticationMethods
+                            }
+                          }
+                        `
+                      : gql`
+                          query($id: ID) {
+                            user(id: $id) {
+                              id
+                              email
+                              profileIconColor
+                              name
+                              primaryAuthenticationMethods
+                              secondaryAuthenticationMethods
+                            }
+                          }
+                        `
+                  }
+                  variables={
+                    this.props.email
+                      ? {
+                          email: this.props.email,
+                        }
+                      : {
+                          id: querystringify.parse(
+                            window.location.search
+                          ).user,
+                        }
+                  }
                   onCompleted={data =>
                     !data.user.primaryAuthenticationMethods[0] &&
                     this.props.client.mutate({
@@ -1260,7 +1281,7 @@ class Login extends Component {
                                   user =>
                                     user.id ===
                                     querystringify.parse(
-                                      "?" + window.location.href.split("?")[1]
+                                      window.location.search
                                     ).user
                                 ) &&
                                   JSON.parse(
@@ -1269,7 +1290,7 @@ class Login extends Component {
                                     user =>
                                       user.id ===
                                       querystringify.parse(
-                                        "?" + window.location.href.split("?")[1]
+                                        window.location.search
                                       ).user
                                   ).profileIconColor) ||
                                 (this.state.user &&
@@ -1283,7 +1304,7 @@ class Login extends Component {
                                 user =>
                                   user.id ===
                                   querystringify.parse(
-                                    "?" + window.location.href.split("?")[1]
+                                    window.location.search
                                   ).user
                               ) &&
                                 JSON.parse(
@@ -1292,7 +1313,7 @@ class Login extends Component {
                                   user =>
                                     user.id ===
                                     querystringify.parse(
-                                      "?" + window.location.href.split("?")[1]
+                                      window.location.search
                                     ).user
                                 ).name) ||
                                 (this.state.user && this.state.user.name)
@@ -1313,7 +1334,7 @@ class Login extends Component {
                                   user =>
                                     user.id ===
                                     querystringify.parse(
-                                      "?" + window.location.href.split("?")[1]
+                                      window.location.search
                                     ).user
                                 ) &&
                                   JSON.parse(
@@ -1322,7 +1343,7 @@ class Login extends Component {
                                     user =>
                                       user.id ===
                                       querystringify.parse(
-                                        "?" + window.location.href.split("?")[1]
+                                        window.location.search
                                       ).user
                                   ).name) ||
                                   (this.state.user && this.state.user.name)}
@@ -1348,7 +1369,7 @@ class Login extends Component {
                                   user =>
                                     user.id ===
                                     querystringify.parse(
-                                      "?" + window.location.href.split("?")[1]
+                                      window.location.search
                                     ).user
                                 ) &&
                                   JSON.parse(
@@ -1357,7 +1378,7 @@ class Login extends Component {
                                     user =>
                                       user.id ===
                                       querystringify.parse(
-                                        "?" + window.location.href.split("?")[1]
+                                        window.location.search
                                       ).user
                                   ).email) ||
                                   (this.state.user && this.state.user.email)}
@@ -1367,16 +1388,17 @@ class Login extends Component {
                         </ListItem>
                         <div
                           style={
-                    this.props.mobile
-                      ? {}
-                      : this.state.user && (
-                        JSON.stringify(
-                          this.state.user.primaryAuthenticationMethods
-                            ) === '["WEBAUTHN"]' || JSON.stringify(
-                              this.state.user.primaryAuthenticationMethods
-                            ) === '[]')
-                      ? { height: "289px" }
-                      : { height: "237px" }
+                            this.props.mobile
+                              ? {}
+                              : this.state.user &&
+                                (JSON.stringify(
+                                  this.state.user.primaryAuthenticationMethods
+                                ) === '["WEBAUTHN"]' ||
+                                  JSON.stringify(
+                                    this.state.user.primaryAuthenticationMethods
+                                  ) === "[]")
+                              ? { height: "289px" }
+                              : { height: "237px" }
                           }
                         >
                           {this.state.user &&
@@ -1682,14 +1704,14 @@ class Login extends Component {
                           user =>
                             user.id ===
                             querystringify.parse(
-                              "?" + window.location.href.split("?")[1]
+                              window.location.search
                             ).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ).profileIconColor) ||
                         this.state.user.profileIconColor,
@@ -1700,14 +1722,14 @@ class Login extends Component {
                         user =>
                           user.id ===
                           querystringify.parse(
-                            "?" + window.location.href.split("?")[1]
+                            window.location.search
                           ).user
                       ) &&
                         JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
                             querystringify.parse(
-                              "?" + window.location.href.split("?")[1]
+                              window.location.search
                             ).user
                         ).name) ||
                         this.state.user.name
@@ -1726,14 +1748,14 @@ class Login extends Component {
                           user =>
                             user.id ===
                             querystringify.parse(
-                              "?" + window.location.href.split("?")[1]
+                              window.location.search
                             ).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ).name) ||
                           this.state.user.name}
@@ -1751,14 +1773,14 @@ class Login extends Component {
                           user =>
                             user.id ===
                             querystringify.parse(
-                              "?" + window.location.href.split("?")[1]
+                              window.location.search
                             ).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
                               querystringify.parse(
-                                "?" + window.location.href.split("?")[1]
+                                window.location.search
                               ).user
                           ).email) ||
                           this.state.user.email}

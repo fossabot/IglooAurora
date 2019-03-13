@@ -10,6 +10,7 @@ import Divider from "@material-ui/core/Divider"
 import ExitToApp from "@material-ui/icons/ExitToApp"
 import Settings from "@material-ui/icons/Settings"
 import People from "@material-ui/icons/People"
+import { Link } from "react-router-dom"
 
 export default class AccountPopover extends React.Component {
   state = { popoverOpen: false }
@@ -74,22 +75,12 @@ export default class AccountPopover extends React.Component {
               JSON.parse(localStorage.getItem("accountList")).map(account => (
                 <ListItem
                   button
-                  selected={
-                    typeof Storage !== undefined &&
-                    localStorage.getItem("userId") === account.id
-                  }
-                  onClick={
-                    typeof Storage !== undefined &&
-                    localStorage.getItem("userId") !== account.id &&
-                    (account.token
-                      ? () => {
-                          localStorage.setItem("userId", account.id)
-                          this.props.changeBearer(account.token)
-                        }
-                      : () => {
-                          this.props.changeAccount(account.id, true)
-                          localStorage.setItem("userId", "")
-                        })
+                  selected={localStorage.getItem("userId") === account.id}
+                  component={Link}
+                  to={
+                    account.token
+                      ? "/?user=" + account.id
+                      : "/login?user=" + account.id
                   }
                 >
                   <Avatar style={{ backgroundColor: account.profileIconColor }}>

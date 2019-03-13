@@ -126,7 +126,7 @@ class Sidebar extends Component {
         error.message === "GraphQL error: The requested resource does not exist"
       ) {
         if (
-          querystringify.parse("?" + window.location.href.split("?")[1]).device
+          querystringify.parse(window.location.search).device
         ) {
           // if a device is selected the sidebar keeps loading, waiting for the device to redirect the user
           sidebarContent = (

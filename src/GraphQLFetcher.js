@@ -513,12 +513,12 @@ class GraphQLFetcher extends Component {
 
     const MainSelected = () => {
       if (
-        querystringify.parse("?" + window.location.href.split("?")[1])
+        querystringify.parse(window.location.search)
           .environment ||
-        querystringify.parse("?" + window.location.href.split("?")[1]).device
+        querystringify.parse(window.location.search).device
       ) {
         if (
-          querystringify.parse("?" + window.location.href.split("?")[1]).device
+          querystringify.parse(window.location.search).device
         ) {
           return (
             <React.Fragment>
@@ -529,7 +529,7 @@ class GraphQLFetcher extends Component {
                 userData={this.props.userData}
                 selectDevice={id => this.setState({ selectedDevice: id })}
                 selectedDevice={
-                  querystringify.parse("?" + window.location.href.split("?")[1])
+                  querystringify.parse(window.location.search)
                     .device
                 }
                 openSettings={() => this.setState({ areSettingsOpen: true })}
@@ -539,7 +539,7 @@ class GraphQLFetcher extends Component {
                   this.setState({ selectedEnvironment: id })
                 }
                 environmentId={
-                  querystringify.parse("?" + window.location.href.split("?")[1])
+                  querystringify.parse(window.location.search)
                     .environment
                 }
                 devMode={
@@ -582,7 +582,7 @@ class GraphQLFetcher extends Component {
                   this.setState({ selectedEnvironment: id })
                 }
                 environmentId={
-                  querystringify.parse("?" + window.location.href.split("?")[1])
+                  querystringify.parse(window.location.search)
                     .environment
                 }
                 devMode={

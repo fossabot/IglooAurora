@@ -224,7 +224,7 @@ class MainBody extends Component {
           <Redirect
             to={
               "/?environment=" +
-              querystringify.parse("?" + window.location.href.split("?")[1])
+              querystringify.parse(window.location.search)
                 .environment
             }
           />
@@ -323,7 +323,7 @@ class MainBody extends Component {
       //changes the environment id in the url so that it is the correct one for the device
       if (
         device.environment.id !==
-        querystringify.parse("?" + window.location.href.split("?")[1])
+        querystringify.parse(window.location.search)
           .environment
       ) {
         return (
@@ -377,7 +377,7 @@ class MainBody extends Component {
           <Redirect
             to={
               "/?environment=" +
-              querystringify.parse("?" + window.location.href.split("?")[1])
+              querystringify.parse(window.location.search)
                 .environment
             }
           />

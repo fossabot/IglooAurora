@@ -52,9 +52,9 @@ export default class UnAuthenticatedMain extends Component {
         },
       })
 
-      if (querystringify.parse("?" + window.location.href.split("?")[1]).to) {
+      if (querystringify.parse(window.location.search).to) {
         window.location.href =
-          querystringify.parse("?" + window.location.href.split("?")[1]).to +
+          querystringify.parse(window.location.search).to +
           "?token=" +
           loginMutation.data.logIn.token
       } else {
@@ -95,13 +95,13 @@ export default class UnAuthenticatedMain extends Component {
 
     if (
       window.location.pathname === "/login" &&
-      querystringify.parse("?" + window.location.href.split("?")[1]) &&
-      querystringify.parse("?" + window.location.href.split("?")[1]).certificate
+      querystringify.parse(window.location.search) &&
+      querystringify.parse(window.location.search).certificate
     ) {
       if (!this.state.emailLogInRunning) {
         this.setState({ emailLogInRunning: true })
         this.signIn(
-          querystringify.parse("?" + window.location.href.split("?")[1])
+          querystringify.parse(window.location.search)
             .certificate
         )
       }

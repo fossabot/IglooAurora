@@ -52,7 +52,7 @@ class Main extends Component {
           if (this.props.devicesSearchText === "") {
             if (
               this.props.environmentData.environment.devices[index].id ===
-              querystringify.parse("?" + window.location.href.split("?")[1])
+              querystringify.parse(window.location.search)
                 .device
             ) {
               this.setState({ deselectDevice: true })
@@ -421,17 +421,17 @@ class Main extends Component {
             environment.devices.filter(
               device =>
                 device.id ===
-                querystringify.parse("?" + window.location.href.split("?")[1])
+                querystringify.parse(window.location.search)
                   .device
             )[0]
-              ? querystringify.parse("?" + window.location.href.split("?")[1])
+              ? querystringify.parse(window.location.search)
                   .device
                 ? "Igloo Aurora - " +
                   environment.devices.filter(
                     device =>
                       device.id ===
                       querystringify.parse(
-                        "?" + window.location.href.split("?")[1]
+                        window.location.search
                       ).device
                   )[0].name
                 : "Igloo Aurora - " + environment.name
