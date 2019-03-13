@@ -863,15 +863,17 @@ class Login extends Component {
                     />
                   </ListItem>
                   <div
-                    style={
-                      this.props.mobile
-                        ? {}
-                        : this.state.user &&
-                          JSON.stringify(
-                            this.state.user.primaryAuthenticationMethods
-                          ) !== '["WEBAUTHN"]'
-                        ? { height: "237px" }
-                        : { height: "289px" }
+                      style={
+                        this.props.mobile
+                          ? {}
+                          : this.state.user && (
+                            JSON.stringify(
+                              this.state.user.primaryAuthenticationMethods
+                            ) === '["WEBAUTHN"]' || JSON.stringify(
+                              this.state.user.primaryAuthenticationMethods
+                            ) === '[]')
+                            ? { height: "289px" }
+                            : { height: "237px" }
                     }
                   >
                     {this.state.user &&
@@ -1049,64 +1051,74 @@ class Login extends Component {
                     >
                       Can't log in?
                     </MUILink>
-                    <MuiThemeProvider
-                      theme={
-                        this.props.mobile
-                          ? createMuiTheme({
-                              palette: {
-                                primary: { main: "#fff" },
-                              },
-                            })
-                          : ""
-                      }
-                    >
-                      <Button
-                        variant={this.props.mobile ? "outlined" : "contained"}
-                        primary={true}
-                        fullWidth={true}
-                        onClick={() => {
-                          this.setState({ showLoading: true })
-                          this.verifyPassword()
-                        }}
-                        style={{ margin: "8px 0" }}
-                        color="primary"
-                        disabled={
-                          !(
-                            isemail.validate(this.props.email, {
-                              errorLevel: true,
-                            }) === 0 && this.props.password
-                          ) || this.state.showLoading
-                        }
-                      >
-                        {this.state.user &&
-                        this.state.user.secondaryAuthenticationMethods[0]
-                          ? "Next"
-                          : "Log in"}
-                        {this.state.showLoading && (
-                          <MuiThemeProvider
-                            theme={createMuiTheme(
-                              this.props.mobile
-                                ? {
-                                    overrides: {
-                                      MuiCircularProgress: {
-                                        colorPrimary: { color: "#fff" },
-                                      },
-                                    },
-                                  }
-                                : {
-                                    overrides: {
-                                      MuiCircularProgress: {
-                                        colorPrimary: { color: "#0083ff" },
-                                      },
-                                    },
-                                  }
-                            )}
+                    {this.state.user &&
+                      (this.state.user.primaryAuthenticationMethods.includes(
+                        "PASSWORD"
+                      ) ||
+                        this.state.user.primaryAuthenticationMethods.includes(
+                          "TOTP"
+                        )) && (
+                        <MuiThemeProvider
+                          theme={
+                            this.props.mobile
+                              ? createMuiTheme({
+                                  palette: {
+                                    primary: { main: "#fff" },
+                                  },
+                                })
+                              : ""
+                          }
+                        >
+                          <Button
+                            variant={
+                              this.props.mobile ? "outlined" : "contained"
+                            }
+                            primary={true}
+                            fullWidth={true}
+                            onClick={() => {
+                              this.setState({ showLoading: true })
+                              this.verifyPassword()
+                            }}
+                            style={{ margin: "8px 0" }}
+                            color="primary"
+                            disabled={
+                              !(
+                                isemail.validate(this.props.email, {
+                                  errorLevel: true,
+                                }) === 0 && this.props.password
+                              ) || this.state.showLoading
+                            }
                           >
-                            <CenteredSpinner isInButton />
-                          </MuiThemeProvider>
-                        )}
-                      </Button>
-                    </MuiThemeProvider>
+                            {this.state.user &&
+                            this.state.user.secondaryAuthenticationMethods[0]
+                              ? "Next"
+                              : "Log in"}
+                            {this.state.showLoading && (
+                              <MuiThemeProvider
+                                theme={createMuiTheme(
+                                  this.props.mobile
+                                    ? {
+                                        overrides: {
+                                          MuiCircularProgress: {
+                                            colorPrimary: { color: "#fff" },
+                                          },
+                                        },
+                                      }
+                                    : {
+                                        overrides: {
+                                          MuiCircularProgress: {
+                                            colorPrimary: { color: "#0083ff" },
+                                          },
+                                        },
+                                      }
+                                )}
+                              >
+                                <CenteredSpinner isInButton />
+                              </MuiThemeProvider>
+                            )}
+                          </Button>
+                        </MuiThemeProvider>
+                      )}
                     <MuiThemeProvider
                       theme={createMuiTheme(
                         this.props.mobile
@@ -1260,7 +1272,8 @@ class Login extends Component {
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).profileIconColor) ||
-                                (this.state.user && this.state.user.profileIconColor),
+                                (this.state.user &&
+                                  this.state.user.profileIconColor),
                             }}
                           >
                             {this.getInitials(
@@ -1282,7 +1295,7 @@ class Login extends Component {
                                       "?" + window.location.href.split("?")[1]
                                     ).user
                                 ).name) ||
-                               (this.state.user && this.state.user.name)
+                                (this.state.user && this.state.user.name)
                             )}
                           </Avatar>
                           <ListItemText
@@ -1312,7 +1325,7 @@ class Login extends Component {
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).name) ||
-                               (this.state.user && this.state.user.name)}
+                                  (this.state.user && this.state.user.name)}
                               </font>
                             }
                             secondary={
@@ -1347,21 +1360,23 @@ class Login extends Component {
                                         "?" + window.location.href.split("?")[1]
                                       ).user
                                   ).email) ||
-                                 (this.state.user && this.state.user.email)}
+                                  (this.state.user && this.state.user.email)}
                               </font>
                             }
                           />
                         </ListItem>
                         <div
                           style={
-                            this.props.mobile
-                              ? {}
-                              : this.state.user &&
-                                JSON.stringify(
-                                  this.state.user && this.state.user.primaryAuthenticationMethods
-                                ) !== '["WEBAUTHN"]'
-                              ? { height: "237px" }
-                              : { height: "289px" }
+                    this.props.mobile
+                      ? {}
+                      : this.state.user && (
+                        JSON.stringify(
+                          this.state.user.primaryAuthenticationMethods
+                            ) === '["WEBAUTHN"]' || JSON.stringify(
+                              this.state.user.primaryAuthenticationMethods
+                            ) === '[]')
+                      ? { height: "289px" }
+                      : { height: "237px" }
                           }
                         >
                           {this.state.user &&
@@ -1538,74 +1553,83 @@ class Login extends Component {
                           >
                             Can't log in?
                           </MUILink>
-                          <MuiThemeProvider
-                            theme={
-                              this.props.mobile
-                                ? createMuiTheme({
-                                    palette: {
-                                      primary: {
-                                        main: "#fff",
-                                      },
-                                    },
-                                  })
-                                : ""
-                            }
-                          >
-                            <Button
-                              variant={
-                                this.props.mobile ? "outlined" : "contained"
-                              }
-                              primary={true}
-                              fullWidth={true}
-                              onClick={() => {
-                                this.setState({
-                                  showLoading: true,
-                                })
-                                this.verifyPassword()
-                              }}
-                              style={{ margin: "8px 0" }}
-                              color="primary"
-                              disabled={
-                                !(
-                                  isemail.validate(this.props.email, {
-                                    errorLevel: true,
-                                  }) === 0 && this.props.password
-                                ) || this.state.showLoading
-                              }
-                            >
-                              {this.state.user &&
-                              this.state.user.secondaryAuthenticationMethods[0]
-                                ? "Next"
-                                : "Log in"}
-                              {this.state.showLoading && (
-                                <MuiThemeProvider
-                                  theme={createMuiTheme(
-                                    this.props.mobile
-                                      ? {
-                                          overrides: {
-                                            MuiCircularProgress: {
-                                              colorPrimary: {
-                                                color: "#fff",
-                                              },
-                                            },
+                          {this.state.user &&
+                            (this.state.user.primaryAuthenticationMethods.includes(
+                              "PASSWORD"
+                            ) ||
+                              this.state.user.primaryAuthenticationMethods.includes(
+                                "TOTP"
+                              )) && (
+                              <MuiThemeProvider
+                                theme={
+                                  this.props.mobile
+                                    ? createMuiTheme({
+                                        palette: {
+                                          primary: {
+                                            main: "#fff",
                                           },
-                                        }
-                                      : {
-                                          overrides: {
-                                            MuiCircularProgress: {
-                                              colorPrimary: {
-                                                color: "#0083ff",
-                                              },
-                                            },
-                                          },
-                                        }
-                                  )}
+                                        },
+                                      })
+                                    : ""
+                                }
+                              >
+                                <Button
+                                  variant={
+                                    this.props.mobile ? "outlined" : "contained"
+                                  }
+                                  primary={true}
+                                  fullWidth={true}
+                                  onClick={() => {
+                                    this.setState({
+                                      showLoading: true,
+                                    })
+                                    this.verifyPassword()
+                                  }}
+                                  style={{ margin: "8px 0" }}
+                                  color="primary"
+                                  disabled={
+                                    !(
+                                      isemail.validate(this.props.email, {
+                                        errorLevel: true,
+                                      }) === 0 && this.props.password
+                                    ) || this.state.showLoading
+                                  }
                                 >
-                                  <CenteredSpinner isInButton />
-                                </MuiThemeProvider>
-                              )}
-                            </Button>
-                          </MuiThemeProvider>
+                                  {this.state.user &&
+                                  this.state.user
+                                    .secondaryAuthenticationMethods[0]
+                                    ? "Next"
+                                    : "Log in"}
+                                  {this.state.showLoading && (
+                                    <MuiThemeProvider
+                                      theme={createMuiTheme(
+                                        this.props.mobile
+                                          ? {
+                                              overrides: {
+                                                MuiCircularProgress: {
+                                                  colorPrimary: {
+                                                    color: "#fff",
+                                                  },
+                                                },
+                                              },
+                                            }
+                                          : {
+                                              overrides: {
+                                                MuiCircularProgress: {
+                                                  colorPrimary: {
+                                                    color: "#0083ff",
+                                                  },
+                                                },
+                                              },
+                                            }
+                                      )}
+                                    >
+                                      <CenteredSpinner isInButton />
+                                    </MuiThemeProvider>
+                                  )}
+                                </Button>
+                              </MuiThemeProvider>
+                            )}
                           <MuiThemeProvider
                             theme={createMuiTheme(
                               this.props.mobile
