@@ -33,17 +33,17 @@ function SlideTransition(props) {
 class AddDevice extends Component {
   state = { authDialogOpen: false, camera: "environment" }
 
-  claimDevice(unclaimedDeviceId, name, environmentId) {
+  claimDevice(deviceId, name, environmentId) {
     this.props.ClaimDevice({
       variables: {
-        unclaimedDeviceId,
+        deviceId,
         name,
         environmentId,
       },
       optimisticResponse: {
         __typename: "Mutation",
         claimDevice: {
-          unclaimedDeviceId,
+          deviceId,
           name,
           environmentId,
         },
@@ -223,12 +223,12 @@ class AddDevice extends Component {
               showViewFinder={false}
               facingMode={this.state.camera}
               onError={() => this.setState({ qrError: true })}
-              onScan={unclaimedDeviceId => {
-                isUUID.v4(unclaimedDeviceId) &&
+              onScan={deviceId => {
+                isUUID.v4(deviceId) &&
                   this.setState({
                     qrOpen: false,
                     authDialogOpen: true,
-                    unclaimedDeviceId,
+                    deviceId,
                   })
                 this.props.close()
               }}
@@ -320,7 +320,7 @@ class AddDevice extends Component {
                       this.setState({
                         manualCodeOpen: false,
                         authDialogOpen: true,
-                        unclaimedDeviceId: this.state.code,
+                        deviceId: this.state.code,
                       })
                       this.props.close()
                     }
@@ -427,7 +427,7 @@ class AddDevice extends Component {
               onKeyPress={event => {
                 if (event.key === "Enter" && !this.state.nameEmpty) {
                   this.claimDevice(
-                    this.state.unclaimedDeviceId,
+                    this.state.deviceId,
                     this.state.name,
                     this.props.environment
                   )
@@ -469,7 +469,7 @@ class AddDevice extends Component {
               variant="contained"
               onClick={() => {
                 this.claimDevice(
-                  this.state.unclaimedDeviceId,
+                  this.state.deviceId,
                   this.state.name,
                   this.props.environment
                 )
@@ -478,7 +478,7 @@ class AddDevice extends Component {
               color="primary"
               disabled={!this.state.name}
             >
-              Next
+              Add
             </Button>
           </DialogActions>
         </Dialog>
@@ -490,12 +490,12 @@ class AddDevice extends Component {
 export default graphql(
   gql`
     mutation ClaimDevice(
-      $unclaimedDeviceId: ID!
+      $deviceId: ID!
       $name: String!
       $environmentId: ID!
     ) {
       claimDevice(
-        unclaimedDeviceId: $unclaimedDeviceId
+        deviceId: $deviceId
         name: $name
         environmentId: $environmentId
       ) {

@@ -234,6 +234,7 @@ class GraphQLFetcher extends Component {
         userUpdated {
           id
           quietMode
+          devMode
           emailIsVerified
           name
           profileIconColor
@@ -260,7 +261,7 @@ class GraphQLFetcher extends Component {
 
     this.props.userData.subscribeToMore({
       document: userUpdatedSubscription,
-  })
+    })
 
     const userDeletedSubscription = gql`
       subscription {
@@ -513,13 +514,10 @@ class GraphQLFetcher extends Component {
 
     const MainSelected = () => {
       if (
-        querystringify.parse(window.location.search)
-          .environment ||
+        querystringify.parse(window.location.search).environment ||
         querystringify.parse(window.location.search).device
       ) {
-        if (
-          querystringify.parse(window.location.search).device
-        ) {
+        if (querystringify.parse(window.location.search).device) {
           return (
             <React.Fragment>
               <Main
@@ -529,8 +527,7 @@ class GraphQLFetcher extends Component {
                 userData={this.props.userData}
                 selectDevice={id => this.setState({ selectedDevice: id })}
                 selectedDevice={
-                  querystringify.parse(window.location.search)
-                    .device
+                  querystringify.parse(window.location.search).device
                 }
                 openSettings={() => this.setState({ areSettingsOpen: true })}
                 closeSettings={() => this.setState({ areSettingsOpen: false })}
@@ -539,13 +536,9 @@ class GraphQLFetcher extends Component {
                   this.setState({ selectedEnvironment: id })
                 }
                 environmentId={
-                  querystringify.parse(window.location.search)
-                    .environment
+                  querystringify.parse(window.location.search).environment
                 }
-                devMode={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("devMode") === "true"
-                }
+                devMode={user&&user.devMode}
                 environments={
                   this.props.userData.user &&
                   this.props.userData.user.environments
@@ -582,13 +575,9 @@ class GraphQLFetcher extends Component {
                   this.setState({ selectedEnvironment: id })
                 }
                 environmentId={
-                  querystringify.parse(window.location.search)
-                    .environment
+                  querystringify.parse(window.location.search).environment
                 }
-                devMode={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("devMode") === "true"
-                }
+                devMode={user&&user.devMode}
                 environments={
                   this.props.userData.user &&
                   this.props.userData.user.environments
@@ -632,6 +621,7 @@ class GraphQLFetcher extends Component {
               client={this.props.client}
               mobile={this.props.isMobile}
               changeEmail={this.props.changeEmail}
+              devMode={user && user.devMode}
             />
             <EmailNotVerified
               mobile={this.props.isMobile}
@@ -659,6 +649,7 @@ export default graphql(
       user {
         id
         quietMode
+        devMode
         emailIsVerified
         name
         profileIconColor

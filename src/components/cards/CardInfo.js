@@ -34,7 +34,11 @@ class CardInfo extends React.Component {
       >
         <DialogTitle disableTypography>Card information</DialogTitle>
         <div
-          style={{ paddingRight: "24px", marginLeft: "24px", height: "100%" }}
+          style={{
+            paddingRight: "24px",
+            marginLeft: "24px",
+            height: "100%",
+          }}
         >
           <b>Created: </b>
           <Moment fromNow>
@@ -52,8 +56,7 @@ class CardInfo extends React.Component {
               "YYYY-MM-DDTh:mm:ss"
             )}
           </Moment>
-          {typeof Storage !== "undefined" &&
-          localStorage.getItem("devMode") === "true" ? (
+          {this.props.devMode ? (
             <React.Fragment>
               <br />
               <br className="notSelectable" />

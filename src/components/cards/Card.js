@@ -412,7 +412,7 @@ class Card extends Component {
                 )}
                 {(value.myRole === "OWNER" || value.myRole === "ADMIN") &&
                   typeof Storage !== "undefined" &&
-                  localStorage.getItem("devMode") === "true" && (
+                  this.props.devMode && (
                     <MenuItem
                       onClick={() => {
                         this.setState({ deleteOpen: true })

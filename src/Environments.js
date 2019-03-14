@@ -27,11 +27,7 @@ class Environments extends Component {
       priority: 1,
       handler: event => {
         //prevents the user from reaching the development tab with the shortcut if dev mode is off
-        if (
-          this.props.settingsOpen &&
-          typeof Storage !== "undefined" &&
-          localStorage.getItem("devMode") === "true"
-        )
+        if (this.props.settingsOpen && this.props.devMode)
           this.setState({ slideIndex: 2 })
       },
     },
@@ -50,6 +46,7 @@ class Environments extends Component {
           user={this.props.userData}
         />
         <EnvironmentsBody
+        devMode={this.props.devMode}
           userData={this.props.userData}
           selectEnvironment={this.props.selectEnvironment}
           searchEnvironments={this.props.searchEnvironments}

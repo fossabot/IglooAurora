@@ -242,16 +242,6 @@ class SettingsDialog extends React.Component {
     }
 
     let toggleDevMode = () => {
-      if (typeof Storage !== "undefined") {
-        !localStorage.getItem("devMode") &&
-          localStorage.setItem("devMode", "false")
-
-        localStorage.setItem(
-          "devMode",
-          !(localStorage.getItem("devMode") === "true")
-        )
-        this.props.forceUpdate()
-      }
     }
 
     let toggleQuietMode = () => {}
@@ -271,6 +261,22 @@ class SettingsDialog extends React.Component {
             user: {
               id: user.id,
               quietMode,
+              __typename: "User",
+            },
+          },
+        })
+      }
+
+      toggleDevMode = devMode => {
+        this.props.ToggleDevMode({
+          variables: {
+            devMode,
+          },
+          optimisticResponse: {
+            __typename: "Mutation",
+            user: {
+              id: user.id,
+              devMode,
               __typename: "User",
             },
           },
@@ -590,15 +596,14 @@ class SettingsDialog extends React.Component {
                   />
                 </ListItem>
                 <ListItem
-                  disabled={typeof Storage === "undefined"}
+                  disabled={!user}
                   button
                   disableRipple
                   onClick={() => {
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("devMode") === "true"
-                      ? toggleDevMode(false)
-                      : toggleDevMode(true)
-                  }}
+                        user && user.devMode
+                          ? toggleDevMode(false)
+                          : toggleDevMode(true)
+                      }}
                 >
                   <ListItemText
                     primary={
@@ -616,13 +621,10 @@ class SettingsDialog extends React.Component {
                   />
                   <ListItemSecondaryAction>
                     <Switch
-                      checked={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("devMode") === "true"
+                      checked={user && user.devMode
                       }
                       onChange={() => {
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("devMode") === "true"
+                        user && user.devMode
                           ? toggleDevMode(false)
                           : toggleDevMode(true)
                       }}
@@ -868,9 +870,7 @@ class SettingsDialog extends React.Component {
       </div>
     )
 
-    let settingsContent =
-      typeof Storage !== "undefined" &&
-      localStorage.getItem("devMode") === "true" ? (
+    let settingsContent =user && user.devMode ? (
         <SwipeableViews
           index={this.props.slideIndex}
           onChangeIndex={this.props.handleSwipe}
@@ -983,14 +983,6 @@ class SettingsDialog extends React.Component {
                     Devices, values and notifications
                   </ListSubheader>
                   <ListItem
-                    disabled={
-                      !(
-                        user &&
-                        user.environments.filter(
-                          environment => environment.myRole !== "SPECTATOR"
-                        )[0]
-                      )
-                    }
                     button
                     onClick={() => this.setState({ createDeviceOpen: true })}
                   >
@@ -1198,9 +1190,7 @@ class SettingsDialog extends React.Component {
                       icon={<Language />}
                       label="General"
                       value={0}
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("devMode") === "true"
+                      style={user && user.devMode
                           ? { width: "33%" }
                           : { width: "50%" }
                       }
@@ -1209,15 +1199,12 @@ class SettingsDialog extends React.Component {
                       icon={<AccountBox />}
                       label="Account"
                       value={1}
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("devMode") === "true"
+                      style={user && user.devMode
                           ? { width: "33%" }
                           : { width: "50%" }
                       }
                     />
-                    {typeof Storage !== "undefined" &&
-                      localStorage.getItem("devMode") === "true" && (
+                    {user && user.devMode && (
                         <Tab
                           icon={<Code />}
                           label="Development"
@@ -1332,8 +1319,7 @@ class SettingsDialog extends React.Component {
                         : { color: "#757575" }
                     }
                   />
-                  {typeof Storage !== "undefined" &&
-                    localStorage.getItem("devMode") === "true" && (
+                  {user && user.devMode && (
                       <BottomNavigationAction
                         icon={<Code />}
                         label="Development"
@@ -1419,7 +1405,6 @@ class SettingsDialog extends React.Component {
         <CreateDevice
           open={this.props.isOpen && this.state.createDeviceOpen}
           close={() => this.setState({ createDeviceOpen: false })}
-          userData={this.props.userData}
         />
         <CreateNotification
           open={this.props.isOpen && this.state.createNotificationOpen}
@@ -1481,4 +1466,17 @@ export default graphql(
   {
     name: "ToggleQuietMode",
   }
+)(graphql(
+  gql`
+    mutation ToggleDevMode($devMode: Boolean!) {
+      user(devMode: $devMode) {
+        id
+        devMode
+      }
+    }
+  `,
+  {
+    name: "ToggleDevMode",
+  }
 )(withMobileDialog({ breakpoint: "xs" })(SettingsDialog))
+)

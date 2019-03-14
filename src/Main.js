@@ -37,13 +37,7 @@ class Main extends Component {
     } = this.props
 
     if (this.props.areSettingsOpen) {
-      if (
-        index < 2 ||
-        (typeof Storage !== "undefined" &&
-          (localStorage.getItem("devMode") === "true"
-            ? index === 2
-            : index !== 2))
-      ) {
+      if (index < 2 || (this.props.devMode ? index === 2 : index !== 2)) {
         this.setState({ slideIndex: index })
       }
     } else {
@@ -52,8 +46,7 @@ class Main extends Component {
           if (this.props.devicesSearchText === "") {
             if (
               this.props.environmentData.environment.devices[index].id ===
-              querystringify.parse(window.location.search)
-                .device
+              querystringify.parse(window.location.search).device
             ) {
               this.setState({ deselectDevice: true })
             } else {
@@ -217,9 +210,9 @@ class Main extends Component {
       },
     })
 
-    const deviceCreatedSubscription = gql`
+    const deviceClaimedSubscription = gql`
       subscription {
-        deviceCreated {
+        deviceClaimed {
           id
           index
           name
@@ -246,20 +239,20 @@ class Main extends Component {
     `
 
     this.props.environmentData.subscribeToMore({
-      document: deviceCreatedSubscription,
+      document: deviceClaimedSubscription,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
           return prev
         }
 
-        const newDevices = subscriptionData.data.deviceCreated.starred
+        const newDevices = subscriptionData.data.deviceClaimed.starred
           ? [
               ...prev.environment.starredDevices,
-              subscriptionData.data.deviceCreated,
+              subscriptionData.data.deviceClaimed,
             ]
-          : [...prev.environment.devices, subscriptionData.data.deviceCreated]
+          : [...prev.environment.devices, subscriptionData.data.deviceClaimed]
 
-        return subscriptionData.data.deviceCreated.starred
+        return subscriptionData.data.deviceClaimed.starred
           ? {
               environment: {
                 ...prev.environment,
@@ -421,18 +414,14 @@ class Main extends Component {
             environment.devices.filter(
               device =>
                 device.id ===
-                querystringify.parse(window.location.search)
-                  .device
+                querystringify.parse(window.location.search).device
             )[0]
-              ? querystringify.parse(window.location.search)
-                  .device
+              ? querystringify.parse(window.location.search).device
                 ? "Igloo Aurora - " +
                   environment.devices.filter(
                     device =>
                       device.id ===
-                      querystringify.parse(
-                        window.location.search
-                      ).device
+                      querystringify.parse(window.location.search).device
                   )[0].name
                 : "Igloo Aurora - " + environment.name
               : "Igloo Aurora"}

@@ -72,9 +72,7 @@ export default class EnvironmentsBody extends Component {
       typeof Storage !== "undefined" &&
       localStorage.getItem("nightMode") === "true"
 
-    let devMode =
-      typeof Storage !== "undefined" &&
-      localStorage.getItem("devMode") === "true"
+    let devMode =this.props.devMode
 
     if (user) {
       yourEnvironmentsList = (
