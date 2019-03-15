@@ -1199,7 +1199,12 @@ class AuthenticationOptions extends React.Component {
           >
             {navigator.credentials &&
               window.location.host === "aurora.igloo.ooo" && (
-                <ListItem button onClick={() => this.enableWebAuthn()}>
+              <ListItem button onClick={() => this.enableWebAuthn()}
+                disabled={
+                  user &&
+                  (user.primaryAuthenticationMethods.includes("WEBATUHN") ||
+                    user.secondaryAuthenticationMethods.includes("WEBATUHN"))
+                }>
                   <ListItemIcon>
                     <Fingerprint />
                   </ListItemIcon>

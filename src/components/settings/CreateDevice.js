@@ -1,5 +1,4 @@
 import React from "react"
-import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
@@ -12,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import withMobileDialog from "@material-ui/core/withMobileDialog"
 import Clear from "@material-ui/icons/Clear"
+import CenteredSpinner from "../CenteredSpinner"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -43,22 +43,39 @@ class CreateDevice extends React.Component {
     }
   }
 
-  render() {
-    let createDeviceMutation = () => {
-      this.props.CreateDevice({
+  createDeviceMutation = async () => {
+    try {
+      this.setState({ loading: true })
+      const {
+        data: {
+          createDevice: { id, qrCode },
+        },
+      } = await this.props.client.mutate({
+        mutation: gql`
+          mutation CreateDevice($deviceType: String!, $firmware: String!) {
+            createDevice(deviceType: $deviceType, firmware: $firmware) {
+              id
+              qrCode
+            }
+          }
+        `,
         variables: {
           deviceType: this.state.deviceType,
-          firmware: this.state.firmware
+          firmware: this.state.firmware,
         },
       })
 
-      this.props.close()
+      this.setState({ id, qrCode, showCodes: true })
+    } finally {
+      this.setState({ loading: false })
     }
+  }
 
+  render() {
     return (
       <React.Fragment>
         <Dialog
-          open={this.props.open}
+          open={this.props.open && !this.state.showCodes}
           onClose={this.props.close}
           TransitionComponent={
             this.props.fullScreen ? SlideTransition : GrowTransition
@@ -103,12 +120,8 @@ class CreateDevice extends React.Component {
                 })
               }
               onKeyPress={event => {
-                if (
-                  event.key === "Enter" &&
-                  this.state.deviceType &&
-                  !this.state.firmware
-                ) {
-                  createDeviceMutation()
+                if (event.key === "Enter" && this.state.deviceType) {
+                  this.createDeviceMutation()
                 }
               }}
               required
@@ -149,12 +162,8 @@ class CreateDevice extends React.Component {
               }
               style={{ width: "100%", marginBottom: "16px" }}
               onKeyPress={event => {
-                if (
-                  event.key === "Enter" &&
-                  this.state.deviceType &&
-                  !this.state.firmware
-                ) {
-                  createDeviceMutation()
+                if (event.key === "Enter" && this.state.deviceType) {
+                  this.createDeviceMutation()
                 }
               }}
               variant="outlined"
@@ -194,10 +203,71 @@ class CreateDevice extends React.Component {
             <Button
               variant="contained"
               color="primary"
+              onClick={this.createDeviceMutation}
+              disabled={!this.state.deviceType || this.state.loading}
+            >
+              Create
+              {this.state.loading && <CenteredSpinner isInButton />}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.showCodes}
+          onClose={() => this.setState({ showCodes: false })}
+          TransitionComponent={
+            this.props.fullScreen ? SlideTransition : GrowTransition
+          }
+          fullScreen={this.props.fullScreen}
+          disableBackdropClick={this.props.fullScreen}
+          fullWidth
+          maxWidth="xs"
+          className="notSelectable"
+        >
+          <DialogTitle disableTypography>Device codes</DialogTitle>
+          <div
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? {
+                    height: "100%",
+                    paddingRight: "24px",
+                    paddingLeft: "24px",
+                    background: "#2f333d",
+                  }
+                : {
+                    height: "100%",
+                    paddingRight: "24px",
+                    paddingLeft: "24px",
+                  }
+            }
+          >
+            <div dangerouslySetInnerHTML={{ __html: this.state.qrCode }}
+              style={{
+                margin: "8px auto",
+                width: "256px",
+                height: "256px",
+              }}/>
+            <b>{this.state.id}</b>
+          </div>
+          <DialogActions>
+            <Button
+              onClick={this.props.close}
+              style={
+                typeof Storage !== "undefined" &&
+                localStorage.getItem("nightMode") === "true"
+                  ? { color: "white", marginRight: "4px" }
+                  : { marginRight: "4px" }
+              }
+            >
+              Never mind
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
               label="Change"
               primary={true}
-              onClick={createDeviceMutation}
-              disabled={!this.state.deviceType || !this.state.firmware}
+              onClick={this.createDeviceMutation}
+              disabled={!this.state.deviceType}
             >
               Create
             </Button>
@@ -208,15 +278,4 @@ class CreateDevice extends React.Component {
   }
 }
 
-export default graphql(
-  gql`
-    mutation CreateDevice($deviceType: String!, $firmware: String!) {
-      createDevice(deviceType: $deviceType,firmware:$firmware) {
-        id
-      }
-    }
-  `,
-  {
-    name: "CreateDevice",
-  }
-)(withMobileDialog({ breakpoint: "xs" })(CreateDevice))
+export default withMobileDialog({ breakpoint: "xs" })(CreateDevice)

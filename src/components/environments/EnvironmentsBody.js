@@ -72,7 +72,7 @@ export default class EnvironmentsBody extends Component {
       typeof Storage !== "undefined" &&
       localStorage.getItem("nightMode") === "true"
 
-    let devMode =this.props.devMode
+    let devMode = this.props.devMode
 
     if (user) {
       yourEnvironmentsList = (
@@ -461,27 +461,29 @@ export default class EnvironmentsBody extends Component {
                 />
               </FormControl>
             </div>
-            {error && <Typography
-              variant="h5"
-              className="notSelectable defaultCursor"
-              style={
-                typeof Storage !== "undefined" &&
+            {error && (
+              <Typography
+                variant="h5"
+                className="notSelectable defaultCursor"
+                style={
+                  typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
-                  ? {
-                    textAlign: "center",
-                    marginTop: "32px",
-                    marginBottom: "32px",
-                    color: "white",
-                  }
-                  : {
-                    textAlign: "center",
-                    marginTop: "32px",
-                    marginBottom: "32px",
-                  }
-              }
-            >
-              Unexpected error
-          </Typography>}
+                    ? {
+                        textAlign: "center",
+                        marginTop: "32px",
+                        marginBottom: "32px",
+                        color: "white",
+                      }
+                    : {
+                        textAlign: "center",
+                        marginTop: "32px",
+                        marginBottom: "32px",
+                      }
+                }
+              >
+                Unexpected error
+              </Typography>
+            )}
             {loading && (
               <div
                 style={{

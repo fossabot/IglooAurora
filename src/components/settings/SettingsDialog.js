@@ -27,7 +27,6 @@ import Shortcuts from "./Shortcuts"
 import CreateValue from "./CreateValue"
 import CreateDevice from "./CreateDevice"
 import CreateNotification from "./CreateNotification"
-import CreatePlotNode from "./CreatePlotNode"
 import GDPRDataDownload from "./GDPRDataDownload"
 import ChangeEmail from "./ChangeEmail"
 import ChangeServer from "./ChangeServer"
@@ -241,8 +240,7 @@ class SettingsDialog extends React.Component {
       }
     }
 
-    let toggleDevMode = () => {
-    }
+    let toggleDevMode = () => {}
 
     let toggleQuietMode = () => {}
 
@@ -600,10 +598,10 @@ class SettingsDialog extends React.Component {
                   button
                   disableRipple
                   onClick={() => {
-                        user && user.devMode
-                          ? toggleDevMode(false)
-                          : toggleDevMode(true)
-                      }}
+                    user && user.devMode
+                      ? toggleDevMode(false)
+                      : toggleDevMode(true)
+                  }}
                 >
                   <ListItemText
                     primary={
@@ -621,8 +619,7 @@ class SettingsDialog extends React.Component {
                   />
                   <ListItemSecondaryAction>
                     <Switch
-                      checked={user && user.devMode
-                      }
+                      checked={user && user.devMode}
                       onChange={() => {
                         user && user.devMode
                           ? toggleDevMode(false)
@@ -870,7 +867,8 @@ class SettingsDialog extends React.Component {
       </div>
     )
 
-    let settingsContent =user && user.devMode ? (
+    let settingsContent =
+      user && user.devMode ? (
         <SwipeableViews
           index={this.props.slideIndex}
           onChangeIndex={this.props.handleSwipe}
@@ -1044,26 +1042,6 @@ class SettingsDialog extends React.Component {
                   <ListItem
                     disabled={!user}
                     button
-                    onClick={() => this.setState({ createNodeOpen: true })}
-                  >
-                    <ListItemText
-                      primary={
-                        <font
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
-                          }
-                        >
-                          Create plot node
-                        </font>
-                      }
-                    />
-                  </ListItem>
-                  <ListItem
-                    disabled={!user}
-                    button
                     onClick={() =>
                       this.setState({ createCategoryNodeOpen: true })
                     }
@@ -1190,7 +1168,8 @@ class SettingsDialog extends React.Component {
                       icon={<Language />}
                       label="General"
                       value={0}
-                      style={user && user.devMode
+                      style={
+                        user && user.devMode
                           ? { width: "33%" }
                           : { width: "50%" }
                       }
@@ -1199,19 +1178,20 @@ class SettingsDialog extends React.Component {
                       icon={<AccountBox />}
                       label="Account"
                       value={1}
-                      style={user && user.devMode
+                      style={
+                        user && user.devMode
                           ? { width: "33%" }
                           : { width: "50%" }
                       }
                     />
                     {user && user.devMode && (
-                        <Tab
-                          icon={<Code />}
-                          label="Development"
-                          value={2}
-                          style={{ width: "33%" }}
-                        />
-                      )}
+                      <Tab
+                        icon={<Code />}
+                        label="Development"
+                        value={2}
+                        style={{ width: "33%" }}
+                      />
+                    )}
                   </Tabs>
                 </AppBar>
               </DialogTitle>
@@ -1320,21 +1300,21 @@ class SettingsDialog extends React.Component {
                     }
                   />
                   {user && user.devMode && (
-                      <BottomNavigationAction
-                        icon={<Code />}
-                        label="Development"
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? this.props.slideIndex === 2
-                              ? { color: "#fff" }
-                              : { color: "#fff", opacity: 0.5 }
-                            : this.props.slideIndex === 2
-                            ? { color: "#0083ff" }
-                            : { color: "#757575" }
-                        }
-                      />
-                    )}
+                    <BottomNavigationAction
+                      icon={<Code />}
+                      label="Development"
+                      style={
+                        typeof Storage !== "undefined" &&
+                        localStorage.getItem("nightMode") === "true"
+                          ? this.props.slideIndex === 2
+                            ? { color: "#fff" }
+                            : { color: "#fff", opacity: 0.5 }
+                          : this.props.slideIndex === 2
+                          ? { color: "#0083ff" }
+                          : { color: "#757575" }
+                      }
+                    />
+                  )}
                 </BottomNavigation>
               </AppBar>
             </React.Fragment>
@@ -1405,15 +1385,11 @@ class SettingsDialog extends React.Component {
         <CreateDevice
           open={this.props.isOpen && this.state.createDeviceOpen}
           close={() => this.setState({ createDeviceOpen: false })}
+          client={this.props.client}
         />
         <CreateNotification
           open={this.props.isOpen && this.state.createNotificationOpen}
           close={() => this.setState({ createNotificationOpen: false })}
-          userData={this.props.userData}
-        />
-        <CreatePlotNode
-          open={this.props.isOpen && this.state.createNodeOpen}
-          close={() => this.setState({ createNodeOpen: false })}
           userData={this.props.userData}
         />
         <GDPRDataDownload
@@ -1466,17 +1442,18 @@ export default graphql(
   {
     name: "ToggleQuietMode",
   }
-)(graphql(
-  gql`
-    mutation ToggleDevMode($devMode: Boolean!) {
-      user(devMode: $devMode) {
-        id
-        devMode
+)(
+  graphql(
+    gql`
+      mutation ToggleDevMode($devMode: Boolean!) {
+        user(devMode: $devMode) {
+          id
+          devMode
+        }
       }
+    `,
+    {
+      name: "ToggleDevMode",
     }
-  `,
-  {
-    name: "ToggleDevMode",
-  }
-)(withMobileDialog({ breakpoint: "xs" })(SettingsDialog))
+  )(withMobileDialog({ breakpoint: "xs" })(SettingsDialog))
 )

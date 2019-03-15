@@ -20,7 +20,6 @@ import Fingerprint from "@material-ui/icons/Fingerprint"
 import Avatar from "@material-ui/core/Avatar"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
-import isemail from "isemail"
 import { Query } from "react-apollo"
 import LogInEmailDialog from "./LogInEmailDialog"
 
@@ -150,6 +149,12 @@ class Login extends Component {
 
   updateWindowDimensions() {
     this.setState({ height: window.innerHeight })
+  }
+
+  isEmailValid = mail => {
+    return /^(([a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]))$/.test(
+      mail
+    )
   }
 
   goToPassword = async () => {
@@ -485,16 +490,13 @@ class Login extends Component {
       if (
         JSON.parse(localStorage.getItem("accountList")).some(
           account =>
-            account.id ===
-            querystringify.parse(window.location.search).user
+            account.id === querystringify.parse(window.location.search).user
         )
       ) {
         this.props.changeEmail(
           JSON.parse(localStorage.getItem("accountList")).filter(
             account =>
-              account.id ===
-              querystringify.parse(window.location.search)
-                .user
+              account.id === querystringify.parse(window.location.search).user
           )[0].email
         )
       }
@@ -593,8 +595,7 @@ class Login extends Component {
             >
               Log in
             </Typography>
-            {!querystringify.parse(window.location.search)
-              .user ? (
+            {!querystringify.parse(window.location.search).user ? (
               <React.Fragment>
                 <TextField
                   variant="outlined"
@@ -619,11 +620,7 @@ class Login extends Component {
                   }}
                   onKeyPress={event => {
                     if (event.key === "Enter") {
-                      if (
-                        isemail.validate(this.props.email, {
-                          errorLevel: true,
-                        }) === 0
-                      ) {
+                      if (this.isEmailValid(this.props.email)) {
                         this.goToPassword()
                       }
                     }
@@ -671,9 +668,8 @@ class Login extends Component {
                       style={{ margin: "8px 0" }}
                       color="primary"
                       disabled={
-                        isemail.validate(this.props.email, {
-                          errorLevel: true,
-                        }) !== 0 || this.state.showEmailScreenLoading
+                        !this.isEmailValid(this.props.email) ||
+                        this.state.showEmailScreenLoading
                       }
                     >
                       Next
@@ -767,18 +763,15 @@ class Login extends Component {
                           (JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ) &&
                             JSON.parse(
                               localStorage.getItem("accountList")
                             ).find(
                               user =>
                                 user.id ===
-                                querystringify.parse(
-                                  window.location.search
-                                ).user
+                                querystringify.parse(window.location.search)
+                                  .user
                             ).profileIconColor) ||
                           this.state.user.profileIconColor,
                       }}
@@ -787,16 +780,12 @@ class Login extends Component {
                         (JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
-                            querystringify.parse(
-                              window.location.search
-                            ).user
+                            querystringify.parse(window.location.search).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ).name) ||
                           this.state.user.name
                       )}
@@ -815,18 +804,15 @@ class Login extends Component {
                           ).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ) &&
                             JSON.parse(
                               localStorage.getItem("accountList")
                             ).find(
                               user =>
                                 user.id ===
-                                querystringify.parse(
-                                  window.location.search
-                                ).user
+                                querystringify.parse(window.location.search)
+                                  .user
                             ).name) ||
                             this.state.user.name}
                         </font>
@@ -844,18 +830,15 @@ class Login extends Component {
                           ).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ) &&
                             JSON.parse(
                               localStorage.getItem("accountList")
                             ).find(
                               user =>
                                 user.id ===
-                                querystringify.parse(
-                                  window.location.search
-                                ).user
+                                querystringify.parse(window.location.search)
+                                  .user
                             ).email) ||
                             this.state.user.email}
                         </font>
@@ -908,9 +891,7 @@ class Login extends Component {
                           onKeyPress={event => {
                             if (event.key === "Enter") {
                               if (
-                                isemail.validate(this.props.email, {
-                                  errorLevel: true,
-                                }) === 0 &&
+                                this.isEmailValid(this.props.email) &&
                                 this.props.password
                               ) {
                                 this.verifyPassword()
@@ -967,14 +948,12 @@ class Login extends Component {
                         <IconButton
                           onClick={this.signInWebauthn}
                           disabled={
-                            isemail.validate(this.props.email, {
-                              errorLevel: true,
-                            }) !== 0 || this.state.showLoading
+                            !this.isEmailValid(this.props.email) ||
+                            this.state.showLoading
                           }
                           style={
-                            isemail.validate(this.props.email, {
-                              errorLevel: true,
-                            }) === 0 && !this.state.showLoading
+                            this.isEmailValid(this.props.email) &&
+                            !this.state.showLoading
                               ? this.props.mobile
                                 ? { color: "white" }
                                 : { color: "black" }
@@ -1083,11 +1062,9 @@ class Login extends Component {
                             style={{ margin: "8px 0" }}
                             color="primary"
                             disabled={
-                              !(
-                                isemail.validate(this.props.email, {
-                                  errorLevel: true,
-                                }) === 0 && this.props.password
-                              ) || this.state.showLoading
+                              !this.isEmailValid(this.props.email) ||
+                              !this.props.password ||
+                              this.state.showLoading
                             }
                           >
                             {this.state.user &&
@@ -1190,9 +1167,7 @@ class Login extends Component {
                           email: this.props.email,
                         }
                       : {
-                          id: querystringify.parse(
-                            window.location.search
-                          ).user,
+                          id: querystringify.parse(window.location.search).user,
                         }
                   }
                   onCompleted={data =>
@@ -1280,9 +1255,8 @@ class Login extends Component {
                                 ).find(
                                   user =>
                                     user.id ===
-                                    querystringify.parse(
-                                      window.location.search
-                                    ).user
+                                    querystringify.parse(window.location.search)
+                                      .user
                                 ) &&
                                   JSON.parse(
                                     localStorage.getItem("accountList")
@@ -1303,18 +1277,16 @@ class Login extends Component {
                               ).find(
                                 user =>
                                   user.id ===
-                                  querystringify.parse(
-                                    window.location.search
-                                  ).user
+                                  querystringify.parse(window.location.search)
+                                    .user
                               ) &&
                                 JSON.parse(
                                   localStorage.getItem("accountList")
                                 ).find(
                                   user =>
                                     user.id ===
-                                    querystringify.parse(
-                                      window.location.search
-                                    ).user
+                                    querystringify.parse(window.location.search)
+                                      .user
                                 ).name) ||
                                 (this.state.user && this.state.user.name)
                             )}
@@ -1333,9 +1305,8 @@ class Login extends Component {
                                 ).find(
                                   user =>
                                     user.id ===
-                                    querystringify.parse(
-                                      window.location.search
-                                    ).user
+                                    querystringify.parse(window.location.search)
+                                      .user
                                 ) &&
                                   JSON.parse(
                                     localStorage.getItem("accountList")
@@ -1368,9 +1339,8 @@ class Login extends Component {
                                 ).find(
                                   user =>
                                     user.id ===
-                                    querystringify.parse(
-                                      window.location.search
-                                    ).user
+                                    querystringify.parse(window.location.search)
+                                      .user
                                 ) &&
                                   JSON.parse(
                                     localStorage.getItem("accountList")
@@ -1434,9 +1404,7 @@ class Login extends Component {
                                 onKeyPress={event => {
                                   if (event.key === "Enter") {
                                     if (
-                                      isemail.validate(this.props.email, {
-                                        errorLevel: true,
-                                      }) === 0 &&
+                                      this.isEmailValid(this.props.email) &&
                                       this.props.password
                                     ) {
                                       this.verifyPassword()
@@ -1506,14 +1474,12 @@ class Login extends Component {
                               <IconButton
                                 onClick={this.signInWebauthn}
                                 disabled={
-                                  isemail.validate(this.props.email, {
-                                    errorLevel: true,
-                                  }) !== 0 || this.state.showLoading
+                                  !this.isEmailValid(this.props.email) ||
+                                  this.state.showLoading
                                 }
                                 style={
-                                  isemail.validate(this.props.email, {
-                                    errorLevel: true,
-                                  }) === 0 && !this.state.showLoading
+                                  this.isEmailValid(this.props.email) &&
+                                  !this.state.showLoading
                                     ? this.props.mobile
                                       ? { color: "white" }
                                       : { color: "black" }
@@ -1610,11 +1576,9 @@ class Login extends Component {
                                   style={{ margin: "8px 0" }}
                                   color="primary"
                                   disabled={
-                                    !(
-                                      isemail.validate(this.props.email, {
-                                        errorLevel: true,
-                                      }) === 0 && this.props.password
-                                    ) || this.state.showLoading
+                                    !this.isEmailValid(this.props.email) ||
+                                    !this.props.password ||
+                                    this.state.showLoading
                                   }
                                 >
                                   {this.state.user &&
@@ -1703,16 +1667,12 @@ class Login extends Component {
                         (JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
-                            querystringify.parse(
-                              window.location.search
-                            ).user
+                            querystringify.parse(window.location.search).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ).profileIconColor) ||
                         this.state.user.profileIconColor,
                     }}
@@ -1721,16 +1681,12 @@ class Login extends Component {
                       (JSON.parse(localStorage.getItem("accountList")).find(
                         user =>
                           user.id ===
-                          querystringify.parse(
-                            window.location.search
-                          ).user
+                          querystringify.parse(window.location.search).user
                       ) &&
                         JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
-                            querystringify.parse(
-                              window.location.search
-                            ).user
+                            querystringify.parse(window.location.search).user
                         ).name) ||
                         this.state.user.name
                     )}
@@ -1747,16 +1703,12 @@ class Login extends Component {
                         {(JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
-                            querystringify.parse(
-                              window.location.search
-                            ).user
+                            querystringify.parse(window.location.search).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ).name) ||
                           this.state.user.name}
                       </font>
@@ -1772,16 +1724,12 @@ class Login extends Component {
                         {(JSON.parse(localStorage.getItem("accountList")).find(
                           user =>
                             user.id ===
-                            querystringify.parse(
-                              window.location.search
-                            ).user
+                            querystringify.parse(window.location.search).user
                         ) &&
                           JSON.parse(localStorage.getItem("accountList")).find(
                             user =>
                               user.id ===
-                              querystringify.parse(
-                                window.location.search
-                              ).user
+                              querystringify.parse(window.location.search).user
                           ).email) ||
                           this.state.user.email}
                       </font>
@@ -1830,9 +1778,7 @@ class Login extends Component {
                         onKeyPress={event => {
                           if (event.key === "Enter") {
                             if (
-                              isemail.validate(this.props.email, {
-                                errorLevel: true,
-                              }) === 0 &&
+                              this.isEmailValid(this.props.email) &&
                               this.props.password
                             ) {
                               this.verifyPassword()
@@ -1948,14 +1894,12 @@ class Login extends Component {
                       <IconButton
                         onClick={this.signInWebauthn}
                         disabled={
-                          isemail.validate(this.props.email, {
-                            errorLevel: true,
-                          }) !== 0 || this.state.showSecondFactorLoading
+                          !this.isEmailValid(this.props.email) ||
+                          this.state.showSecondFactorLoading
                         }
                         style={
-                          isemail.validate(this.props.email, {
-                            errorLevel: true,
-                          }) === 0 && !this.state.showSecondFactorLoading
+                          this.isEmailValid(this.props.email) &&
+                          !this.state.showSecondFactorLoading
                             ? this.props.mobile
                               ? { color: "white" }
                               : { color: "black" }

@@ -142,7 +142,7 @@ class Sidebar extends Component {
               }
             />
           )
-        } else {
+        } else  {
           // if there's no environment with the id in the url and no device is selected, the user gets redirected
           return <Redirect to="/" />
         }
