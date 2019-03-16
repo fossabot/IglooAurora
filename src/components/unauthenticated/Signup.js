@@ -91,9 +91,9 @@ const desktopTheme = createMuiTheme({
 const mobileTheme = createMuiTheme({
   palette: {
     default: { main: "#fff" },
-    primary: { light: "#0083ff", main: "#0057cb" },
+    primary: { main: "#fff" },
     secondary: { main: "#ff4081" },
-    error: { main: "#f44336" },
+    error: { main: "#fff" },
   },
   overrides: {
     MuiInput: {
@@ -790,7 +790,7 @@ export default class Signup extends Component {
                     helperText={
                       !this.state.isNameValid ? "This field is required" : " "
                     }
-                    error={!this.props.mobile && !this.state.isNameValid}
+                    error={!this.state.isNameValid}
                     InputLabelProps={this.props.name && { shrink: true }}
                     InputProps={{
                       endAdornment: this.props.name ? (
@@ -818,7 +818,6 @@ export default class Signup extends Component {
                     label="Email"
                     value={this.props.email}
                     error={
-                      !this.props.mobile &&
                       (this.props.emailError ||
                         ((!this.state.isEmailValid && this.props.email) ||
                         this.state.isMailEmpty
@@ -1270,7 +1269,9 @@ export default class Signup extends Component {
                   >
                     Sign up
                   </Typography>
-                  <MuiThemeProvider theme={passwordTheme}>
+                  <MuiThemeProvider
+                    theme={this.props.mobile ? mobileTheme : passwordTheme}
+                  >
                     <TextField
                       variant="outlined"
                       id="desktop-password-signup"
@@ -1380,7 +1381,6 @@ export default class Signup extends Component {
                     type={this.state.showConfirmPassword ? "text" : "password"}
                     value={this.state.confirmPassword}
                     error={
-                      !this.props.mobile &&
                       (this.state.isConfirmPasswordEmpty ? true : false)
                     }
                     helperText={

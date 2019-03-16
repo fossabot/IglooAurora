@@ -78,9 +78,9 @@ const desktopTheme = createMuiTheme({
 const mobileTheme = createMuiTheme({
   palette: {
     default: { main: "#fff" },
-    primary: { light: "#0083ff", main: "#0057cb" },
+    primary: { main: "#fff" },
     secondary: { main: "#ff4081" },
-    error: { main: "#f44336" },
+    error: { main: "#fff" },
   },
   overrides: {
     MuiInput: {

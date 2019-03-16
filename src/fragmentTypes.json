@@ -1,1 +1,1 @@
-{"__schema":{"types":[{"kind":"INTERFACE","name":"Value","possibleTypes":[{"name":"FloatValue"},{"name":"StringValue"},{"name":"BooleanValue"},{"name":"PlotValue"},{"name":"CategoryPlotValue"},{"name":"MapValue"}]}]}}
+{"__schema":{"types":[{"kind":"INTERFACE","name":"Value","possibleTypes":[{"name":"FloatValue"},{"name":"StringValue"},{"name":"BooleanValue"},{"name":"PlotValue"},{"name":"CategoryPlotValue"}]}]}}
