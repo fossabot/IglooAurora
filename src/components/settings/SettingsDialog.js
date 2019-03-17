@@ -24,12 +24,8 @@ import TimeFormatDialog from "./TimeFormat"
 import UnitOfMeasumentDialog from "./UnitOfMeasurement"
 import ManageAuthorizations from "./ManageAuthorizations"
 import Shortcuts from "./Shortcuts"
-import CreateValue from "./CreateValue"
-import CreateDevice from "./CreateDevice"
-import CreateNotification from "./CreateNotification"
 import GDPRDataDownload from "./GDPRDataDownload"
 import ChangeEmail from "./ChangeEmail"
-import ChangeServer from "./ChangeServer"
 import VerifyEmailDialog from "../VerifyEmailDialog"
 import BottomNavigation from "@material-ui/core/BottomNavigation"
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction"
@@ -38,7 +34,6 @@ import Tooltip from "@material-ui/core/Tooltip"
 import Typography from "@material-ui/core/Typography"
 import Toolbar from "@material-ui/core/Toolbar"
 import withMobileDialog from "@material-ui/core/withMobileDialog"
-import Code from "@material-ui/icons/Code"
 import Close from "@material-ui/icons/Close"
 import AccountBox from "@material-ui/icons/AccountBox"
 import Language from "@material-ui/icons/Language"
@@ -75,12 +70,8 @@ const allDialogsClosed = {
   nameDialogOpen: false,
   shortcutDialogOpen: false,
   authDialogOpen: false,
-  createValueOpen: false,
-  createDeviceOpen: false,
-  createNotificationOpen: false,
   createNodeOpen: false,
   gdprOpen: false,
-  serverOpen: false,
   verifyOpen: false,
   mailingOpen: false,
   authenticationOpen: false,
@@ -240,8 +231,6 @@ class SettingsDialog extends React.Component {
       }
     }
 
-    let toggleDevMode = () => {}
-
     let toggleQuietMode = () => {}
 
     let name = ""
@@ -265,33 +254,31 @@ class SettingsDialog extends React.Component {
         })
       }
 
-      toggleDevMode = devMode => {
-        this.props.ToggleDevMode({
-          variables: {
-            devMode,
-          },
-          optimisticResponse: {
-            __typename: "Mutation",
-            user: {
-              id: user.id,
-              devMode,
-              __typename: "User",
-            },
-          },
-        })
-      }
-
       name = user.name
 
       profileIconColor = user.profileIconColor
     }
 
-    let uiSettings = (
-      <div
-        style={
-          typeof Storage !== "undefined" &&
-          localStorage.getItem("nightMode") === "true"
-            ? !this.props.fullScreen
+    let settingsContent = (
+      <SwipeableViews
+        index={this.props.slideIndex}
+        onChangeIndex={this.props.handleChange}
+      >
+        <div
+          style={
+            typeof Storage !== "undefined" &&
+            localStorage.getItem("nightMode") === "true"
+              ? !this.props.fullScreen
+                ? {
+                    overflowY: "auto",
+                    height: "calc(100vh - 220px)",
+                    maxHeight: "550px",
+                  }
+                : {
+                    overflowY: "auto",
+                    height: "calc(100vh - 128px)",
+                  }
+              : !this.props.fullScreen
               ? {
                   overflowY: "auto",
                   height: "calc(100vh - 220px)",
@@ -301,266 +288,37 @@ class SettingsDialog extends React.Component {
                   overflowY: "auto",
                   height: "calc(100vh - 128px)",
                 }
-            : !this.props.fullScreen
-            ? {
-                overflowY: "auto",
-                height: "calc(100vh - 220px)",
-                maxHeight: "550px",
-              }
-            : {
-                overflowY: "auto",
-                height: "calc(100vh - 128px)",
-              }
-        }
-      >
-        <div style={listStyles.root}>
-          <List style={{ width: "100%", padding: "0" }} subheader={<li />}>
-            <li key="appearance">
-              <ul style={{ padding: "0" }}>
-                <ListSubheader
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "#c1c2c5",
-                          cursor: "default",
-                          backgroundColor: "#2f333d",
-                        }
-                      : {
-                          color: "#7a7a7a",
-                          cursor: "default",
-                          backgroundColor: "white",
-                        }
-                  }
-                  className="notSelectable defaultCursor"
-                >
-                  Appearance
-                </ListSubheader>
-                <ListItem
-                  disabled={typeof Storage === "undefined"}
-                  button
-                  disableRipple
-                  onClick={toggleNightMode}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Night mode
-                      </font>
+          }
+        >
+          <div style={listStyles.root}>
+            <List style={{ width: "100%", padding: "0" }} subheader={<li />}>
+              <li key="appearance">
+                <ul style={{ padding: "0" }}>
+                  <ListSubheader
+                    style={
+                      typeof Storage !== "undefined" &&
+                      localStorage.getItem("nightMode") === "true"
+                        ? {
+                            color: "#c1c2c5",
+                            cursor: "default",
+                            backgroundColor: "#2f333d",
+                          }
+                        : {
+                            color: "#7a7a7a",
+                            cursor: "default",
+                            backgroundColor: "white",
+                          }
                     }
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      checked={localStorage.getItem("nightMode") === "true"}
-                      onChange={toggleNightMode}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <Divider />
-              </ul>
-            </li>
-            <li key="tokens">
-              <ul style={{ padding: "0" }}>
-                <ListSubheader
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "#c1c2c5",
-                          cursor: "default",
-                          backgroundColor: "#2f333d",
-                        }
-                      : {
-                          color: "#7a7a7a",
-                          cursor: "default",
-                          backgroundColor: "white",
-                        }
-                  }
-                  className="notSelectable defaultCursor"
-                >
-                  Notifications
-                </ListSubheader>
-                <ListItem
-                  disabled={!user}
-                  button
-                  disableRipple
-                  onClick={() => toggleQuietMode(!user.quietMode)}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Quiet mode
-                      </font>
-                    }
-                    secondary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "#c1c2c5" }
-                            : { color: "#7a7a7a" }
-                        }
-                      >
-                        Mute all notifications
-                      </font>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      disabled={!user}
-                      checked={user && user.quietMode}
-                      onChange={() => toggleQuietMode(!user.quietMode)}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <Divider />
-              </ul>
-            </li>
-            <li key="localization">
-              <ul style={{ padding: "0" }}>
-                <ListSubheader
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "#c1c2c5",
-                          cursor: "default",
-                          backgroundColor: "#2f333d",
-                        }
-                      : {
-                          color: "#7a7a7a",
-                          cursor: "default",
-                          backgroundColor: "white",
-                        }
-                  }
-                  className="notSelectable defaultCursor"
-                >
-                  Localization
-                </ListSubheader>
-                <ListItem
-                  disabled={!user}
-                  button
-                  onClick={this.handleUnitDialogOpen}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Change units of measurement
-                      </font>
-                    }
-                    secondary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "#c1c2c5" }
-                            : { color: "#7a7a7a" }
-                        }
-                      >
-                        {user &&
-                          (user.settings.lengthAndMass === "SI"
-                            ? "SI"
-                            : "Imperial") +
-                            ", " +
-                            (user.settings.temperature === "CELSIUS"
-                              ? "Celsius"
-                              : user.settings.temperature === "FAHRENHEIT"
-                              ? "Fahreinheit"
-                              : "Kelvin")}
-                      </font>
-                    }
-                  />
-                </ListItem>
-                <ListItem
-                  disabled={!user}
-                  button
-                  onClick={this.handleTimeFormatDialogOpen}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Change date and time format
-                      </font>
-                    }
-                    secondary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "#c1c2c5" }
-                            : { color: "#7a7a7a" }
-                        }
-                      >
-                        {user &&
-                          (user.settings.dateFormat === "MDY"
-                            ? "MM/DD/YYYY"
-                            : user.settings.dateFormat === "DMY"
-                            ? "DD/MM/YYYY"
-                            : user.settings.dateFormat === "YMD"
-                            ? "YYYY/MM/DD"
-                            : "YYYY/DD/MM") +
-                            ", " +
-                            (user.settings.timeFormat === "H12"
-                              ? "12-hour clock"
-                              : "24-hour clock")}
-                      </font>
-                    }
-                  />
-                </ListItem>
-                <Divider />
-              </ul>
-            </li>
-            <li key="miscellaneous">
-              <ul style={{ padding: "0" }}>
-                <ListSubheader
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "#c1c2c5",
-                          cursor: "default",
-                          backgroundColor: "#2f333d",
-                        }
-                      : {
-                          color: "#7a7a7a",
-                          cursor: "default",
-                          backgroundColor: "white",
-                        }
-                  }
-                  className="notSelectable defaultCursor"
-                >
-                  Miscellaneous
-                </ListSubheader>
-                {installPromptEvent && (
-                  <ListItem button onClick={this.addToHomeScreen}>
+                    className="notSelectable defaultCursor"
+                  >
+                    Appearance
+                  </ListSubheader>
+                  <ListItem
+                    disabled={typeof Storage === "undefined"}
+                    button
+                    disableRipple
+                    onClick={toggleNightMode}
+                  >
                     <ListItemText
                       primary={
                         <font
@@ -571,338 +329,20 @@ class SettingsDialog extends React.Component {
                               : { color: "black" }
                           }
                         >
-                          Add to home screen
+                          Night mode
                         </font>
                       }
                     />
+                    <ListItemSecondaryAction>
+                      <Switch
+                        checked={localStorage.getItem("nightMode") === "true"}
+                        onChange={toggleNightMode}
+                      />
+                    </ListItemSecondaryAction>
                   </ListItem>
-                )}
-                <ListItem button onClick={this.handleShortcutDialogOpen}>
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Keyboard shortcuts
-                      </font>
-                    }
-                  />
-                </ListItem>
-                <ListItem
-                  disabled={!user}
-                  button
-                  disableRipple
-                  onClick={() => {
-                    user && user.devMode
-                      ? toggleDevMode(false)
-                      : toggleDevMode(true)
-                  }}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Developer mode
-                      </font>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <Switch
-                      checked={user && user.devMode}
-                      onChange={() => {
-                        user && user.devMode
-                          ? toggleDevMode(false)
-                          : toggleDevMode(true)
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </ul>
-            </li>
-          </List>
-        </div>
-      </div>
-    )
-
-    let accountSettings = (
-      <div
-        style={
-          typeof Storage !== "undefined" &&
-          localStorage.getItem("nightMode") === "true"
-            ? !this.props.fullScreen
-              ? {
-                  overflowY: "auto",
-                  height: "calc(100vh - 220px)",
-                  maxHeight: "550px",
-                }
-              : {
-                  overflowY: "auto",
-                  height: "calc(100vh - 128px)",
-                }
-            : !this.props.fullScreen
-            ? {
-                overflowY: "auto",
-                height: "calc(100vh - 220px)",
-                maxHeight: "550px",
-              }
-            : {
-                overflowY: "auto",
-                height: "calc(100vh - 128px)",
-              }
-        }
-      >
-        <List subheader={<li />}>
-          <li key="authentication">
-            <ul style={{ padding: "0" }}>
-              <ListSubheader
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? {
-                        color: "#c1c2c5",
-                        cursor: "default",
-                        backgroundColor: "#2f333d",
-                      }
-                    : {
-                        color: "#7a7a7a",
-                        cursor: "default",
-                        backgroundColor: "white",
-                      }
-                }
-                className="notSelectable defaultCursor"
-              >
-                Authentication
-              </ListSubheader>
-              <ListItem
-                button
-                onClick={() => this.setState({ emailDialogOpen: true })}
-              >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Change email
-                    </font>
-                  }
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={() => this.setState({ authenticationOpen: true })}
-                disabled={!user}
-              >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Authentication methods
-                    </font>
-                  }
-                />
-              </ListItem>
-              <Divider />
-            </ul>
-          </li>
-          <li key="account">
-            <ul style={{ padding: "0" }}>
-              <ListSubheader
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? {
-                        color: "#c1c2c5",
-                        cursor: "default",
-                        backgroundColor: "#2f333d",
-                      }
-                    : {
-                        color: "#7a7a7a",
-                        cursor: "default",
-                        backgroundColor: "white",
-                      }
-                }
-                className="notSelectable defaultCursor"
-              >
-                Account management
-              </ListSubheader>
-              {user && !user.emailIsVerified && (
-                <ListItem
-                  button
-                  onClick={() => this.setState({ verifyOpen: true })}
-                >
-                  <ListItemText
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
-                        Resend verifcation email
-                      </font>
-                    }
-                  />
-                </ListItem>
-              )}
-              <ListItem
-                button
-                onClick={() => this.setState({ mailingOpen: true })}
-                disabled={!user}
-              >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Mailing options
-                    </font>
-                  }
-                />
-              </ListItem>
-              <ListItem
-                disabled={!user}
-                button
-                onClick={this.handleNameDialogOpen}
-              >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Manage your profile
-                    </font>
-                  }
-                  secondary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "#c1c2c5", cursor: "default" }
-                          : { color: "#7a7a7a", cursor: "default" }
-                      }
-                    >
-                      Change your profile photo and name
-                    </font>
-                  }
-                />
-              </ListItem>
-              <ListItem
-                disabled={!user}
-                button
-                onClick={() => this.setState({ gdprOpen: true })}
-              >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Download data
-                    </font>
-                  }
-                  secondary={
-                    <font
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "#c1c2c5", cursor: "default" }
-                          : { color: "#7a7a7a", cursor: "default" }
-                      }
-                    >
-                      Transfer your data to another service
-                    </font>
-                  }
-                />
-              </ListItem>
-              <ListItem button onClick={this.handleDeleteDialogOpen}>
-                <ListItemText
-                  primary={
-                    <font style={{ color: "#f44336" }}>
-                      Delete your account
-                    </font>
-                  }
-                />
-              </ListItem>
-            </ul>
-          </li>
-        </List>
-      </div>
-    )
-
-    let settingsContent =
-      user && user.devMode ? (
-        <SwipeableViews
-          index={this.props.slideIndex}
-          onChangeIndex={this.props.handleSwipe}
-          style={{ overflowY: "hidden" }}
-        >
-          {uiSettings}
-          {accountSettings}
-          <div
-            style={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-                ? !this.props.fullScreen
-                  ? {
-                      overflowY: "auto",
-                      height: "calc(100vh - 220px)",
-                      maxHeight: "550px",
-                    }
-                  : {
-                      overflowY: "auto",
-                      height: "calc(100vh - 128px)",
-                    }
-                : !this.props.fullScreen
-                ? {
-                    overflowY: "auto",
-                    height: "calc(100vh - 220px)",
-                    maxHeight: "550px",
-                  }
-                : {
-                    overflowY: "auto",
-                    height: "calc(100vh - 128px)",
-                  }
-            }
-          >
-            <List subheader={<li />}>
+                  <Divider />
+                </ul>
+              </li>
               <li key="tokens">
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
@@ -922,12 +362,13 @@ class SettingsDialog extends React.Component {
                     }
                     className="notSelectable defaultCursor"
                   >
-                    Tokens
+                    Notifications
                   </ListSubheader>
                   <ListItem
                     disabled={!user}
                     button
-                    onClick={this.handleAuthDialogOpen}
+                    disableRipple
+                    onClick={() => toggleQuietMode(!user.quietMode)}
                   >
                     <ListItemText
                       primary={
@@ -939,7 +380,7 @@ class SettingsDialog extends React.Component {
                               : { color: "black" }
                           }
                         >
-                          Manage authorizations
+                          Quiet mode
                         </font>
                       }
                       secondary={
@@ -947,19 +388,26 @@ class SettingsDialog extends React.Component {
                           style={
                             typeof Storage !== "undefined" &&
                             localStorage.getItem("nightMode") === "true"
-                              ? { color: "#c1c2c5", cursor: "default" }
-                              : { color: "#7a7a7a", cursor: "default" }
+                              ? { color: "#c1c2c5" }
+                              : { color: "#7a7a7a" }
                           }
                         >
-                          Generate, view and delete your account's access tokens
+                          Mute all notifications
                         </font>
                       }
                     />
+                    <ListItemSecondaryAction>
+                      <Switch
+                        disabled={!user}
+                        checked={user && user.quietMode}
+                        onChange={() => toggleQuietMode(!user.quietMode)}
+                      />
+                    </ListItemSecondaryAction>
                   </ListItem>
                   <Divider />
                 </ul>
               </li>
-              <li key="devicesValues">
+              <li key="localization">
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
@@ -978,11 +426,12 @@ class SettingsDialog extends React.Component {
                     }
                     className="notSelectable defaultCursor"
                   >
-                    Devices, values and notifications
+                    Localization
                   </ListSubheader>
                   <ListItem
+                    disabled={!user}
                     button
-                    onClick={() => this.setState({ createDeviceOpen: true })}
+                    onClick={this.handleUnitDialogOpen}
                   >
                     <ListItemText
                       primary={
@@ -994,47 +443,28 @@ class SettingsDialog extends React.Component {
                               : { color: "black" }
                           }
                         >
-                          Create device
+                          Change units of measurement
                         </font>
                       }
-                    />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={() => this.setState({ createValueOpen: true })}
-                  >
-                    <ListItemText
-                      primary={
+                      secondary={
                         <font
                           style={
                             typeof Storage !== "undefined" &&
                             localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
+                              ? { color: "#c1c2c5" }
+                              : { color: "#7a7a7a" }
                           }
                         >
-                          Create value
-                        </font>
-                      }
-                    />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={() =>
-                      this.setState({ createNotificationOpen: true })
-                    }
-                  >
-                    <ListItemText
-                      primary={
-                        <font
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
-                          }
-                        >
-                          Create notification
+                          {user &&
+                            (user.settings.lengthAndMass === "SI"
+                              ? "SI"
+                              : "Imperial") +
+                              ", " +
+                              (user.settings.temperature === "CELSIUS"
+                                ? "Celsius"
+                                : user.settings.temperature === "FAHRENHEIT"
+                                ? "Fahreinheit"
+                                : "Kelvin")}
                         </font>
                       }
                     />
@@ -1042,9 +472,7 @@ class SettingsDialog extends React.Component {
                   <ListItem
                     disabled={!user}
                     button
-                    onClick={() =>
-                      this.setState({ createCategoryNodeOpen: true })
-                    }
+                    onClick={this.handleTimeFormatDialogOpen}
                   >
                     <ListItemText
                       primary={
@@ -1056,7 +484,30 @@ class SettingsDialog extends React.Component {
                               : { color: "black" }
                           }
                         >
-                          Create category plot node
+                          Change date and time format
+                        </font>
+                      }
+                      secondary={
+                        <font
+                          style={
+                            typeof Storage !== "undefined" &&
+                            localStorage.getItem("nightMode") === "true"
+                              ? { color: "#c1c2c5" }
+                              : { color: "#7a7a7a" }
+                          }
+                        >
+                          {user &&
+                            (user.settings.dateFormat === "MDY"
+                              ? "MM/DD/YYYY"
+                              : user.settings.dateFormat === "DMY"
+                              ? "DD/MM/YYYY"
+                              : user.settings.dateFormat === "YMD"
+                              ? "YYYY/MM/DD"
+                              : "YYYY/DD/MM") +
+                              ", " +
+                              (user.settings.timeFormat === "H12"
+                                ? "12-hour clock"
+                                : "24-hour clock")}
                         </font>
                       }
                     />
@@ -1064,7 +515,7 @@ class SettingsDialog extends React.Component {
                   <Divider />
                 </ul>
               </li>
-              <li key="testing">
+              <li key="miscellaneous">
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
@@ -1083,12 +534,27 @@ class SettingsDialog extends React.Component {
                     }
                     className="notSelectable defaultCursor"
                   >
-                    Testing
+                    Miscellaneous
                   </ListSubheader>
-                  <ListItem
-                    button
-                    onClick={() => this.setState({ serverOpen: true })}
-                  >
+                  {installPromptEvent && (
+                    <ListItem button onClick={this.addToHomeScreen}>
+                      <ListItemText
+                        primary={
+                          <font
+                            style={
+                              typeof Storage !== "undefined" &&
+                              localStorage.getItem("nightMode") === "true"
+                                ? { color: "white" }
+                                : { color: "black" }
+                            }
+                          >
+                            Add to home screen
+                          </font>
+                        }
+                      />
+                    </ListItem>
+                  )}
+                  <ListItem button onClick={this.handleShortcutDialogOpen}>
                     <ListItemText
                       primary={
                         <font
@@ -1099,7 +565,7 @@ class SettingsDialog extends React.Component {
                               : { color: "black" }
                           }
                         >
-                          Change connected server
+                          Keyboard shortcuts
                         </font>
                       }
                     />
@@ -1108,16 +574,294 @@ class SettingsDialog extends React.Component {
               </li>
             </List>
           </div>
-        </SwipeableViews>
-      ) : (
-        <SwipeableViews
-          index={this.props.slideIndex}
-          onChangeIndex={this.props.handleChange}
+        </div>
+        <div
+          style={
+            typeof Storage !== "undefined" &&
+            localStorage.getItem("nightMode") === "true"
+              ? !this.props.fullScreen
+                ? {
+                    overflowY: "auto",
+                    height: "calc(100vh - 220px)",
+                    maxHeight: "550px",
+                  }
+                : {
+                    overflowY: "auto",
+                    height: "calc(100vh - 128px)",
+                  }
+              : !this.props.fullScreen
+              ? {
+                  overflowY: "auto",
+                  height: "calc(100vh - 220px)",
+                  maxHeight: "550px",
+                }
+              : {
+                  overflowY: "auto",
+                  height: "calc(100vh - 128px)",
+                }
+          }
         >
-          {uiSettings}
-          {accountSettings}
-        </SwipeableViews>
-      )
+          <List subheader={<li />}>
+            <li key="authentication">
+              <ul style={{ padding: "0" }}>
+                <ListSubheader
+                  style={
+                    typeof Storage !== "undefined" &&
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          color: "#c1c2c5",
+                          cursor: "default",
+                          backgroundColor: "#2f333d",
+                        }
+                      : {
+                          color: "#7a7a7a",
+                          cursor: "default",
+                          backgroundColor: "white",
+                        }
+                  }
+                  className="notSelectable defaultCursor"
+                >
+                  Authentication
+                </ListSubheader>
+                <ListItem
+                  button
+                  onClick={() => this.setState({ emailDialogOpen: true })}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Change email
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={() => this.setState({ authenticationOpen: true })}
+                  disabled={!user}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Authentication methods
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <Divider />
+              </ul>
+            </li>
+            <li key="account">
+              <ul style={{ padding: "0" }}>
+                <ListSubheader
+                  style={
+                    typeof Storage !== "undefined" &&
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          color: "#c1c2c5",
+                          cursor: "default",
+                          backgroundColor: "#2f333d",
+                        }
+                      : {
+                          color: "#7a7a7a",
+                          cursor: "default",
+                          backgroundColor: "white",
+                        }
+                  }
+                  className="notSelectable defaultCursor"
+                >
+                  Tokens
+                </ListSubheader>
+                <ListItem
+                  disabled={!user}
+                  button
+                  onClick={this.handleAuthDialogOpen}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Manage tokens
+                      </font>
+                    }
+                    secondary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "#c1c2c5", cursor: "default" }
+                            : { color: "#7a7a7a", cursor: "default" }
+                        }
+                      >
+                        Generate, view and delete your account's access tokens
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <Divider />
+              </ul>
+            </li>
+            <li key="account">
+              <ul style={{ padding: "0" }}>
+                <ListSubheader
+                  style={
+                    typeof Storage !== "undefined" &&
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          color: "#c1c2c5",
+                          cursor: "default",
+                          backgroundColor: "#2f333d",
+                        }
+                      : {
+                          color: "#7a7a7a",
+                          cursor: "default",
+                          backgroundColor: "white",
+                        }
+                  }
+                  className="notSelectable defaultCursor"
+                >
+                  Account management
+                </ListSubheader>
+                {user && !user.emailIsVerified && (
+                  <ListItem
+                    button
+                    onClick={() => this.setState({ verifyOpen: true })}
+                  >
+                    <ListItemText
+                      primary={
+                        <font
+                          style={
+                            typeof Storage !== "undefined" &&
+                            localStorage.getItem("nightMode") === "true"
+                              ? { color: "white" }
+                              : { color: "black" }
+                          }
+                        >
+                          Resend verifcation email
+                        </font>
+                      }
+                    />
+                  </ListItem>
+                )}
+                <ListItem
+                  button
+                  onClick={() => this.setState({ mailingOpen: true })}
+                  disabled={!user}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Mailing options
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <ListItem
+                  disabled={!user}
+                  button
+                  onClick={this.handleNameDialogOpen}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Manage your profile
+                      </font>
+                    }
+                    secondary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "#c1c2c5", cursor: "default" }
+                            : { color: "#7a7a7a", cursor: "default" }
+                        }
+                      >
+                        Change your profile photo and name
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <ListItem
+                  disabled={!user}
+                  button
+                  onClick={() => this.setState({ gdprOpen: true })}
+                >
+                  <ListItemText
+                    primary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        Download data
+                      </font>
+                    }
+                    secondary={
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "#c1c2c5", cursor: "default" }
+                            : { color: "#7a7a7a", cursor: "default" }
+                        }
+                      >
+                        Transfer your data to another service
+                      </font>
+                    }
+                  />
+                </ListItem>
+                <ListItem button onClick={this.handleDeleteDialogOpen}>
+                  <ListItemText
+                    primary={
+                      <font style={{ color: "#f44336" }}>
+                        Delete your account
+                      </font>
+                    }
+                  />
+                </ListItem>
+              </ul>
+            </li>
+          </List>
+        </div>
+      </SwipeableViews>
+    )
 
     return (
       <React.Fragment>
@@ -1136,12 +880,8 @@ class SettingsDialog extends React.Component {
             !this.state.nameDialogOpen &&
             !this.state.shortcutDialogOpen &&
             !this.state.authDialogOpen &&
-            !this.state.createValueOpen &&
-            !this.state.createDeviceOpen &&
-            !this.state.createNotificationOpen &&
             !this.state.createNodeOpen &&
             !this.state.gdprOpen &&
-            !this.state.serverOpen &&
             !this.state.verifyOpen &&
             !this.state.mailingOpen &&
             !this.state.authenticationOpen
@@ -1168,30 +908,14 @@ class SettingsDialog extends React.Component {
                       icon={<Language />}
                       label="General"
                       value={0}
-                      style={
-                        user && user.devMode
-                          ? { width: "33%" }
-                          : { width: "50%" }
-                      }
+                      style={{ width: "50%" }}
                     />
                     <Tab
                       icon={<AccountBox />}
                       label="Account"
                       value={1}
-                      style={
-                        user && user.devMode
-                          ? { width: "33%" }
-                          : { width: "50%" }
-                      }
+                      style={{ width: "50%" }}
                     />
-                    {user && user.devMode && (
-                      <Tab
-                        icon={<Code />}
-                        label="Development"
-                        value={2}
-                        style={{ width: "33%" }}
-                      />
-                    )}
                   </Tabs>
                 </AppBar>
               </DialogTitle>
@@ -1299,22 +1023,6 @@ class SettingsDialog extends React.Component {
                         : { color: "#757575" }
                     }
                   />
-                  {user && user.devMode && (
-                    <BottomNavigationAction
-                      icon={<Code />}
-                      label="Development"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? this.props.slideIndex === 2
-                            ? { color: "#fff" }
-                            : { color: "#fff", opacity: 0.5 }
-                          : this.props.slideIndex === 2
-                          ? { color: "#0083ff" }
-                          : { color: "#757575" }
-                      }
-                    />
-                  )}
                 </BottomNavigation>
               </AppBar>
             </React.Fragment>
@@ -1376,22 +1084,6 @@ class SettingsDialog extends React.Component {
             this.props.isOpen && this.state.shortcutDialogOpen
           }
         />
-        <CreateValue
-          open={this.props.isOpen && this.state.createValueOpen}
-          openDialog={() => this.setState({ createvalueOpen: true })}
-          close={() => this.setState({ createValueOpen: false })}
-          userData={this.props.userData}
-        />
-        <CreateDevice
-          open={this.props.isOpen && this.state.createDeviceOpen}
-          close={() => this.setState({ createDeviceOpen: false })}
-          client={this.props.client}
-        />
-        <CreateNotification
-          open={this.props.isOpen && this.state.createNotificationOpen}
-          close={() => this.setState({ createNotificationOpen: false })}
-          userData={this.props.userData}
-        />
         <GDPRDataDownload
           open={this.props.isOpen && this.state.gdprOpen}
           close={() => this.setState({ gdprOpen: false })}
@@ -1404,12 +1096,6 @@ class SettingsDialog extends React.Component {
           client={this.props.client}
           email={user && user.email}
           user={user}
-        />
-        <ChangeServer
-          open={this.props.isOpen && this.state.serverOpen}
-          close={() => this.setState({ serverOpen: false })}
-          logOut={this.props.logOut}
-          forceUpdate={() => this.props.forceUpdate()}
         />
         <VerifyEmailDialog
           open={this.props.isOpen && this.state.verifyOpen}
@@ -1442,18 +1128,4 @@ export default graphql(
   {
     name: "ToggleQuietMode",
   }
-)(
-  graphql(
-    gql`
-      mutation ToggleDevMode($devMode: Boolean!) {
-        user(devMode: $devMode) {
-          id
-          devMode
-        }
-      }
-    `,
-    {
-      name: "ToggleDevMode",
-    }
-  )(withMobileDialog({ breakpoint: "xs" })(SettingsDialog))
-)
+)(withMobileDialog({ breakpoint: "xs" })(SettingsDialog))

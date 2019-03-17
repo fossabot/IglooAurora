@@ -37,9 +37,7 @@ class Main extends Component {
     } = this.props
 
     if (this.props.areSettingsOpen) {
-      if (index < 2 || (this.props.devMode ? index === 2 : index !== 2)) {
         this.setState({ slideIndex: index })
-      }
     } else {
       if (environment) {
         if (this.props.environmentData.environment.devices[index]) {
@@ -388,11 +386,6 @@ class Main extends Component {
     }
 
     let nightMode = false
-    let devMode = false
-
-    if (this.props.devMode) {
-      devMode = this.props.devMode
-    }
 
     if (this.state.redirectTo) {
       this.setState({ redirectTo: "" })
@@ -496,7 +489,6 @@ class Main extends Component {
                     hiddenNotifications={this.state.hiddenNotifications}
                     showHiddenNotifications={this.showHiddenNotifications}
                     nightMode={nightMode}
-                    devMode={devMode}
                     environmentData={this.props.environmentData}
                     environments={this.props.environments}
                     isMobile={true}
@@ -525,7 +517,6 @@ class Main extends Component {
                     changeShowHiddenState={this.changeShowHiddenState}
                     isMobile={true}
                     nightMode={nightMode}
-                    devMode={devMode}
                     environmentData={this.props.environmentData}
                     userData={this.props.userData}
                   />
@@ -590,7 +581,6 @@ class Main extends Component {
                 hiddenNotifications={this.state.hiddenNotifications}
                 showHiddenNotifications={this.showHiddenNotifications}
                 nightMode={nightMode}
-                devMode={devMode}
                 openSnackBar={() => {
                   this.setState({ copyMessageOpen: true })
                 }}
@@ -614,7 +604,6 @@ class Main extends Component {
                   showHidden={this.state.showMainHidden}
                   changeShowHiddenState={this.changeShowHiddenState}
                   nightMode={nightMode}
-                  devMode={devMode}
                   environmentData={this.props.environmentData}
                   isMobile={false}
                   logOut={this.props.logOut}

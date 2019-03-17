@@ -23,14 +23,6 @@ class Environments extends Component {
         if (this.props.settingsOpen) this.setState({ slideIndex: 1 })
       },
     },
-    "alt+3": {
-      priority: 1,
-      handler: event => {
-        //prevents the user from reaching the development tab with the shortcut if dev mode is off
-        if (this.props.settingsOpen && this.props.devMode)
-          this.setState({ slideIndex: 2 })
-      },
-    },
   }
 
   render() {
@@ -46,7 +38,6 @@ class Environments extends Component {
           user={this.props.userData}
         />
         <EnvironmentsBody
-        devMode={this.props.devMode}
           userData={this.props.userData}
           selectEnvironment={this.props.selectEnvironment}
           searchEnvironments={this.props.searchEnvironments}

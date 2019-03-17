@@ -56,15 +56,9 @@ class CardInfo extends React.Component {
               "YYYY-MM-DDTh:mm:ss"
             )}
           </Moment>
-          {this.props.devMode ? (
-            <React.Fragment>
               <br />
               <br className="notSelectable" />
               <b>ID: </b> {this.props.id}
-            </React.Fragment>
-          ) : (
-            ""
-          )}
         </div>
         <DialogActions>
           <Button onClick={this.props.handleInfoClose}>Close</Button>

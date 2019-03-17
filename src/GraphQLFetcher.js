@@ -234,7 +234,6 @@ class GraphQLFetcher extends Component {
         userUpdated {
           id
           quietMode
-          devMode
           emailIsVerified
           name
           profileIconColor
@@ -538,7 +537,6 @@ class GraphQLFetcher extends Component {
                 environmentId={
                   querystringify.parse(window.location.search).environment
                 }
-                devMode={user&&user.devMode}
                 environments={
                   this.props.userData.user &&
                   this.props.userData.user.environments
@@ -577,7 +575,6 @@ class GraphQLFetcher extends Component {
                 environmentId={
                   querystringify.parse(window.location.search).environment
                 }
-                devMode={user&&user.devMode}
                 environments={
                   this.props.userData.user &&
                   this.props.userData.user.environments
@@ -621,7 +618,6 @@ class GraphQLFetcher extends Component {
               client={this.props.client}
               mobile={this.props.isMobile}
               changeEmail={this.props.changeEmail}
-              devMode={user && user.devMode}
             />
             <EmailNotVerified
               mobile={this.props.isMobile}
@@ -649,7 +645,6 @@ export default graphql(
       user {
         id
         quietMode
-        devMode
         emailIsVerified
         name
         profileIconColor

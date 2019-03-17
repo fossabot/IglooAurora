@@ -345,7 +345,6 @@ class MainBodyHeader extends Component {
                   device => device.id === this.props.deviceId
                 )[0])
             }
-            devMode={this.props.devMode}
           />
         )}
         {((this.props.environmentData.environment &&

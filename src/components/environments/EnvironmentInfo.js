@@ -52,15 +52,9 @@ class EnvironmentInfo extends React.Component {
               "YYYY-MM-DDTh:mm:ss"
             )}
           </Moment>
-          {this.props.devMode ? (
-            <React.Fragment>
               <br />
               <br className="notSelectable" />
               <b>ID: </b> {this.props.environment.id}
-            </React.Fragment>
-          ) : (
-            ""
-          )}
         </div>
         <DialogActions>
           <Button onClick={this.props.close}>Close</Button>

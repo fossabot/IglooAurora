@@ -270,7 +270,6 @@ class MainBody extends Component {
             typeof Storage !== "undefined" &&
             localStorage.getItem("nightMode") === "true"
           }
-          devMode={this.props.devMode}
           environmentData={this.props.environmentData}
           userData={this.props.userData}
           environments={this.props.environments}

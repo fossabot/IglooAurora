@@ -458,7 +458,6 @@ class EnvironmentCard extends Component {
           open={this.state.infoOpen}
           close={() => this.setState({ infoOpen: false })}
           environment={this.props.environment}
-          devMode={this.props.devMode}
         />
         <CustomizeEnvironment
           open={this.state.renameOpen}

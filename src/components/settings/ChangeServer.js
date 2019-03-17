@@ -56,11 +56,7 @@ class ChangeServer extends React.Component {
       this.props.forceUpdate()
     }
 
-    if (!this.props.unauthenticated) {
-      this.props.logOut(false)
-    } else {
-      this.setState({ redirectToAccounts: true })
-    }
+    this.setState({ redirectToAccounts: true })
   }
 
   isUrl = url => {
@@ -88,7 +84,7 @@ class ChangeServer extends React.Component {
     let unsecure = this.state.unsecure
 
     if (typeof Storage !== "undefined") {
-      this.props.unauthenticated && localStorage.setItem("server", url)
+      localStorage.setItem("server", url)
       localStorage.setItem("serverUnsecure", unsecure)
 
       this.isUrl(url) &&
@@ -197,34 +193,7 @@ class ChangeServer extends React.Component {
               <Cloud />
             )}
           </ListItemIcon>
-          <ListItemText
-            primary={
-              <font
-                style={
-                  !this.props.unauthenticated &&
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-              >
-                {server.name}
-              </font>
-            }
-            secondary={
-              <font
-                style={
-                  !this.props.unauthenticated &&
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "#c1c2c5" }
-                    : { color: "#7a7a7a" }
-                }
-              >
-                {server.url}
-              </font>
-            }
-          />
+          <ListItemText primary={server.name} secondary={server.url} />
           <ListItemSecondaryAction>
             <IconButton
               onClick={event =>
@@ -240,8 +209,64 @@ class ChangeServer extends React.Component {
         </ListItem>
       ))
 
-    const dialog = (
-      <React.Fragment>
+    return (
+      <MuiThemeProvider
+        theme={createMuiTheme({
+          palette: {
+            default: { main: "#fff" },
+            primary: { light: "#0083ff", main: "#0057cb" },
+            secondary: { main: "#ff4081" },
+            error: { main: "#f44336" },
+          },
+          overrides: {
+            MuiDialogTitle: {
+              root: {
+                fontSize: "1.3125rem",
+                lineHeight: "1.16667em",
+                fontWeight: 500,
+                cursor: "default",
+                webkitTouchCallout: "none",
+                webkitUserSelect: "none",
+                khtmlUserSelect: "none",
+                mozUserSelect: "none",
+                msUserSelect: "none",
+                userSelect: "none",
+              },
+            },
+            MuiButton: {
+              containedPrimary: {
+                backgroundColor: "#0083ff",
+              },
+            },
+            MuiListItemIcon: {
+              root: {
+                color: "black",
+              },
+            },
+            MuiDialogActions: {
+              action: {
+                marginRight: "4px",
+              },
+            },
+            MuiList: {
+              padding: {
+                paddingTop: 0,
+                paddingBottom: 0,
+              },
+            },
+            MuiSwitch: {
+              colorSecondary: {
+                "&$checked": {
+                  color: "#0083ff",
+                  "& + $bar": {
+                    backgroundColor: "#0083ff",
+                  },
+                },
+              },
+            },
+          },
+        })}
+      >
         <Dialog
           open={
             typeof Storage !== "undefined" &&
@@ -283,32 +308,8 @@ class ChangeServer extends React.Component {
                   <CloudDone />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    <font
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      Default server
-                    </font>
-                  }
-                  secondary={
-                    <font
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "#c1c2c5" }
-                          : { color: "#7a7a7a" }
-                      }
-                    >
-                      bering.igloo.ooo
-                    </font>
-                  }
+                  primary="Default server"
+                  secondary="bering.igloo.ooo"
                 />
               </ListItem>
               {dialogList}
@@ -323,21 +324,7 @@ class ChangeServer extends React.Component {
                 <ListItemIcon>
                   <Add />
                 </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
-                    >
-                      New server
-                    </font>
-                  }
-                />
+                <ListItemText primary="New server" />
               </ListItem>
             </List>
           </div>
@@ -513,21 +500,7 @@ class ChangeServer extends React.Component {
                   paddingLeft: "24px",
                 }}
               >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : {}
-                      }
-                    >
-                      Use unsecure connection
-                    </font>
-                  }
-                />
+                <ListItemText primary="Use unsecure connection" />
                 <ListItemSecondaryAction>
                   <Switch
                     checked={this.state.unsecure}
@@ -749,21 +722,7 @@ class ChangeServer extends React.Component {
                   paddingLeft: "24px",
                 }}
               >
-                <ListItemText
-                  primary={
-                    <font
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : {}
-                      }
-                    >
-                      Use unsecure connection
-                    </font>
-                  }
-                />
+                <ListItemText primary="Use unsecure connection" />
                 <ListItemSecondaryAction>
                   <Switch
                     checked={this.state.editUnsecure}
@@ -849,22 +808,7 @@ class ChangeServer extends React.Component {
             <ListItemIcon>
               <Create />
             </ListItemIcon>
-            <ListItemText
-              inset
-              primary={
-                <font
-                  style={
-                    !this.props.unauthenticated &&
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { color: "white" }
-                      : { color: "black" }
-                  }
-                >
-                  Edit
-                </font>
-              }
-            />
+            <ListItemText inset primary="Edit" />
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -881,71 +825,7 @@ class ChangeServer extends React.Component {
           </MenuItem>
         </Menu>
         {this.state.redirectToAccounts && <Redirect to="/accounts" />}
-      </React.Fragment>
-    )
-
-    return this.props.unauthenticated ? (
-      <MuiThemeProvider
-        theme={createMuiTheme({
-          palette: {
-            default: { main: "#fff" },
-            primary: { light: "#0083ff", main: "#0057cb" },
-            secondary: { main: "#ff4081" },
-            error: { main: "#f44336" },
-          },
-          overrides: {
-            MuiDialogTitle: {
-              root: {
-                fontSize: "1.3125rem",
-                lineHeight: "1.16667em",
-                fontWeight: 500,
-                cursor: "default",
-                webkitTouchCallout: "none",
-                webkitUserSelect: "none",
-                khtmlUserSelect: "none",
-                mozUserSelect: "none",
-                msUserSelect: "none",
-                userSelect: "none",
-              },
-            },
-            MuiButton: {
-              containedPrimary: {
-                backgroundColor: "#0083ff",
-              },
-            },
-            MuiListItemIcon: {
-              root: {
-                color: "black",
-              },
-            },
-            MuiDialogActions: {
-              action: {
-                marginRight: "4px",
-              },
-            },
-            MuiList: {
-              padding: {
-                paddingTop: 0,
-                paddingBottom: 0,
-              },
-            },
-            MuiSwitch: {
-              colorSecondary: {
-                "&$checked": {
-                  color: "#0083ff",
-                  "& + $bar": {
-                    backgroundColor: "#0083ff",
-                  },
-                },
-              },
-            },
-          },
-        })}
-      >
-        {dialog}
       </MuiThemeProvider>
-    ) : (
-      dialog
     )
   }
 }

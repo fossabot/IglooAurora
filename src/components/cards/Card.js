@@ -32,7 +32,6 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import Visibility from "@material-ui/icons/Visibility"
 import AspectRatio from "@material-ui/icons/AspectRatio"
 import Create from "@material-ui/icons/Create"
-import Delete from "@material-ui/icons/Delete"
 
 class Card extends Component {
   state = {
@@ -390,24 +389,6 @@ class Card extends Component {
                     </MenuItem>
                   </React.Fragment>
                 )}
-                {(value.myRole === "OWNER" || value.myRole === "ADMIN") &&
-                  typeof Storage !== "undefined" &&
-                  this.props.devMode && (
-                    <MenuItem
-                      onClick={() => {
-                        this.setState({ deleteOpen: true })
-                        this.handleMenuClose()
-                      }}
-                    >
-                      <ListItemIcon>
-                        <Delete style={{ color: "#f44336" }} />
-                      </ListItemIcon>
-                      <ListItemText inset>
-                        <font style={{ color: "#f44336" }}>Delete</font>
-                      </ListItemText>
-                    </MenuItem>
-                  )}
-                }
               </Menu>
             </div>
           </div>
@@ -433,7 +414,6 @@ class Card extends Component {
           createdAt={value.createdAt}
           updatedAt={value.updatedAt}
           id={value.id}
-          devMode={this.props.devMode}
         />
         <CardSize
           open={this.state.cardSizeOpen}

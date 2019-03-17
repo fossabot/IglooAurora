@@ -71,8 +71,6 @@ export default class EnvironmentsBody extends Component {
       typeof Storage !== "undefined" &&
       localStorage.getItem("nightMode") === "true"
 
-    let devMode = this.props.devMode
-
     if (user) {
       yourEnvironmentsList = (
         <Grid
@@ -92,7 +90,6 @@ export default class EnvironmentsBody extends Component {
                   userData={this.props.userData}
                   environment={environment}
                   nightMode={nightMode}
-                  devMode={devMode}
                   showMessage={() => this.setState({ copyMessageOpen: true })}
                   lastEnvironment={!user.environments[1]}
                   client={this.props.client}
@@ -231,7 +228,6 @@ export default class EnvironmentsBody extends Component {
                   userData={this.props.userData}
                   environment={environment}
                   nightMode={nightMode}
-                  devMode={devMode}
                   showMessage={() => this.setState({ copyMessageOpen: true })}
                   lastEnvironment={!user.environments[1]}
                   client={this.props.client}
