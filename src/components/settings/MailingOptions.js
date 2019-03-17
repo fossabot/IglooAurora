@@ -107,6 +107,20 @@ class MailingOptions extends React.Component {
     })
   }
 
+  PendingEnvironmentShareAcceptedEmail = pendingEnvironmentShareAcceptedEmail => {
+    this.props.PendingEnvironmentShareAcceptedEmail({
+      variables: {
+        pendingEnvironmentShareAcceptedEmail,
+      },
+      optimisticResponse: {
+        __typename: "Mutation",
+        settings: {
+          pendingEnvironmentShareAcceptedEmail,
+        },
+      },
+    })
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -172,8 +186,9 @@ class MailingOptions extends React.Component {
                             marginBottom: "32px",
                           }
                     }
-                  > className="notSelectable defaultCursor"
-                     Unexpected error
+                    className="notSelectable defaultCursor"
+                  >
+                    Unexpected error
                   </Typography>
                 )
 
@@ -196,7 +211,9 @@ class MailingOptions extends React.Component {
                       <Checkbox
                         checked={settings.passwordChangeEmail}
                         onChange={event =>
-                          this.passwordChangeEmailMutation(event.target.checked)
+                          this.passwordChangeEmailMutation(
+                            event.target.checked
+                          )
                         }
                         color="primary"
                         style={{ marginRight: "8px" }}
@@ -209,7 +226,9 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.permanentTokenCreatedEmail}
+                        checked={
+                          settings.permanentTokenCreatedEmail
+                        }
                         onChange={event =>
                           this.permanentTokenCreatedEmailMutation(
                             event.target.checked
@@ -225,9 +244,11 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.pendingEnvironmentShareReceivedEmail}
+                        checked={
+                          settings.pendingOwnerChangeReceivedEmail
+                        }
                         onChange={event =>
-                          this.pendingEnvironmentShareReceivedEmailMutation(
+                          this.pendingOwnerChangeReceivedEmailMutation(
                             event.target.checked
                           )
                         }
@@ -241,7 +262,9 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.pendingOwnerChangeAcceptedEmail}
+                        checked={
+                          settings.pendingOwnerChangeAcceptedEmail
+                        }
                         onChange={event =>
                           this.changePendingOwnerChangeAcceptedEmail(
                             event.target.checked
@@ -257,9 +280,11 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.pendingEnvironmentShareAcceptedEmail}
+                        checked={
+                          settings.pendingEnvironmentShareReceivedEmail
+                        }
                         onChange={event =>
-                          this.pendingEnvironmentShareAcceptedEmailMutation(
+                          this.pendingEnvironmentShareReceivedEmailMutation(
                             event.target.checked
                           )
                         }
@@ -273,9 +298,11 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.permanentTokenCreatedEmail}
+                        checked={
+                          settings.pendingEnvironmentShareAcceptedEmail
+                        }
                         onChange={event =>
-                          this.permanentTokenCreatedEmailMutation(
+                          this.pendingEnvironmentShareAcceptedEmailMutation(
                             event.target.checked
                           )
                         }
@@ -306,6 +333,7 @@ export default graphql(
       settings(
         pendingOwnerChangeAcceptedEmail: $pendingOwnerChangeAcceptedEmail
       ) {
+        id
         pendingOwnerChangeAcceptedEmail
       }
     }
@@ -320,6 +348,7 @@ export default graphql(
         settings(
           pendingEnvironmentShareReceivedEmail: $pendingEnvironmentShareReceivedEmail
         ) {
+          id
           pendingEnvironmentShareReceivedEmail
         }
       }
@@ -334,6 +363,7 @@ export default graphql(
           settings(
             pendingOwnerChangeReceivedEmail: $pendingOwnerChangeReceivedEmail
           ) {
+            id
             pendingOwnerChangeReceivedEmail
           }
         }
@@ -346,6 +376,7 @@ export default graphql(
         gql`
           mutation settings($passwordChangeEmail: Boolean) {
             settings(passwordChangeEmail: $passwordChangeEmail) {
+              id
               passwordChangeEmail
             }
           }
@@ -360,6 +391,7 @@ export default graphql(
               settings(
                 permanentTokenCreatedEmail: $permanentTokenCreatedEmail
               ) {
+                id
                 permanentTokenCreatedEmail
               }
             }
@@ -367,7 +399,25 @@ export default graphql(
           {
             name: "PermanentTokenCreatedEmail",
           }
-        )(withMobileDialog({ breakpoint: "xs" })(MailingOptions))
+        )(
+          graphql(
+            gql`
+              mutation settings(
+                $pendingEnvironmentShareAcceptedEmail: Boolean
+              ) {
+                settings(
+                  pendingEnvironmentShareAcceptedEmail: $pendingEnvironmentShareAcceptedEmail
+                ) {
+                  id
+                  pendingEnvironmentShareAcceptedEmail
+                }
+              }
+            `,
+            {
+              name: "PendingEnvironmentShareAcceptedEmail",
+            }
+          )(withMobileDialog({ breakpoint: "xs" })(MailingOptions))
+        )
       )
     )
   )

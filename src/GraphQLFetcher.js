@@ -243,6 +243,7 @@ class GraphQLFetcher extends Component {
           primaryAuthenticationMethods
           secondaryAuthenticationMethods
           settings {
+            id
             timeFormat
             dateFormat
             lengthAndMass
@@ -654,6 +655,7 @@ export default graphql(
         primaryAuthenticationMethods
         secondaryAuthenticationMethods
         settings {
+          id
           timeFormat
           dateFormat
           lengthAndMass
