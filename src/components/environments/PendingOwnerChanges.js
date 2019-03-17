@@ -328,24 +328,12 @@ class PendingOwnerChanges extends Component {
                         onClick={() =>
                           this.AcceptOwnership(pendingOwnerChange.id)
                         }
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
                       >
                         <Done />
                       </IconButton>
                       <IconButton
                         onClick={() =>
                           this.DeclineOwnership(pendingOwnerChange.id)
-                        }
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
                         }
                       >
                         <Close />

@@ -128,6 +128,7 @@ const lightTheme = createMuiTheme({
       msUserSelect: "none",
       userSelect: "none",
     },
+    MuiIconButton: { root: { color: "black" } },
     ...sharedStyles,
   },
 })
@@ -242,6 +243,7 @@ const darkTheme = createMuiTheme({
     MuiDivider: {
       root: { backgroundColor: "rgba(255, 255, 255, 0.12)" },
     },
+    MuiIconButton: { root: { color: "white" } },
     ...sharedStyles,
   },
 })
@@ -644,8 +646,7 @@ class App extends Component {
       localStorage.getItem("accountList") &&
       JSON.parse(localStorage.getItem("accountList")).find(
         account =>
-          account.id ===
-          querystringify.parse(window.location.search).user
+          account.id === querystringify.parse(window.location.search).user
       ) &&
       window.location.pathname === "/"
     ) {
@@ -657,8 +658,7 @@ class App extends Component {
       this.setState({
         bearer: JSON.parse(localStorage.getItem("accountList")).find(
           account =>
-            account.id ===
-            querystringify.parse(window.location.search).user
+            account.id === querystringify.parse(window.location.search).user
         ).token,
       })
 
@@ -755,10 +755,8 @@ class App extends Component {
               path="/login"
               render={() =>
                 this.state.bearer &&
-                !querystringify.parse(window.location.search)
-                  .certificate &&
-                !querystringify.parse(window.location.search)
-                  .user ? (
+                !querystringify.parse(window.location.search).certificate &&
+                !querystringify.parse(window.location.search).user ? (
                   <Redirect to="/" />
                 ) : (
                   <UnauthenticatedMain

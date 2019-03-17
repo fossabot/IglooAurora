@@ -215,12 +215,6 @@ class CreateNotification extends React.Component {
                             <IconButton
                               onClick={() => this.setState({ content: "" })}
                               tabIndex="-1"
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
-                              }
                             >
                               <Clear />
                             </IconButton>

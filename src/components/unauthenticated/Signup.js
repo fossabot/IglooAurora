@@ -84,6 +84,7 @@ const desktopTheme = createMuiTheme({
         "&$checked": { color: "#0083ff" },
       },
     },
+    MuiIconButton: {root:{color:"black"}},
     ...sharedStyles,
   },
 })
@@ -125,6 +126,7 @@ const mobileTheme = createMuiTheme({
       },
     },
     MuiInputBase: { root: { color: "white" } },
+    MuiIconButton: {root:{color:"white"}},
     ...sharedStyles,
   },
 })

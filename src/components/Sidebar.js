@@ -444,12 +444,6 @@ class Sidebar extends Component {
                     <IconButton
                       onClick={() => this.props.searchDevices("")}
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
                     >
                       <Clear />
                     </IconButton>
@@ -482,11 +476,7 @@ class Sidebar extends Component {
                   )[0]
                 )
               }
-              style={
-                typeof Storage !== "undefined" &&
-                localStorage.getItem("nightMode") === "true"
-                  ? { color: "white", marginTop: "8px" }
-                  : { color: "black", marginTop: "8px" }
+              style={ { marginTop: "8px" }
               }
             >
               <Tune

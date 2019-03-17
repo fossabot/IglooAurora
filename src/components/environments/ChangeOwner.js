@@ -141,12 +141,6 @@ class ChangeOwner extends Component {
                       this.setState({ email: "", emailEmpty: true })
                     }
                     tabIndex="-1"
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { color: "rgba(0, 0, 0, 0.46)" }
-                        : { color: "rgba(0, 0, 0, 0.46)" }
-                    }
                   >
                     <Clear />
                   </IconButton>

@@ -239,30 +239,10 @@ export default class FilterPopover extends Component {
                         localStorage.setItem("sortDirection", "ascending")
                       this.props.forceUpdate()
                     }}
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? localStorage.getItem("sortBy") === "index"
-                          ? {
-                              marginRight: 0,
-                              marginLeft: "auto",
-                              color: "white",
-                              opacity: 0.54,
-                            }
-                          : {
-                              marginRight: 0,
-                              marginLeft: "auto",
-                              color: "white",
-                            }
-                        : localStorage.getItem("sortBy") === "index"
-                        ? {
-                            marginRight: 0,
-                            marginLeft: "auto",
-                            color: "black",
-                            opacity: 0.54,
-                          }
-                        : { marginRight: 0, marginLeft: "auto", color: "black" }
-                    }
+                    style={{
+                      marginRight: 0,
+                      marginLeft: "auto",
+                    }}
                     disabled={localStorage.getItem("sortBy") === "index"}
                   >
                     <SvgIcon>
@@ -281,30 +261,10 @@ export default class FilterPopover extends Component {
                         localStorage.setItem("sortDirection", "descending")
                       this.props.forceUpdate()
                     }}
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? localStorage.getItem("sortBy") === "index"
-                          ? {
-                              marginRight: 0,
-                              marginLeft: "auto",
-                              color: "white",
-                              opacity: 0.54,
-                            }
-                          : {
-                              marginRight: 0,
-                              marginLeft: "auto",
-                              color: "white",
-                            }
-                        : localStorage.getItem("sortBy") === "index"
-                        ? {
-                            marginRight: 0,
-                            marginLeft: "auto",
-                            color: "black",
-                            opacity: 0.54,
-                          }
-                        : { marginRight: 0, marginLeft: "auto", color: "black" }
-                    }
+                    style={{
+                      marginRight: 0,
+                      marginLeft: "auto",
+                    }}
                     disabled={localStorage.getItem("sortBy") === "index"}
                   >
                     <SvgIcon>
@@ -519,20 +479,7 @@ export default class FilterPopover extends Component {
                         <ListItemSecondaryAction>
                           <IconButton onClick={this.handleOpen(deviceType)}>
                             {this.state.open.indexOf(deviceType) !== -1 ? (
-                              <ExpandLess
-                                style={
-                                  typeof Storage !== "undefined" &&
-                                  localStorage.getItem("nightMode") === "true"
-                                    ? {
-                                        backgroundColor: "transparent",
-                                        color: "white",
-                                      }
-                                    : {
-                                        backgroundColor: "transparent",
-                                        color: "black",
-                                      }
-                                }
-                              />
+                              <ExpandLess />
                             ) : (
                               <ExpandMore
                                 style={

@@ -71,6 +71,7 @@ const desktopTheme = createMuiTheme({
         "&$checked": { color: "#0083ff" },
       },
     },
+    MuiIconButton: {root:{color:"black"}},
     ...sharedStyles,
   },
 })
@@ -112,6 +113,7 @@ const mobileTheme = createMuiTheme({
       },
     },
     MuiInputBase: { root: { color: "white" } },
+    MuiIconButton: {root:{color:"white"}},
     ...sharedStyles,
   },
 })
@@ -640,7 +642,6 @@ class Login extends Component {
                             this.setState({ isMailEmpty: true })
                           }}
                           tabIndex="-1"
-                          style={{ color: "black" }}
                         >
                           <Clear />
                         </IconButton>
@@ -916,7 +917,6 @@ class Login extends Component {
                                   }
                                   onMouseDown={this.handleMouseDownPassword}
                                   tabIndex="-1"
-                                  style={{ color: "black" }}
                                 >
                                   {/* fix for ToggleIcon glitch on Edge */}
                                   {document.documentMode ||
@@ -950,22 +950,6 @@ class Login extends Component {
                           disabled={
                             !this.isEmailValid(this.props.email) ||
                             this.state.showLoading
-                          }
-                          style={
-                            this.isEmailValid(this.props.email) &&
-                            !this.state.showLoading
-                              ? this.props.mobile
-                                ? { color: "white" }
-                                : { color: "black" }
-                              : this.props.mobile
-                              ? {
-                                  color: "white",
-                                  opacity: 0.54,
-                                }
-                              : {
-                                  color: "black",
-                                  opacity: 0.54,
-                                }
                           }
                         >
                           <Fingerprint
@@ -1438,9 +1422,6 @@ class Login extends Component {
                                           this.handleMouseDownPassword
                                         }
                                         tabIndex="-1"
-                                        style={{
-                                          color: "black",
-                                        }}
                                       >
                                         {/* fix for ToggleIcon glitch on Edge */}
                                         {document.documentMode ||
@@ -1476,22 +1457,6 @@ class Login extends Component {
                                 disabled={
                                   !this.isEmailValid(this.props.email) ||
                                   this.state.showLoading
-                                }
-                                style={
-                                  this.isEmailValid(this.props.email) &&
-                                  !this.state.showLoading
-                                    ? this.props.mobile
-                                      ? { color: "white" }
-                                      : { color: "black" }
-                                    : this.props.mobile
-                                    ? {
-                                        color: "white",
-                                        opacity: 0.54,
-                                      }
-                                    : {
-                                        color: "black",
-                                        opacity: 0.54,
-                                      }
                                 }
                               >
                                 <Fingerprint
@@ -1805,7 +1770,6 @@ class Login extends Component {
                                 }
                                 onMouseDown={this.handleMouseDownPassword}
                                 tabIndex="-1"
-                                style={{ color: "black" }}
                               >
                                 {/* fix for ToggleIcon glitch on Edge */}
                                 {document.documentMode ||
@@ -1871,12 +1835,6 @@ class Login extends Component {
                                   })
                                 }
                                 tabIndex="-1"
-                                style={
-                                  typeof Storage !== "undefined" &&
-                                  localStorage.getItem("nightMode") === "true"
-                                    ? { color: "rgba(0, 0, 0, 0.46)" }
-                                    : { color: "rgba(0, 0, 0, 0.46)" }
-                                }
                               >
                                 <Clear />
                               </IconButton>
@@ -1896,22 +1854,6 @@ class Login extends Component {
                         disabled={
                           !this.isEmailValid(this.props.email) ||
                           this.state.showSecondFactorLoading
-                        }
-                        style={
-                          this.isEmailValid(this.props.email) &&
-                          !this.state.showSecondFactorLoading
-                            ? this.props.mobile
-                              ? { color: "white" }
-                              : { color: "black" }
-                            : this.props.mobile
-                            ? {
-                                color: "white",
-                                opacity: 0.54,
-                              }
-                            : {
-                                color: "black",
-                                opacity: 0.54,
-                              }
                         }
                       >
                         <Fingerprint

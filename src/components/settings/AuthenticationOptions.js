@@ -557,14 +557,6 @@ class AuthenticationOptions extends React.Component {
                 anchorEl: event.currentTarget,
               })
             }
-            style={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-                ? {
-                    color: "white",
-                  }
-                : { color: "black" }
-            }
           >
             <MoreVert />
           </IconButton>
@@ -602,14 +594,6 @@ class AuthenticationOptions extends React.Component {
                 menuTarget: "TOTP",
                 anchorEl: event.currentTarget,
               })
-            }
-            style={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-                ? {
-                    color: "white",
-                  }
-                : { color: "black" }
             }
           >
             <MoreVert />
@@ -649,14 +633,6 @@ class AuthenticationOptions extends React.Component {
                 anchorEl: event.currentTarget,
               })
             }
-            style={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-                ? {
-                    color: "white",
-                  }
-                : { color: "black" }
-            }
           >
             <MoreVert />
           </IconButton>
@@ -671,9 +647,7 @@ class AuthenticationOptions extends React.Component {
           close={this.props.close}
           fullScreen={this.props.fullScreen}
           setToken={token => this.setState({ token })}
-          openOtherDialog={() =>
-            this.setState({ selectAuthTypeOpen: true })
-          }
+          openOtherDialog={() => this.setState({ selectAuthTypeOpen: true })}
           otherDialogOpen={this.state.selectAuthTypeOpen}
           client={this.props.client}
           user={this.props.user}
@@ -944,12 +918,6 @@ class AuthenticationOptions extends React.Component {
                         }))
                       }
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(0, 0, 0, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                     >
                       {/* fix for ToggleIcon glitch on Edge */}
                       {document.documentMode ||
@@ -1133,12 +1101,6 @@ class AuthenticationOptions extends React.Component {
                                 this.setState({ code: "", codeEmpty: true })
                               }
                               tabIndex="-1"
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "rgba(0, 0, 0, 0.46)" }
-                                  : { color: "rgba(0, 0, 0, 0.46)" }
-                              }
                             >
                               <Clear />
                             </IconButton>
@@ -1199,12 +1161,15 @@ class AuthenticationOptions extends React.Component {
           >
             {navigator.credentials &&
               window.location.host === "aurora.igloo.ooo" && (
-              <ListItem button onClick={() => this.enableWebAuthn()}
-                disabled={
-                  user &&
-                  (user.primaryAuthenticationMethods.includes("WEBATUHN") ||
-                    user.secondaryAuthenticationMethods.includes("WEBATUHN"))
-                }>
+                <ListItem
+                  button
+                  onClick={() => this.enableWebAuthn()}
+                  disabled={
+                    user &&
+                    (user.primaryAuthenticationMethods.includes("WEBATUHN") ||
+                      user.secondaryAuthenticationMethods.includes("WEBATUHN"))
+                  }
+                >
                   <ListItemIcon>
                     <Fingerprint />
                   </ListItemIcon>

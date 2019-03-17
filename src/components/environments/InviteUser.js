@@ -53,9 +53,8 @@ class InviteUser extends Component {
         e.message ===
         "GraphQL error: This user already has a role on this environment"
       ) {
-         this.setState({ emailError: "This user already has a role" })
-      }
-        else      if (
+        this.setState({ emailError: "This user already has a role" })
+      } else if (
         e.message ===
         "GraphQL error: This account doesn't exist, check the email passed"
       ) {
@@ -166,12 +165,6 @@ class InviteUser extends Component {
                       this.setState({ email: "", emailEmpty: true })
                     }
                     tabIndex="-1"
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { color: "rgba(0, 0, 0, 0.46)" }
-                        : { color: "rgba(0, 0, 0, 0.46)" }
-                    }
                   >
                     <Clear />
                   </IconButton>

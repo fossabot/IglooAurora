@@ -561,12 +561,6 @@ class CreateValue extends React.Component {
                             endAdornment: this.state.name && (
                               <InputAdornment position="end">
                                 <IconButton
-                                  style={
-                                    typeof Storage !== "undefined" &&
-                                    localStorage.getItem("nightMode") === "true"
-                                      ? { color: "white" }
-                                      : { color: "black" }
-                                  }
                                   onClick={() => this.setState({ name: "" })}
                                   tabIndex="-1"
                                 >
@@ -803,13 +797,6 @@ class CreateValue extends React.Component {
                               endAdornment: this.state.unit && (
                                 <InputAdornment position="end">
                                   <IconButton
-                                    style={
-                                      typeof Storage !== "undefined" &&
-                                      localStorage.getItem("nightMode") ===
-                                        "true"
-                                        ? { color: "white" }
-                                        : { color: "black" }
-                                    }
                                     onClick={() => this.setState({ unit: "" })}
                                     tabIndex="-1"
                                   >

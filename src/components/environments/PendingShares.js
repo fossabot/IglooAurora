@@ -330,12 +330,6 @@ class PendingShares extends Component {
                             pendingEnvironmentShare.id
                           )
                         }
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
                       >
                         <Done />
                       </IconButton>
@@ -344,12 +338,6 @@ class PendingShares extends Component {
                           this.DeclinePendingEnvironmentShare(
                             pendingEnvironmentShare.id
                           )
-                        }
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
                         }
                       >
                         <Close />

@@ -202,7 +202,7 @@ export default function VerifyAuthentication(props) {
           }}
           onKeyPress={event => {
             if (event.key === "Enter" && password !== "")
-         verifyPassword(props, setPasswordError, password, setLoading)
+              verifyPassword(props, setPasswordError, password, setLoading)
           }}
           style={{
             width: "100%",
@@ -214,12 +214,6 @@ export default function VerifyAuthentication(props) {
                 <IconButton
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex="-1"
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { color: "rgba(0, 0, 0, 0.46)" }
-                      : { color: "rgba(0, 0, 0, 0.46)" }
-                  }
                 >
                   {/* fix for ToggleIcon glitch on Edge */}
                   {document.documentMode || /Edge/.test(navigator.userAgent) ? (
@@ -247,21 +241,6 @@ export default function VerifyAuthentication(props) {
             <IconButton
               onClick={() => verifyWebAuthn(props, setLoading)}
               disabled={loading}
-              style={
-                !loading
-                  ? localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                  : localStorage.getItem("nightMode") === "true"
-                  ? {
-                      color: "white",
-                      opacity: 0.54,
-                    }
-                  : {
-                      color: "black",
-                      opacity: 0.54,
-                    }
-              }
             >
               <Fingerprint
                 style={{

@@ -15,7 +15,6 @@ import CustomizeEnvironment from "./CustomizeEnvironment"
 import EnvironmentInfo from "./EnvironmentInfo"
 import ShareEnvironment from "./ShareEnvironment"
 import LeaveEnvironment from "./LeaveEnvironment"
-import HibernateEnvironment from "./HibernateEnvironment"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import fox from "../../styles/assets/fox.jpg"
@@ -177,18 +176,7 @@ class EnvironmentCard extends Component {
             <Tooltip id="tooltip-bottom" title="More" placement="bottom">
               <IconButton onClick={this.handleMenuOpen} style={{ zIndex: 10 }}>
                 {/*makes the IconButton appear over the ButtonBase*/}
-                <MoreVert
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "white",
-                        }
-                      : {
-                          color: "black",
-                        }
-                  }
-                />
+                <MoreVert />
               </IconButton>
             </Tooltip>
           </div>
@@ -449,19 +437,6 @@ class EnvironmentCard extends Component {
               </MenuItem>
             </React.Fragment>
           )}
-          {/* {this.props.environment.myRole === "OWNER" && (
-            <MenuItem
-              onClick={() => {
-                this.setState({ hibernateOpen: true })
-                this.handleMenuClose()
-              }}
-            >
-              <ListItemIcon>
-                <AcUnit />
-              </ListItemIcon>
-              <ListItemText inset primary="Hibernate" disableTypography />
-            </MenuItem>
-          )} */}
           {(this.props.environment.myRole === "OWNER" ||
             this.props.environment.myRole === "ADMIN") && (
             <MenuItem
@@ -493,11 +468,6 @@ class EnvironmentCard extends Component {
         <DeleteEnvironment
           open={this.state.deleteOpen}
           close={() => this.setState({ deleteOpen: false })}
-          environment={this.props.environment}
-        />
-        <HibernateEnvironment
-          open={this.state.hibernateOpen}
-          close={() => this.setState({ hibernateOpen: false })}
           environment={this.props.environment}
         />
         <ShareEnvironment

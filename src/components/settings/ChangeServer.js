@@ -29,7 +29,7 @@ import Switch from "@material-ui/core/Switch"
 import SvgIcon from "@material-ui/core/SvgIcon"
 import normalizeUrl from "normalize-url"
 import compareUrls from "compare-urls"
-import {Redirect} from "react-router"
+import { Redirect } from "react-router"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -58,8 +58,9 @@ class ChangeServer extends React.Component {
 
     if (!this.props.unauthenticated) {
       this.props.logOut(false)
-    }else{
-this.setState({redirectToAccounts:true})}
+    } else {
+      this.setState({ redirectToAccounts: true })
+    }
   }
 
   isUrl = url => {
@@ -231,13 +232,6 @@ this.setState({redirectToAccounts:true})}
                   menuTarget: server,
                   anchorEl: event.currentTarget,
                 })
-              }
-              style={
-                !this.props.unauthenticated &&
-                typeof Storage !== "undefined" &&
-                localStorage.getItem("nightMode") === "true"
-                  ? { color: "white" }
-                  : { color: "black" }
               }
             >
               <MoreVert />
@@ -435,13 +429,6 @@ this.setState({redirectToAccounts:true})}
                       onClick={() => {
                         this.setState({ name: "" })
                       }}
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(255, 255, 255, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                       tabIndex="-1"
                     >
                       <Clear />
@@ -505,13 +492,6 @@ this.setState({redirectToAccounts:true})}
                       onClick={() => {
                         this.setState({ url: "" })
                       }}
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(255, 255, 255, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                       tabIndex="-1"
                     >
                       <Clear />
@@ -686,13 +666,6 @@ this.setState({redirectToAccounts:true})}
                       onClick={() => {
                         this.setState({ editName: "" })
                       }}
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(255, 255, 255, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                       tabIndex="-1"
                     >
                       <Clear />
@@ -755,13 +728,6 @@ this.setState({redirectToAccounts:true})}
                       onClick={() => {
                         this.setState({ editUrl: "" })
                       }}
-                      style={
-                        !this.props.unauthenticated &&
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(255, 255, 255, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                       tabIndex="-1"
                     >
                       <Clear />
@@ -914,9 +880,7 @@ this.setState({redirectToAccounts:true})}
             </ListItemText>
           </MenuItem>
         </Menu>
-        {
-          this.state.redirectToAccounts && <Redirect to="/accounts" />
-        }
+        {this.state.redirectToAccounts && <Redirect to="/accounts" />}
       </React.Fragment>
     )
 

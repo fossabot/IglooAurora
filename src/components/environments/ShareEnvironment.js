@@ -213,12 +213,6 @@ class ShareEnvironment extends React.Component {
                     <ListItemSecondaryAction>
                       <IconButton
                         onClick={() => this.setState({ changeOwnerOpen: true })}
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
                       >
                         <SwapHoriz />
                       </IconButton>
@@ -294,12 +288,6 @@ class ShareEnvironment extends React.Component {
                               revokeOwnerChangeOpen: true,
                               menuTarget: item,
                             })
-                          }
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
                           }
                         >
                           <RemoveCircleOutline />
@@ -395,12 +383,6 @@ class ShareEnvironment extends React.Component {
                                 selectedUserForChangeRoleDialog: "admin",
                               })
                             }
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? { color: "white" }
-                                : { color: "black" }
-                            }
                           >
                             <MoreVert />
                           </IconButton>
@@ -442,18 +424,18 @@ class ShareEnvironment extends React.Component {
                               >
                                 {item.receiver.name}
                                 <font
-                                                                style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? {
-                                      color: "white",
-                                      opacity: 0.72,
-                                    }
-                                  : {
-                                      color: "black",
-                                      opacity: 0.72,
-                                    }
-                              }
+                                  style={
+                                    typeof Storage !== "undefined" &&
+                                    localStorage.getItem("nightMode") === "true"
+                                      ? {
+                                          color: "white",
+                                          opacity: 0.72,
+                                        }
+                                      : {
+                                          color: "black",
+                                          opacity: 0.72,
+                                        }
+                                  }
                                 >
                                   {" "}
                                   (pending)
@@ -485,12 +467,6 @@ class ShareEnvironment extends React.Component {
                                   menuTarget: item,
                                   selectedUserForChangeRoleDialog: "admin",
                                 })
-                              }
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
                               }
                             >
                               <MoreVert />
@@ -639,12 +615,6 @@ class ShareEnvironment extends React.Component {
                                 selectedUserForChangeRoleDialog: "editor",
                               })
                             }
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? { color: "white" }
-                                : { color: "black" }
-                            }
                           >
                             <MoreVert />
                           </IconButton>
@@ -686,18 +656,18 @@ class ShareEnvironment extends React.Component {
                               >
                                 {item.receiver.name}
                                 <font
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? {
-                                      color: "white",
-                                      opacity: 0.72,
-                                    }
-                                  : {
-                                      color: "black",
-                                      opacity: 0.72,
-                                    }
-                              }
+                                  style={
+                                    typeof Storage !== "undefined" &&
+                                    localStorage.getItem("nightMode") === "true"
+                                      ? {
+                                          color: "white",
+                                          opacity: 0.72,
+                                        }
+                                      : {
+                                          color: "black",
+                                          opacity: 0.72,
+                                        }
+                                  }
                                 >
                                   {" "}
                                   (pending)
@@ -729,12 +699,6 @@ class ShareEnvironment extends React.Component {
                                   menuTarget: item,
                                   selectedUserForChangeRoleDialog: "editor",
                                 })
-                              }
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
                               }
                             >
                               <MoreVert />
@@ -883,12 +847,6 @@ class ShareEnvironment extends React.Component {
                                 selectedUserForChangeRoleDialog: "spectator",
                               })
                             }
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? { color: "white" }
-                                : { color: "black" }
-                            }
                           >
                             <MoreVert />
                           </IconButton>
@@ -930,18 +888,18 @@ class ShareEnvironment extends React.Component {
                               >
                                 {item.receiver.name}
                                 <font
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? {
-                                      color: "white",
-                                      opacity: 0.72,
-                                    }
-                                  : {
-                                      color: "black",
-                                      opacity: 0.72,
-                                    }
-                              }
+                                  style={
+                                    typeof Storage !== "undefined" &&
+                                    localStorage.getItem("nightMode") === "true"
+                                      ? {
+                                          color: "white",
+                                          opacity: 0.72,
+                                        }
+                                      : {
+                                          color: "black",
+                                          opacity: 0.72,
+                                        }
+                                  }
                                 >
                                   {" "}
                                   (pending)
@@ -973,12 +931,6 @@ class ShareEnvironment extends React.Component {
                                   menuTarget: item,
                                   selectedUserForChangeRoleDialog: "spectator",
                                 })
-                              }
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
                               }
                             >
                               <MoreVert />

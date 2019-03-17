@@ -170,7 +170,6 @@ class AddDevice extends Component {
               typeof Storage !== "undefined" &&
               localStorage.getItem("nightMode") === "true"
                 ? {
-                    color: "white",
                     marginTop: "-54px",
                     width: "48px",
                     marginBottom: "8px",
@@ -178,7 +177,6 @@ class AddDevice extends Component {
                     marginRight: "auto",
                   }
                 : {
-                    color: "black",
                     marginTop: "-54px",
                     width: "48px",
                     marginBottom: "8px",
@@ -290,12 +288,6 @@ class AddDevice extends Component {
                         this.setState({ code: "", codeEmpty: true })
                       }
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(0, 0, 0, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                     >
                       <Clear />
                     </IconButton>
@@ -447,12 +439,6 @@ class AddDevice extends Component {
                         this.setState({ name: "", nameEmpty: true })
                       }
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(0, 0, 0, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                     >
                       <Clear />
                     </IconButton>
@@ -489,11 +475,7 @@ class AddDevice extends Component {
 
 export default graphql(
   gql`
-    mutation ClaimDevice(
-      $deviceId: ID!
-      $name: String!
-      $environmentId: ID!
-    ) {
+    mutation ClaimDevice($deviceId: ID!, $name: String!, $environmentId: ID!) {
       claimDevice(
         deviceId: $deviceId
         name: $name

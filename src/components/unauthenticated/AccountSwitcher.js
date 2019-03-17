@@ -211,13 +211,7 @@ export default class AccountSwitcher extends Component {
                       }
                     />
                     <ListItemSecondaryAction>
-                      <IconButton
-                        style={
-                          this.props.mobile
-                            ? { color: "white" }
-                            : { color: "black" }
-                        }
-                      >
+                      <IconButton>
                         <RemoveCircleOutline
                           onClick={() => {
                             localStorage.setItem(

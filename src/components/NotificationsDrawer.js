@@ -460,12 +460,6 @@ class NotificationsDrawer extends React.Component {
                               onClick={() =>
                                 deleteNotification(notification.id)
                               }
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
-                              }
                             >
                               <Delete />
                             </IconButton>
@@ -566,12 +560,6 @@ class NotificationsDrawer extends React.Component {
                                   anchorEl: event.currentTarget,
                                   targetNotification: notification,
                                 })
-                              }
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
                               }
                             >
                               <MoreVert />

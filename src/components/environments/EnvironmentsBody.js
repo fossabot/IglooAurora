@@ -19,7 +19,6 @@ import CreateEnvironment from "./CreateEnvironment"
 import Helmet from "react-helmet"
 import PendingShares from "./PendingShares"
 import PendingOwnerChanges from "./PendingOwnerChanges"
-import Hibernations from "./Hibernations"
 import People from "@material-ui/icons/People"
 //import AcUnit from "@material-ui/icons/AcUnit"
 import Add from "@material-ui/icons/Add"
@@ -157,59 +156,6 @@ export default class EnvironmentsBody extends Component {
               </ButtonBase>
             </Grid>
           )}
-          {/*   <Grid key="hibernations" item  style={{ margin: 8 }}>
-            <ButtonBase
-              focusRipple
-              style={{ borderRadius: "4px" }}
-              onClick={() => this.setState({ hibernationsOpen: true })}
-            >
-              <Paper
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? {
-                        backgroundColor: "#2f333d",
-                        width: "256px",
-                        height: "192px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        color: "white",
-                        borderRadius: "4px",
-                      }
-                    : {
-                        backgroundColor: "#fff",
-                        width: "256px",
-                        height: "192px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        borderRadius: "4px",
-                      }
-                }
-              >
-                <div
-                  style={{
-                    paddingTop: "47px",
-                    paddingBottom: "47px",
-                    borderRadius: "4px",
-                  }}
-                >
-                  <AcUnit style={{ fontSize: "48px", margin: "8px 0" }} />
-                  <br />
-                  <Typography
-                    variant="h5"
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { color: "white" }
-                        : {}
-                    }
-                  >
-                    99+ hibernations
-                  </Typography>
-                </div>
-              </Paper>
-            </ButtonBase>
-          </Grid> */}
           <Grid key="create" item style={{ margin: 8 }}>
             <ButtonBase
               focusRipple
@@ -448,9 +394,6 @@ export default class EnvironmentsBody extends Component {
                         <IconButton
                           onClick={() => this.props.searchEnvironments("")}
                           onMouseDown={this.handleMouseDownSearch}
-                          style={
-                            nightMode ? { color: "white" } : { color: "black" }
-                          }
                           tabIndex="-1"
                         >
                           <Clear />
@@ -720,12 +663,6 @@ export default class EnvironmentsBody extends Component {
                       <InputAdornment position="end">
                         <IconButton
                           onClick={() => this.props.searchEnvironments("")}
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
-                          }
                           tabIndex="-1"
                         >
                           <Clear />
@@ -851,10 +788,6 @@ export default class EnvironmentsBody extends Component {
         <PendingOwnerChanges
           open={this.state.pendingOwnerChangesOpen}
           close={() => this.setState({ pendingOwnerChangesOpen: false })}
-        />
-        <Hibernations
-          open={this.state.hibernationsOpen}
-          close={() => this.setState({ hibernationsOpen: false })}
         />
       </React.Fragment>
     )

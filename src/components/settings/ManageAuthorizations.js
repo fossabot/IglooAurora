@@ -336,10 +336,7 @@ class AuthDialog extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.open !== nextProps.open &&
-      nextProps.open
-    ) {
+    if (this.props.open !== nextProps.open && nextProps.open) {
       this.setState({
         isPasswordEmpty: false,
         passwordError: false,
@@ -514,12 +511,6 @@ class AuthDialog extends React.Component {
                       anchorEl: event.currentTarget,
                     })
                   }
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { color: "white" }
-                      : { color: "black" }
-                  }
                 >
                   <MoreVert />
                 </IconButton>
@@ -556,9 +547,7 @@ class AuthDialog extends React.Component {
     return (
       <React.Fragment>
         <VerifyAuthentication
-          open={
-            this.props.open && !this.state.authDialogOpen
-          }
+          open={this.props.open && !this.state.authDialogOpen}
           close={this.props.close}
           fullScreen={this.props.fullScreen}
           setToken={token => this.setState({ token })}
@@ -651,12 +640,6 @@ class AuthDialog extends React.Component {
                       onClick={() => {
                         this.setState({ tokenName: "" })
                       }}
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(0, 0, 0, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                       tabIndex="-1"
                     >
                       <Clear />

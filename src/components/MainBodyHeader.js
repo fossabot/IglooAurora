@@ -226,18 +226,10 @@ class MainBodyHeader extends Component {
           {this.props.isMobile && (
             <Tooltip id="tooltip-bottom" title="Devices" placement="bottom">
               <IconButton
-                style={
-                  this.props.environmentData.environment
-                    ? {
-                        color: "white",
-                        margin: "0 8px",
-                      }
-                    : {
-                        color: "white",
-                        opacity: 0.5,
-                        margin: "0 8px",
-                      }
-                }
+                style={{
+                  color: "white",
+                  margin: "0 8px",
+                }}
                 component={Link}
                 to={
                   this.props.environmentData.environment
@@ -322,21 +314,6 @@ class MainBodyHeader extends Component {
                       )[0].id) ||
                     (device && device.id)
                   )
-                }
-                style={
-                  (this.props.environmentData.environment &&
-                    this.props.environmentData.environment.devices.filter(
-                      device => device.id === this.props.deviceId
-                    )[0] &&
-                    this.props.environmentData.environment &&
-                    this.props.environmentData.environment.devices.filter(
-                      device => device.id === this.props.deviceId
-                    )[0].id) ||
-                  (device && device.id)
-                    ? {
-                        color: "white",
-                      }
-                    : { color: "white", opacity: 0.5 }
                 }
               >
                 <MoreVert />

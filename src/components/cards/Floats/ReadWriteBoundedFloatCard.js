@@ -108,12 +108,6 @@ class ReadWriteBooleanCard extends Component {
                     <IconButton
                       onClick={() => this.setState({ value: "" })}
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "rgba(0, 0, 0, 0.46)" }
-                          : { color: "rgba(0, 0, 0, 0.46)" }
-                      }
                     >
                       <Clear />
                     </IconButton>

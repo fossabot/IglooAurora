@@ -133,12 +133,6 @@ class CreateDevice extends React.Component {
                     <IconButton
                       onClick={() => this.setState({ deviceType: "" })}
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
                     >
                       <Clear />
                     </IconButton>
@@ -174,12 +168,6 @@ class CreateDevice extends React.Component {
                     <IconButton
                       onClick={() => this.setState({ firmware: "" })}
                       tabIndex="-1"
-                      style={
-                        typeof Storage !== "undefined" &&
-                        localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
-                      }
                     >
                       <Clear />
                     </IconButton>

@@ -300,16 +300,6 @@ class Card extends Component {
                     onClick={() => {
                       this.setState({ isCardFullScreen: true })
                     }}
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? {
-                            color: "white",
-                          }
-                        : {
-                            color: "black",
-                          }
-                    }
                   >
                     <Fullscreen />
                   </IconButton>
@@ -317,16 +307,6 @@ class Card extends Component {
               ) : null}
               <Tooltip id="tooltip-more" title="More" placement="bottom">
                 <IconButton
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? {
-                          color: "white",
-                        }
-                      : {
-                          color: "black",
-                        }
-                  }
                   onClick={event =>
                     this.setState({ anchorEl: event.currentTarget })
                   }
