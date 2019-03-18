@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from "react"
+import React, { Component, Fragment } from "react"
 import { ApolloClient } from "apollo-client"
 import { HttpLink } from "apollo-link-http"
 import { InMemoryCache } from "apollo-cache-inmemory"
@@ -27,10 +27,20 @@ export default class UnAuthenticatedMain extends Component {
     token: "",
   }
 
-  signIn = async emailCertificate => {
+  signIn = async token => {
     try {
       this.props.changePasswordError("")
       this.props.changeEmailError("")
+
+      const verifyEmailTokenMutation = await this.client.mutate({
+        mutation: gql`
+          mutation($token: String!) {
+            verifyEmailToken(token: $token)
+          }
+        `,
+        variables: { token },
+      })
+
       const loginMutation = await this.client.mutate({
         mutation: gql`
           mutation($emailCertificate: String) {
@@ -48,7 +58,7 @@ export default class UnAuthenticatedMain extends Component {
           }
         `,
         variables: {
-          emailCertificate,
+          emailCertificate: verifyEmailTokenMutation.data.verifyEmailToken,
         },
       })
 
@@ -72,7 +82,10 @@ export default class UnAuthenticatedMain extends Component {
 
   render() {
     if (this.state.tapCounter === 7) {
-      this.setState({ changeServerOpen: true, tapCounter: 0 })
+      this.setState({
+        changeServerOpen: true,
+        tapCounter: 0,
+      })
     }
 
     let link = new HttpLink({
@@ -96,44 +109,46 @@ export default class UnAuthenticatedMain extends Component {
     if (
       window.location.pathname === "/login" &&
       querystringify.parse(window.location.search) &&
-      querystringify.parse(window.location.search).certificate
+      querystringify.parse(window.location.search).token
     ) {
       if (!this.state.emailLogInRunning) {
         this.setState({ emailLogInRunning: true })
-        this.signIn(
-          querystringify.parse(window.location.search)
-            .certificate
-        )
+        this.signIn(querystringify.parse(window.location.search).token)
       }
 
-      return (<Fragment>
-        <div
-          style={{
-            position: "absolute",
-            margin: "auto",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            textAlign: "center",
-            padding: "0 32px",
-            backgroundColor: "#0057cb",
-          }}
-          className="notSelectable defaultCursor"
-        >
-          <MuiThemeProvider
-            theme={createMuiTheme({
-              overrides: {
-                MuiCircularProgress: {
-                  colorPrimary: { color: "#fff" },
-                },
-              },
-            })}
+      return (
+        <Fragment>
+          <div
+            style={{
+              position: "absolute",
+              margin: "auto",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              textAlign: "center",
+              padding: "0 32px",
+              backgroundColor: "#0057cb",
+            }}
+            className="notSelectable defaultCursor"
           >
-            <CenteredSpinner large style={{ paddingTop: "96px" }} />
-          </MuiThemeProvider>
-        </div>
-      {this.state.redirect && <Redirect push to="/login" />}</Fragment>)
+            <MuiThemeProvider
+              theme={createMuiTheme({
+                overrides: {
+                  MuiCircularProgress: {
+                    colorPrimary: {
+                      color: "#fff",
+                    },
+                  },
+                },
+              })}
+            >
+              <CenteredSpinner large style={{ paddingTop: "96px" }} />
+            </MuiThemeProvider>
+          </div>
+          {this.state.redirect && <Redirect push to="/login" />}
+        </Fragment>
+      )
     }
 
     return (
@@ -163,7 +178,11 @@ export default class UnAuthenticatedMain extends Component {
                     mobile
                     client={this.client}
                     signIn={this.props.signIn}
-                    goToSignup={() => this.setState({ slideIndex: 0 })}
+                    goToSignup={() =>
+                      this.setState({
+                        slideIndex: 0,
+                      })
+                    }
                     password={this.props.password}
                     changePassword={this.props.changePassword}
                     passwordError={this.props.passwordError}
@@ -174,7 +193,9 @@ export default class UnAuthenticatedMain extends Component {
                     changeEmailError={this.props.changeEmailError}
                     changeSignupEmail={this.props.changeSignupEmail}
                     openChangeServer={() =>
-                      this.setState({ changeServerOpen: true })
+                      this.setState({
+                        changeServerOpen: true,
+                      })
                     }
                     forceUpdate={() => this.props.forceUpdate()}
                     changeBearer={this.props.changeBearer}
@@ -187,7 +208,9 @@ export default class UnAuthenticatedMain extends Component {
                   changeEmail={this.props.changeEmail}
                   forceUpdate={() => this.props.forceUpdate()}
                   openChangeServer={() =>
-                    this.setState({ changeServerOpen: true })
+                    this.setState({
+                      changeServerOpen: true,
+                    })
                   }
                 />
               ) : (
@@ -206,7 +229,9 @@ export default class UnAuthenticatedMain extends Component {
                   changeEmailError={this.props.changeEmailError}
                   changeLoginEmail={this.props.changeLoginEmail}
                   openChangeServer={() =>
-                    this.setState({ changeServerOpen: true })
+                    this.setState({
+                      changeServerOpen: true,
+                    })
                   }
                   setToken={token => this.setState({ token })}
                 />
@@ -217,7 +242,10 @@ export default class UnAuthenticatedMain extends Component {
           <div className="auroraLoginBackground">
             <Paper
               className="loginForm"
-              style={{ margin: "32px 0", borderRadius: "8px" }}
+              style={{
+                margin: "32px 0",
+                borderRadius: "8px",
+              }}
             >
               <div
                 className="leftSide notSelectable"
@@ -235,7 +263,10 @@ export default class UnAuthenticatedMain extends Component {
                     alt="Igloo logo"
                     className="notSelectable nonDraggable"
                     draggable="false"
-                    style={{ width: "300px", marginBottom: "50px" }}
+                    style={{
+                      width: "300px",
+                      marginBottom: "50px",
+                    }}
                     onClick={() =>
                       this.setState(oldState => ({
                         tapCounter: oldState.tapCounter + 1,
@@ -280,7 +311,11 @@ export default class UnAuthenticatedMain extends Component {
                   client={this.client}
                   isDialog={false}
                   signIn={this.props.signIn}
-                  goToLogin={() => this.setState({ slideIndex: 1 })}
+                  goToLogin={() =>
+                    this.setState({
+                      slideIndex: 1,
+                    })
+                  }
                   email={this.props.email}
                   password={this.props.password}
                   name={this.props.name}
@@ -298,7 +333,11 @@ export default class UnAuthenticatedMain extends Component {
         )}
         <ChangeServer
           open={this.state.changeServerOpen}
-          close={() => this.setState({ changeServerOpen: false })}
+          close={() =>
+            this.setState({
+              changeServerOpen: false,
+            })
+          }
           forceUpdate={() => this.props.forceUpdate()}
         />
       </React.Fragment>

@@ -238,8 +238,8 @@ class Login extends Component {
         if (!user.primaryAuthenticationMethods[0]) {
           await this.props.client.mutate({
             mutation: gql`
-              mutation SendLogInEmail($email: String!) {
-                sendLogInEmail(email: $email)
+              mutation SendConfirmationEmail($email: String!) {
+                sendConfirmationEmail(email:$email,operation:"LOG_IN")
               }
             `,
             variables: {
@@ -1002,10 +1002,10 @@ class Login extends Component {
                         this.setState({ logInEmailOpen: true })
 
                         this.props.client.mutate({
-                          mutation: gql`
-                            mutation SendLogInEmail($email: String!) {
-                              sendLogInEmail(email: $email)
-                            }
+            mutation: gql`
+              mutation SendConfirmationEmail($email: String!) {
+                sendConfirmationEmail(email:$email,operation:"LOG_IN")
+              }
                           `,
                           variables: {
                             email: this.state.user.email,
@@ -1157,10 +1157,10 @@ class Login extends Component {
                   onCompleted={data =>
                     !data.user.primaryAuthenticationMethods[0] &&
                     this.props.client.mutate({
-                      mutation: gql`
-                        mutation SendLogInEmail($email: String!) {
-                          sendLogInEmail(email: $email)
-                        }
+            mutation: gql`
+              mutation SendConfirmationEmail($email: String!) {
+                sendConfirmationEmail(email:$email,operation:LOG_IN)
+              }
                       `,
                       variables: {
                         email: data.user.email,
