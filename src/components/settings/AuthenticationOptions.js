@@ -1049,7 +1049,15 @@ class AuthenticationOptions extends React.Component {
                       .
                     </div>
                     <div
-                      dangerouslySetInnerHTML={{ __html: qrCode }}
+                                          dangerouslySetInnerHTML={
+                      localStorage.getItem("nightMode") === "true"
+                        ? {
+                            __html: qrCode
+                              .replace(/#ffffff/g, "transparent")
+                              .replace(/#000000/g, "#ffffff"),
+                          }
+                        : { __html: qrCode }
+                    }
                       style={{
                         margin: "8px auto",
                         width: "195px",

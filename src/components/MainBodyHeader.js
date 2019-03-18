@@ -27,6 +27,7 @@ import SwapHoriz from "@material-ui/icons/SwapHoriz"
 import Delete from "@material-ui/icons/Delete"
 import Star from "@material-ui/icons/Star"
 import StarBorder from "@material-ui/icons/StarBorder"
+import {Redirect} from "react-router-dom"
 
 class MainBodyHeader extends Component {
   hot_keys = {
@@ -387,6 +388,7 @@ class MainBodyHeader extends Component {
         <DeleteDevice
           open={this.state.deleteOpen}
           close={() => this.setState({ deleteOpen: false })}
+          client={this.props.client}
           device={
             device ||
             (this.props.environmentData.environment &&
@@ -613,6 +615,7 @@ class MainBodyHeader extends Component {
               )}
           </Menu>
         )}
+        {this.state.goToDevices&&<Redirect to={"/?environment=" + this.props.environment}/>}
       </React.Fragment>
     )
   }

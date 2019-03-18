@@ -153,7 +153,7 @@ export default class EnvironmentsBody extends Component {
               </ButtonBase>
             </Grid>
           )}
-          <Grid key="create" item style={{ margin: 8 }}>
+          {user.environments.length<100 && <Grid key="create" item style={{ margin: 8 }}>
             <ButtonBase
               focusRipple
               style={{ borderRadius: "4px" }}
@@ -205,7 +205,7 @@ export default class EnvironmentsBody extends Component {
                 </div>
               </Paper>
             </ButtonBase>
-          </Grid>
+          </Grid>}
         </Grid>
       )
 

@@ -37,7 +37,7 @@ class Main extends Component {
     } = this.props
 
     if (this.props.areSettingsOpen) {
-        this.setState({ slideIndex: index })
+      this.setState({ slideIndex: index })
     } else {
       if (environment) {
         if (this.props.environmentData.environment.devices[index]) {
@@ -493,6 +493,7 @@ class Main extends Component {
                     environments={this.props.environments}
                     isMobile={true}
                     userData={this.props.userData}
+                    client={this.props.client}
                   />
                 </AppBar>
                 <div
@@ -587,6 +588,7 @@ class Main extends Component {
                 environmentData={this.props.environmentData}
                 environments={this.props.environments}
                 userData={this.props.userData}
+                client={this.props.client}
               />
             ) : (
               <div
