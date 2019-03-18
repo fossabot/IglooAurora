@@ -85,161 +85,165 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
         <div style={{ height: "100%", padding: "0 24px" }}>
           You may want to save this device ID and QR code before deleting it, so
           here they are!
-          <Query
-            query={gql`
-              query($id: ID!) {
-                device(id: $id) {
-                  id
-                  qrCode
-                }
-              }
-            `}
-            skip={!props.open}
-            variables={{ id: props.device && props.device.id }}
-          >
-            {({ loading, error, data }) => {
-              if (loading) return <CenteredSpinner />
-
-              if (error)
-                return (
-                  <Typography
-                    variant="h5"
-                    className="notSelectable defaultCursor"
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? {
-                            textAlign: "center",
-                            marginTop: "32px",
-                            marginBottom: "32px",
-                            color: "white",
-                          }
-                        : {
-                            textAlign: "center",
-                            marginTop: "32px",
-                            marginBottom: "32px",
-                          }
-                    }
-                  >
-                    Unexpected error
-                  </Typography>
-                )
-
-              if (data) {
-                setQrCode(data.device.qrCode)
-              }
-
-              return (
-                <div
-                  style={{
-                    marginTop: "16px",
-                    marginBottom: "8px",
-                    textAlign: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Button
-                    onClick={async () => {
-                      clipboardCopy(props.device.id)
-
-                      //this way the zoom animation isn't shown when the dialog opens
-                      setCopyRan(true)
-
-                      setShowCopy(false)
-                      setShowConfirm(true)
-                      await sleep(1000)
-                      setShowConfirm(false)
-                      setShowCopy(true)
-                    }}
-                    style={{ marginRight: "4px" }}
-                  >
-                    {showConfirm && (
-                      <Zoom in={showConfirm}>
-                        <SvgIcon style={{ marginRight: "8px" }}>
-                          <svg
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? {
-                                    width: "24px",
-                                    height: "24px",
-                                    color: "white",
-                                  }
-                                : {
-                                    width: "24px",
-                                    height: "24px",
-                                    color: "black",
-                                  }
-                            }
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
-                          </svg>
-                        </SvgIcon>
-                      </Zoom>
-                    )}
-                    {showCopy && (
-                      <Zoom
-                        in={showCopy}
-                        timeout={
-                          copyRan
-                            ? { enter: 225, exit: 255 }
-                            : { enter: 0, exit: 0 }
-                        }
-                      >
-                        <SvgIcon style={{ marginRight: "8px" }}>
-                          <svg
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? {
-                                    width: "24px",
-                                    height: "24px",
-                                    color: "white",
-                                  }
-                                : {
-                                    width: "24px",
-                                    height: "24px",
-                                    color: "black",
-                                  }
-                            }
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-                          </svg>
-                        </SvgIcon>
-                      </Zoom>
-                    )}
-                    Copy ID
-                  </Button>
-                  <Button onClick={() => downloadQr(qrCode, props.device.name)}>
-                    <SvgIcon style={{ marginRight: "8px" }}>
-                      <svg
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? {
-                                width: "24px",
-                                height: "24px",
-                                color: "white",
-                              }
-                            : {
-                                width: "24px",
-                                height: "24px",
-                                color: "black",
-                              }
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-                      </svg>
-                    </SvgIcon>
-                    Download QR
-                  </Button>
-                </div>
-              )
+          <div
+            style={{
+              marginTop: "16px",
+              marginBottom: "8px",
+              textAlign: "center",
+              width: "100%",
             }}
-          </Query>
+          >
+            <Query
+              query={gql`
+                query($id: ID!) {
+                  device(id: $id) {
+                    id
+                    qrCode
+                  }
+                }
+              `}
+              skip={!props.open}
+              variables={{ id: props.device && props.device.id }}
+            >
+              {({ loading, error, data }) => {
+                if (loading) return <CenteredSpinner />
+
+                if (error)
+                  return (
+                    <Typography
+                      variant="h5"
+                      className="notSelectable defaultCursor"
+                      style={
+                        typeof Storage !== "undefined" &&
+                        localStorage.getItem("nightMode") === "true"
+                          ? {
+                              textAlign: "center",
+                              marginTop: "32px",
+                              marginBottom: "32px",
+                              color: "white",
+                            }
+                          : {
+                              textAlign: "center",
+                              marginTop: "32px",
+                              marginBottom: "32px",
+                            }
+                      }
+                    >
+                      Unexpected error
+                    </Typography>
+                  )
+
+                if (data) {
+                  setQrCode(data.device.qrCode)
+                }
+
+                return (
+                  <Fragment>
+                    <Button
+                      onClick={async () => {
+                        clipboardCopy(props.device.id)
+
+                        //this way the zoom animation isn't shown when the dialog opens
+                        setCopyRan(true)
+
+                        setShowCopy(false)
+                        setShowConfirm(true)
+                        await sleep(1000)
+                        setShowConfirm(false)
+                        setShowCopy(true)
+                      }}
+                      style={{ marginRight: "4px" }}
+                    >
+                      {showConfirm && (
+                        <Zoom in={showConfirm}>
+                          <SvgIcon style={{ marginRight: "8px" }}>
+                            <svg
+                              style={
+                                typeof Storage !== "undefined" &&
+                                localStorage.getItem("nightMode") === "true"
+                                  ? {
+                                      width: "24px",
+                                      height: "24px",
+                                      color: "white",
+                                    }
+                                  : {
+                                      width: "24px",
+                                      height: "24px",
+                                      color: "black",
+                                    }
+                              }
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+                            </svg>
+                          </SvgIcon>
+                        </Zoom>
+                      )}
+                      {showCopy && (
+                        <Zoom
+                          in={showCopy}
+                          timeout={
+                            copyRan
+                              ? { enter: 225, exit: 255 }
+                              : { enter: 0, exit: 0 }
+                          }
+                        >
+                          <SvgIcon style={{ marginRight: "8px" }}>
+                            <svg
+                              style={
+                                typeof Storage !== "undefined" &&
+                                localStorage.getItem("nightMode") === "true"
+                                  ? {
+                                      width: "24px",
+                                      height: "24px",
+                                      color: "white",
+                                    }
+                                  : {
+                                      width: "24px",
+                                      height: "24px",
+                                      color: "black",
+                                    }
+                              }
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            </svg>
+                          </SvgIcon>
+                        </Zoom>
+                      )}
+                      Copy ID
+                    </Button>
+                    <Button
+                      onClick={() => downloadQr(qrCode, props.device.name)}
+                    >
+                      <SvgIcon style={{ marginRight: "8px" }}>
+                        <svg
+                          style={
+                            typeof Storage !== "undefined" &&
+                            localStorage.getItem("nightMode") === "true"
+                              ? {
+                                  width: "24px",
+                                  height: "24px",
+                                  color: "white",
+                                }
+                              : {
+                                  width: "24px",
+                                  height: "24px",
+                                  color: "black",
+                                }
+                          }
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                        </svg>
+                      </SvgIcon>
+                      Download QR
+                    </Button>
+                  </Fragment>
+                )
+              }}
+            </Query>
+          </div>
         </div>
         <DialogActions>
           <Button
