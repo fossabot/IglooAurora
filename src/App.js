@@ -9,6 +9,7 @@ import OfflineScreen from "./OfflineScreen"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import querystringify from "querystringify"
+import EmailTokenManager from "./EmailTokenManager"
 
 // Material-UI customizations that do not change between light mode and night mode
 const sharedStyles = {
@@ -820,6 +821,16 @@ class App extends Component {
                   />
                 )
               }
+            />
+            <Route
+              path="/delete-user"
+              render={() => (
+                <EmailTokenManager
+                  deleteUser
+                  bearer={this.state.bearer}
+                  setBearer={bearer => this.setState({ bearer })}
+                />
+              )}
             />
             <Route render={() => <Error404 isMobile={this.state.isMobile} />} />
           </Switch>
