@@ -14,6 +14,7 @@ import Grow from "@material-ui/core/Grow"
 import Slide from "@material-ui/core/Slide"
 import gql from "graphql-tag"
 import Fingerprint from "@material-ui/icons/Fingerprint"
+import Link from "@material-ui/core/Link"
 
 let GrowTransition = props => {
   return <Grow {...props} />
@@ -214,12 +215,20 @@ export default class VerifyAuthentication extends Component {
       >
         <DialogTitle disableTypography>Is it you?</DialogTitle>
         <div
-          style={{
-            height: "100%",
-            paddingRight: "24px",
-            paddingLeft: "24px",
-            textAlign: "center",
-          }}
+          style={
+            this.props.user && !this.props.user.primaryAuthenticationMethods[0]
+              ? {
+                  height: "100%",
+                  paddingRight: "24px",
+                  paddingLeft: "24px",
+                }
+              : {
+                  height: "100%",
+                  paddingRight: "24px",
+                  paddingLeft: "24px",
+                  textAlign: "center",
+                }
+          }
         >
           {this.props.user &&
             this.props.user.primaryAuthenticationMethods.includes(
@@ -300,9 +309,31 @@ export default class VerifyAuthentication extends Component {
                 />
               </IconButton>
             )}
-          {this.props.user &&
-            !this.props.user.primaryAuthenticationMethods[0] &&
-            <font>Look for a confirmation email in your inbox.</font>}
+          {this.props.user && !this.props.user.primaryAuthenticationMethods[0] && (
+            <font>
+              You should have received a confirmation link via email.{" "}
+              <Link
+                onClick={() =>
+                  this.sendConfirmationEmail(
+                    this.props.user.email,
+                    this.props.tokenType
+                  )
+                }
+                style={
+                  typeof Storage !== "undefined" &&
+                  localStorage.getItem("nightMode") === "true"
+                    ? {
+                        color: "white",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }
+                    : { cursor: "pointer" }
+                }
+              >
+                Didn't receive it?
+              </Link>
+            </font>
+          )}
         </div>
         <DialogActions>
           <Button onClick={this.props.close}>Never mind</Button>
