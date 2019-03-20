@@ -139,6 +139,12 @@ class AuthenticatedApp extends Component {
           changeBearer={this.props.changeBearer}
           forceUpdate={this.props.forceUpdate}
           client={this.client}
+          changeEmailBearer={this.props.changeEmailBearer}
+          changeAuthenticationBearer={this.props.changeAuthenticationBearer}
+          deleteUserBearer={this.props.deleteUserBearer}
+          managePermanentTokensBearer={
+            this.props.managePermanentTokensBearer
+          }
         />
       </ApolloProvider>
     )

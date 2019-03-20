@@ -172,7 +172,7 @@ export default class AccountPopover extends React.Component {
             <ListItem
               button
               onClick={() => {
-                this.props.openSettings()
+                this.props.setOpen(!this.props.isOpen)
                 this.setState({ popoverOpen: false })
               }}
             >

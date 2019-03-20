@@ -529,9 +529,6 @@ class GraphQLFetcher extends Component {
                 selectedDevice={
                   querystringify.parse(window.location.search).device
                 }
-                openSettings={() => this.setState({ areSettingsOpen: true })}
-                closeSettings={() => this.setState({ areSettingsOpen: false })}
-                areSettingsOpen={this.state.areSettingsOpen}
                 selectEnvironment={id =>
                   this.setState({ selectedEnvironment: id })
                 }
@@ -565,9 +562,6 @@ class GraphQLFetcher extends Component {
                 logOut={this.props.logOut}
                 changeAccount={this.props.changeAccount}
                 userData={this.props.userData}
-                openSettings={() => this.setState({ areSettingsOpen: true })}
-                closeSettings={() => this.setState({ areSettingsOpen: false })}
-                areSettingsOpen={this.state.areSettingsOpen}
                 selectDevice={id => this.setState({ selectedDevice: id })}
                 selectedDevice={null}
                 selectEnvironment={id =>
@@ -610,19 +604,25 @@ class GraphQLFetcher extends Component {
               searchEnvironments={text => {
                 this.setState({ environmentsSearchText: text })
               }}
-              settingsOpen={this.state.areSettingsOpen}
-              openSettings={() => this.setState({ areSettingsOpen: true })}
-              closeSettings={() => this.setState({ areSettingsOpen: false })}
-              areSettingsOpen={this.state.areSettingsOpen}
               environmentsSearchText={this.state.environmentsSearchText}
               forceUpdate={this.props.forceUpdate}
               client={this.props.client}
               mobile={this.props.isMobile}
               changeEmail={this.props.changeEmail}
+              changeEmailBearer={this.props.changeEmailBearer}
+              changeAuthenticationBearer={
+                this.props.changeAuthenticationBearer
+              }
+              deleteUserBearer={this.props.deleteUserBearer}
+              managePermanentTokensBearer={
+                this.props.managePermanentTokensBearer
+              }
             />
             <EmailNotVerified
               mobile={this.props.isMobile}
-              open={user && !user.emailIsVerified && this.state.snackbarOpen}
+              open={
+                user && !user.emailIsVerified && this.state.snackbarOpen
+              }
               close={() => this.setState({ snackbarOpen: false })}
             />
             <GenericDialog />

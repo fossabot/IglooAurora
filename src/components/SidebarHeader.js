@@ -10,17 +10,11 @@ class SidebarHeader extends Component {
   hot_keys = {
     "alt+,": {
       priority: 1,
-      handler: event =>
-        this.props.areSettingsOpen
-          ? this.props.closeSettings()
-          : this.props.openSettingsDialog(),
+      handler: event =>this.props.setOpen(!this.props.isOpen),
     },
     "alt+.": {
       priority: 1,
-      handler: event =>
-        this.props.areSettingsOpen
-          ? this.props.closeSettings()
-          : this.props.openSettingsDialog(),
+      handler: event => this.props.setOpen(!this.props.isOpen)
     },
     "alt+q": {
       priority: 1,

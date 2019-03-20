@@ -32,9 +32,8 @@ class Environments extends Component {
           logOut={this.props.logOut}
           changeBearer={this.props.changeBearer}
           changeAccount={this.props.changeAccount}
-          openSettings={this.props.openSettings}
-          closeSettings={this.props.closeSettings}
-          areSettingsOpen={this.props.areSettingsOpen}
+          isOpen={this.state.settingsOpen}
+          setOpen={settingsOpen => this.setState({ settingsOpen })}
           user={this.props.userData}
         />
         <EnvironmentsBody
@@ -47,8 +46,8 @@ class Environments extends Component {
           mobile={this.props.mobile}
         />
         <SettingsDialog
-          isOpen={this.props.settingsOpen}
-          closeSettingsDialog={this.props.closeSettings}
+          isOpen={this.state.settingsOpen}
+          setOpen={settingsOpen => this.setState({ settingsOpen })}
           handleSettingsTabChanged={(event, value) => {
             this.setState({
               slideIndex: value,
@@ -62,6 +61,10 @@ class Environments extends Component {
           forceUpdate={this.props.forceUpdate}
           logOut={this.props.logOut}
           client={this.props.client}
+          changeEmailBearer={this.props.changeEmailBearer}
+          changeAuthenticationBearer={this.props.changeAuthenticationBearer}
+          deleteUserBearer={this.props.deleteUserBearer}
+          managePermanentTokensBearer={this.props.managePermanentTokensBearer}
         />
       </React.Fragment>
     )

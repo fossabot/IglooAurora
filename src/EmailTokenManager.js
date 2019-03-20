@@ -70,7 +70,13 @@ function setUpClient(bearer) {
   })
 }
 
-async function verifyToken(token, bearer, setBearer, setRedirect) {
+async function verifyToken(
+  token,
+  bearer,
+  setSpecialBearer,
+  setRedirect,
+  tokenType
+) {
   try {
     let client
 
@@ -88,26 +94,29 @@ async function verifyToken(token, bearer, setBearer, setRedirect) {
       variables: { token },
     })
 
-    setBearer(verifyEmailTokenMutation.data.verifyEmailToken)
-  } finally {
-    setRedirect(true)
+    setSpecialBearer(verifyEmailTokenMutation.data.verifyEmailToken, tokenType)
+
+    setRedirect("/?dialog=" + tokenType)
+  } catch (e) {
+    setRedirect("/")
   }
 }
 
 export default function EmailTokenManager(props) {
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState("")
   const [verificationRunning, setVerificationRunning] = useState(false)
 
   if (redirect || !querystringify.parse(window.location.search).token)
-    return <Redirect to="/" />
+    return <Redirect to={redirect} />
 
   if (!verificationRunning) {
     setVerificationRunning(true)
     verifyToken(
       querystringify.parse(window.location.search).token,
       props.bearer,
-      props.setBearer,
-      setRedirect
+      props.setSpecialBearer,
+      setRedirect,
+      props.tokenType
     )
   }
 

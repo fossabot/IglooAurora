@@ -39,6 +39,8 @@ import AccountBox from "@material-ui/icons/AccountBox"
 import Language from "@material-ui/icons/Language"
 import MailingOptions from "./MailingOptions"
 import AuthenticationOptions from "./AuthenticationOptions"
+import querystringify from "querystringify"
+import {Redirect} from "react-router-dom"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -82,6 +84,7 @@ class SettingsDialog extends React.Component {
     isDeleteDisabled: true,
     stepIndex: 0,
     showHidden: false,
+    redirect:false,
     ...allDialogsClosed,
   }
 
@@ -185,9 +188,34 @@ class SettingsDialog extends React.Component {
     this.setState({ nameDialogOpen: false })
   }
 
+  componentDidMount(){
+    if (querystringify.parse(window.location.search).dialog==="delete-user" || querystringify.parse(window.location.search).dialog==="change-email" || querystringify.parse(window.location.search).dialog === "manage-permanent-tokens" || querystringify.parse(window.location.search).dialog==="change-authentication") {
+      this.props.setOpen(true)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isOpen !== this.props.isOpen && nextProps.isOpen) {
       this.setState(allDialogsClosed)
+
+    if (querystringify.parse(window.location.search).dialog==="delete-user") {
+      this.setState({deleteDialogOpen:true,redirect:true}
+        )
+    }
+
+    if (querystringify.parse(window.location.search).dialog==="change-email") {
+      this.setState({ emailDialogOpen: true, redirect: true }
+      )
+    }
+
+    if (querystringify.parse(window.location.search).dialog === "manage-permanent-tokens") {
+this.setState({authDialogOpen:true,redirect:true}
+        )
+    }
+
+    if (querystringify.parse(window.location.search).dialog==="change-authentication") {
+      this.setState({ authenticationOpen: true, redirect: true })
+    }
     }
   }
 
@@ -626,6 +654,7 @@ class SettingsDialog extends React.Component {
                 <ListItem
                   button
                   onClick={() => this.setState({ emailDialogOpen: true })}
+                  disabled={!user}
                 >
                   <ListItemText
                     primary={
@@ -886,7 +915,7 @@ class SettingsDialog extends React.Component {
             !this.state.mailingOpen &&
             !this.state.authenticationOpen
           }
-          onClose={this.props.closeSettingsDialog}
+          onClose={()=>this.props.setOpen(false)}
           TransitionComponent={
             this.props.fullScreen ? SlideTransition : GrowTransition
           }
@@ -928,7 +957,7 @@ class SettingsDialog extends React.Component {
                       ? { float: "right", color: "white" }
                       : { float: "right", color: "black" }
                   }
-                  onClick={this.props.closeSettingsDialog}
+                  onClick={()=>this.props.setOpen(false)}
                 >
                   Close
                 </Button>
@@ -954,9 +983,13 @@ class SettingsDialog extends React.Component {
                   >
                     Settings
                   </Typography>
-                  <Tooltip id="tooltip-bottom" title="Close" placement="bottom">
+                  <Tooltip
+                    id="tooltip-bottom"
+                    title="Close"
+                    placement="bottom"
+                  >
                     <IconButton
-                      onClick={this.props.closeSettingsDialog}
+                      onClick={()=>this.props.setOpen(false)}
                       style={{
                         marginRight: "-16px",
                         marginLeft: "auto",
@@ -1106,11 +1139,12 @@ class SettingsDialog extends React.Component {
           close={() => this.setState({ mailingOpen: false })}
         />
         <AuthenticationOptions
-          open={this.state.authenticationOpen}
+          open={this.props.isOpen && this.state.authenticationOpen}
           close={() => this.setState({ authenticationOpen: false })}
           client={this.props.client}
           user={user}
         />
+        {this.state.redirect && <Redirect to ="/"/>}
       </React.Fragment>
     )
   }

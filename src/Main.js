@@ -429,15 +429,6 @@ class Main extends Component {
                     logOut={this.props.logOut}
                     key="sidebarHeader"
                     selectedEnvironment={this.props.environmentId}
-                    areSettingsOpen={this.props.areSettingsOpen}
-                    openSettingsDialog={this.props.openSettings}
-                    closeSettings={this.props.closeSettings}
-                    changeSettingsState={() =>
-                      this.setState(oldState => ({
-                        areSettingsOpen: !oldState.areSettingsOpen,
-                        drawer: false,
-                      }))
-                    }
                     environments={this.props.environments}
                     snackbarOpen={this.props.snackbarOpen}
                   />
@@ -538,15 +529,6 @@ class Main extends Component {
               logOut={this.props.logOut}
               key="sidebarHeader"
               selectedEnvironment={this.props.environmentId}
-              areSettingsOpen={this.props.areSettingsOpen}
-              openSettingsDialog={this.props.openSettings}
-              closeSettings={this.props.closeSettings}
-              changeSettingsState={() =>
-                this.setState(oldState => ({
-                  areSettingsOpen: !oldState.areSettingsOpen,
-                  drawer: false,
-                }))
-              }
               environments={this.props.environments}
             />
             <div

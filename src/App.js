@@ -405,6 +405,10 @@ class App extends Component {
       signupPasswordError: "",
       name: "",
       nameError: "",
+      changeEmailBearer: "",
+      changeAuthenticationBearer: "",
+      deleteUserBearer: "",
+      managePermanentTokensBearer: "",
     }
   }
 
@@ -692,6 +696,14 @@ class App extends Component {
                       isMobile={this.state.isMobile}
                       forceUpdate={() => this.forceUpdate()}
                       changeEmail={loginEmail => this.setState({ loginEmail })}
+                      changeEmailBearer={this.state.changeEmailBearer}
+                      changeAuthenticationBearer={
+                        this.state.changeAuthenticationBearer
+                      }
+                      deleteUserBearer={this.state.deleteUserBearer}
+                      managePermanentTokensBearer={
+                        this.state.managePermanentTokensBearer
+                      }
                     />
                   )
                 } else {
@@ -826,9 +838,47 @@ class App extends Component {
               path="/delete-user"
               render={() => (
                 <EmailTokenManager
-                  deleteUser
+                  tokenType="delete-user"
                   bearer={this.state.bearer}
-                  setBearer={bearer => this.setState({ bearer })}
+                  setSpecialBearer={deleteUserBearer =>
+                    this.setState({ deleteUserBearer })
+                  }
+                />
+              )}
+            />
+            <Route
+              path="/change-authentication"
+              render={() => (
+                <EmailTokenManager
+                  tokenType="change-authentication"
+                  bearer={this.state.bearer}
+                  setSpecialBearer={changeAuthenticationBearer =>
+                    this.setState({ changeAuthenticationBearer })
+                  }
+                />
+              )}
+            />
+            <Route
+              path="/manage-permanent-tokens"
+              render={() => (
+                <EmailTokenManager
+                  tokenType="manage-permanent-tokens"
+                  bearer={this.state.bearer}
+                  setSpecialBearer={managePermanentTokensBearer =>
+                    this.setState({ managePermanentTokensBearer })
+                  }
+                />
+              )}
+            />
+            <Route
+              path="/change-email"
+              render={() => (
+                <EmailTokenManager
+                  tokenType="change-email"
+                  bearer={this.state.bearer}
+                  setSpecialBearer={changeEmailBearer =>
+                    this.setState({ changeEmailBearer })
+                  }
                 />
               )}
             />
