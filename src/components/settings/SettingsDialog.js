@@ -915,7 +915,7 @@ this.setState({authDialogOpen:true,redirect:true}
             !this.state.mailingOpen &&
             !this.state.authenticationOpen
           }
-          onClose={()=>this.props.setOpen(false)}
+          onClose={() => this.props.setOpen(false)}
           TransitionComponent={
             this.props.fullScreen ? SlideTransition : GrowTransition
           }
@@ -957,7 +957,7 @@ this.setState({authDialogOpen:true,redirect:true}
                       ? { float: "right", color: "white" }
                       : { float: "right", color: "black" }
                   }
-                  onClick={()=>this.props.setOpen(false)}
+                  onClick={() => this.props.setOpen(false)}
                 >
                   Close
                 </Button>
@@ -989,7 +989,7 @@ this.setState({authDialogOpen:true,redirect:true}
                     placement="bottom"
                   >
                     <IconButton
-                      onClick={()=>this.props.setOpen(false)}
+                      onClick={() => this.props.setOpen(false)}
                       style={{
                         marginRight: "-16px",
                         marginLeft: "auto",
@@ -1068,6 +1068,7 @@ this.setState({authDialogOpen:true,redirect:true}
           forceUpdate={() => this.props.forceUpdate()}
           logOut={this.props.logOut}
           user={this.props.userData.user}
+          token={this.props.deleteUserBearer}
         />
         <ManageAuthorizations
           open={this.props.isOpen && this.state.authDialogOpen}
@@ -1075,6 +1076,7 @@ this.setState({authDialogOpen:true,redirect:true}
           user={this.props.userData.user}
           client={this.props.client}
           logOut={this.props.logOut}
+          token={this.props.changeAuthenticationBearer}
         />
         <TimeFormatDialog
           handleTimeFormatDialogClose={this.handleTimeFormatDialogClose}
@@ -1129,10 +1131,12 @@ this.setState({authDialogOpen:true,redirect:true}
           client={this.props.client}
           email={user && user.email}
           user={user}
+          token={this.props.changeEmailBearer}
         />
         <VerifyEmailDialog
           open={this.props.isOpen && this.state.verifyOpen}
           close={() => this.setState({ verifyOpen: false })}
+          email={user && user.email}
         />
         <MailingOptions
           open={this.props.isOpen && this.state.mailingOpen}
@@ -1143,8 +1147,9 @@ this.setState({authDialogOpen:true,redirect:true}
           close={() => this.setState({ authenticationOpen: false })}
           client={this.props.client}
           user={user}
+          token={this.props.changeAuthenticationBearer}
         />
-        {this.state.redirect && <Redirect to ="/"/>}
+        {this.state.redirect && <Redirect to="/" />}
       </React.Fragment>
     )
   }

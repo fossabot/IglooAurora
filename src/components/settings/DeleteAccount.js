@@ -186,6 +186,7 @@ class DeleteAccountDialog extends React.Component {
           client={this.props.client}
           user={this.props.user}
           tokenType="DELETE_USER"
+          token={this.props.token}
         />
         <Dialog
           open={this.state.deleteOpen}

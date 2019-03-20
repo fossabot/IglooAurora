@@ -145,9 +145,9 @@ class CustomizedSnackbars extends React.Component {
           />
         </Snackbar>
         <VerifyEmailDialog
-          ResendVerificationEmail={this.props.ResendVerificationEmail}
           open={this.state.dialogOpen}
           close={() => this.setState({ dialogOpen: false })}
+          email={this.props.email}
         />
       </React.Fragment>
     )

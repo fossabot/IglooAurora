@@ -74,12 +74,13 @@ class VerifyEmail extends React.Component {
 export default withMobileDialog({ breakpoint: "xs" })(
   graphql(
     gql`
-      mutation ResendVerificationEmail {
-        resendVerificationEmail
+      mutation ResendVerificationEmail($email: String!) {
+        resendVerificationEmail(email: $email)
       }
     `,
     {
       name: "ResendVerificationEmail",
+      options: ({ email }) => ({ variables: { email } }),
     }
   )(VerifyEmail)
 )

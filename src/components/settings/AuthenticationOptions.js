@@ -652,6 +652,7 @@ class AuthenticationOptions extends React.Component {
           client={this.props.client}
           user={this.props.user}
           tokenType="CHANGE_AUTHENTICATION"
+          token={this.props.token}
         />
         <Dialog
           open={

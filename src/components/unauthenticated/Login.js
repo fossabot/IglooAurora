@@ -239,7 +239,7 @@ export default class Login extends Component {
           await this.props.client.mutate({
             mutation: gql`
               mutation SendConfirmationEmail($email: String!) {
-                sendConfirmationEmail(email:$email,operation:"LOG_IN")
+                sendConfirmationEmail(email:$email,operation:LOG_IN)
               }
             `,
             variables: {
@@ -1004,7 +1004,7 @@ export default class Login extends Component {
                         this.props.client.mutate({
             mutation: gql`
               mutation SendConfirmationEmail($email: String!) {
-                sendConfirmationEmail(email:$email,operation:"LOG_IN")
+                sendConfirmationEmail(email:$email,operation:LOG_IN)
               }
                           `,
                           variables: {

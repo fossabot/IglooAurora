@@ -550,6 +550,7 @@ class GraphQLFetcher extends Component {
                 mobile={this.props.isMobile}
                 open={user && !user.emailIsVerified && this.state.snackbarOpen}
                 close={() => this.setState({ snackbarOpen: false })}
+                email={user && user.email}
               />
               <GenericDialog />
             </React.Fragment>
@@ -585,6 +586,7 @@ class GraphQLFetcher extends Component {
                 mobile={this.props.isMobile}
                 open={user && !user.emailIsVerified && this.state.snackbarOpen}
                 close={() => this.setState({ snackbarOpen: false })}
+                email={user && user.email}
               />
               <GenericDialog />
             </React.Fragment>
@@ -624,6 +626,7 @@ class GraphQLFetcher extends Component {
                 user && !user.emailIsVerified && this.state.snackbarOpen
               }
               close={() => this.setState({ snackbarOpen: false })}
+              email={user && user.email}
             />
             <GenericDialog />
           </React.Fragment>

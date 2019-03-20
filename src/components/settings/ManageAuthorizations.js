@@ -347,6 +347,10 @@ class AuthDialog extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.token) {
+      this.setState({ authDialogOpen: true })
+    }
+
     this.props.tokenData.refetch()
 
     const permanentTokenCreatedSubscription = gql`
