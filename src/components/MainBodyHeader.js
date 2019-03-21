@@ -27,7 +27,7 @@ import SwapHoriz from "@material-ui/icons/SwapHoriz"
 import Delete from "@material-ui/icons/Delete"
 import Star from "@material-ui/icons/Star"
 import StarBorder from "@material-ui/icons/StarBorder"
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom"
 
 class MainBodyHeader extends Component {
   hot_keys = {
@@ -38,20 +38,11 @@ class MainBodyHeader extends Component {
   }
 
   state = {
-    open: false,
     infoOpen: false,
     deleteOpen: false,
     renameOpen: false,
     changeEnvironmentOpen: false,
     goToDevices: false,
-  }
-
-  handleOpen = () => {
-    this.setState({ open: true })
-  }
-
-  handleClose = () => {
-    this.setState({ open: false })
   }
 
   handleMenuOpen = event => {
@@ -267,15 +258,7 @@ class MainBodyHeader extends Component {
                   }
             }
           >
-            {(this.props.environmentData.environment &&
-              this.props.environmentData.environment.devices.filter(
-                device => device.id === this.props.deviceId
-              )[0] &&
-              this.props.environmentData.environment &&
-              this.props.environmentData.environment.devices.filter(
-                device => device.id === this.props.deviceId
-              )[0].name) ||
-              (device && device.name)}
+            {device && device.name}
           </Typography>
           <div
             style={{
@@ -303,106 +286,45 @@ class MainBodyHeader extends Component {
             <Tooltip id="tooltip-more" title="More" placement="bottom">
               <IconButton
                 onClick={this.handleMenuOpen}
-                disabled={
-                  !(
-                    (this.props.environmentData.environment &&
-                      this.props.environmentData.environment.devices.filter(
-                        device => device.id === this.props.deviceId
-                      )[0] &&
-                      this.props.environmentData.environment &&
-                      this.props.environmentData.environment.devices.filter(
-                        device => device.id === this.props.deviceId
-                      )[0].id) ||
-                    (device && device.id)
-                  )
-                }
+                disabled={!(device && device.id)}
               >
                 <MoreVert />
               </IconButton>
             </Tooltip>
           </div>
         </div>
-        {((this.props.environmentData.environment &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0] &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0].id &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0].createdAt &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0].updatedAt) ||
-          (device && device.id && device.createdAt && device.updatedAt)) && (
+        {device && device.id && device.createdAt && device.updatedAt && (
           <DeviceInfo
             infoOpen={this.state.infoOpen}
             close={() => this.setState({ infoOpen: false })}
-            device={
-              device ||
-              (this.props.environmentData.environment &&
-                this.props.environmentData.environment.devices.filter(
-                  device => device.id === this.props.deviceId
-                )[0])
-            }
+            device={device}
           />
         )}
-        {((this.props.environmentData.environment &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0] &&
-          this.props.environmentData.environment.devices.filter(
-            device => device.id === this.props.deviceId
-          )[0].id) ||
-          (device && device.id)) &&
-          this.props.userData && (
-            <ChangeEnvironment
-              open={this.state.changeEnvironmentOpen}
-              close={() => this.setState({ changeEnvironmentOpen: false })}
-              userData={this.props.userData}
-              device={
-                device ||
-                (this.props.environmentData.environment &&
-                  this.props.environmentData.environment.devices.filter(
-                    device => device.id === this.props.deviceId
-                  )[0])
-              }
-              deviceEnvironment={device && device.environment.id}
-              environments={this.props.environments}
-            />
-          )}
+        {device && device.id && this.props.userData && (
+          <ChangeEnvironment
+            open={this.state.changeEnvironmentOpen}
+            close={() => this.setState({ changeEnvironmentOpen: false })}
+            userData={this.props.userData}
+            device={device}
+            deviceEnvironment={device && device.environment.id}
+            environments={this.props.environments}
+          />
+        )}
         {device && device.name && (
           <RenameDevice
             open={this.state.renameOpen}
             close={() => this.setState({ renameOpen: false })}
-            device={
-              device ||
-              (this.props.environmentData.environment &&
-                this.props.environmentData.environment.devices.filter(
-                  device => device.id === this.props.deviceId
-                )[0])
-            }
+            device={device}
           />
         )}
         <DeleteDevice
           open={this.state.deleteOpen}
           close={() => this.setState({ deleteOpen: false })}
           client={this.props.client}
-          device={
-            device ||
-            (this.props.environmentData.environment &&
-              this.props.environmentData.environment.devices.filter(
-                device => device.id === this.props.deviceId
-              )[0])
-          }
+          device={device}
           deselectDevice={() => this.setState({ goToDevices: true })}
         />
-        {(device ||
-          (this.props.environmentData.environment &&
-            this.props.environmentData.environment.devices.filter(
-              device => device.id === this.props.deviceId
-            )[0])) && (
+        {device && (
           <Menu
             id="simple-menu"
             anchorEl={this.state.anchorEl}
@@ -435,17 +357,7 @@ class MainBodyHeader extends Component {
               <ListItemText inset primary="Information" disableTypography />
             </MenuItem>
             <Divider />
-            {(device && device.muted) ||
-            ((device ||
-              (this.props.environmentData.environment &&
-                this.props.environmentData.environment.devices.filter(
-                  device => device.id === this.props.deviceId
-                )[0])) &&
-              (device ||
-                (this.props.environmentData.environment &&
-                  this.props.environmentData.environment.devices.filter(
-                    device => device.id === this.props.deviceId
-                  )[0]))) ? (
+            {device && device.muted ? (
               <MenuItem
                 className="notSelectable"
                 style={
@@ -615,7 +527,9 @@ class MainBodyHeader extends Component {
               )}
           </Menu>
         )}
-        {this.state.goToDevices&&<Redirect to={"/?environment=" + this.props.environment}/>}
+        {this.state.goToDevices && (
+          <Redirect to={"/?environment=" + this.props.environment} />
+        )}
       </React.Fragment>
     )
   }

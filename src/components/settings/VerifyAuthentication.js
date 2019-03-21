@@ -190,7 +190,12 @@ export default class VerifyAuthentication extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.open !== this.props.open && nextProps.open) {
+    if (
+      nextProps.open !== this.props.open &&
+      nextProps.open &&
+      this.props.user &&
+      !this.props.user.primaryAuthenticationMethods[0]
+    ) {
       this.sendConfirmationEmail(
         this.props.user.email,
         this.props.tokenType,
@@ -327,7 +332,7 @@ export default class VerifyAuthentication extends Component {
                         textDecoration: "underline",
                         cursor: "pointer",
                       }
-                    : { cursor: "pointer" }
+                    : { cursor: "pointer",color:"#0083ff" }
                 }
               >
                 Didn't receive it?

@@ -113,7 +113,7 @@ class ChangeOwner extends Component {
             variant="outlined"
             error={this.state.emailEmpty || this.state.emailError}
             helperText={
-              this.state.isEmailEmpty
+              this.state.emailEmpty
                 ? "This field is required"
                 : this.state.emailError || " "
             }

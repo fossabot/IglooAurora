@@ -170,6 +170,9 @@ const darkTheme = createMuiTheme({
       text: {
         color: "white",
       },
+      disabled: {
+        color: "rgba(255,255,255,.26)",
+      },
     },
     MuiMenu: {
       paper: {
@@ -393,18 +396,14 @@ class App extends Component {
       isMobile: null,
       from: "",
       redirectToReferrer: false,
-      environmentId: "",
       loggedOut: false,
       loginEmail: "",
       loginEmailError: "",
       loginPassword: "",
-      loginPasswordError: "",
       signupEmail: "",
       signupEmailError: "",
       signupPassword: "",
-      signupPasswordError: "",
       name: "",
-      nameError: "",
       changeEmailBearer: "",
       changeAuthenticationBearer: "",
       deleteUserBearer: "",

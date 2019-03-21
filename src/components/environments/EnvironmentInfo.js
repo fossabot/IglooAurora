@@ -18,8 +18,6 @@ function SlideTransition(props) {
 }
 
 class EnvironmentInfo extends React.Component {
-  state = { showHidden: false }
-
   render() {
     return (
       <Dialog
@@ -52,9 +50,9 @@ class EnvironmentInfo extends React.Component {
               "YYYY-MM-DDTh:mm:ss"
             )}
           </Moment>
-              <br />
-              <br className="notSelectable" />
-              <b>ID: </b> {this.props.environment.id}
+          <br />
+          <br className="notSelectable" />
+          <b>ID: </b> {this.props.environment.id}
         </div>
         <DialogActions>
           <Button onClick={this.props.close}>Close</Button>

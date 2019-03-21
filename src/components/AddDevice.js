@@ -86,7 +86,7 @@ class AddDevice extends Component {
                 button
                 style={{ paddingLeft: "24px" }}
                 onClick={() => {
-                  this.setState({ qrOpen: true, qrErrpr: false })
+                  this.setState({ qrOpen: true, qrError: false })
                 }}
               >
                 <ListItemIcon>
@@ -118,7 +118,7 @@ class AddDevice extends Component {
                 button
                 style={{ paddingLeft: "24px" }}
                 onClick={() => {
-                  this.setState({ manualCodeOpen: true, qrErrpr: false })
+                  this.setState({ manualCodeOpen: true, qrError: false })
                 }}
               >
                 <ListItemIcon>
@@ -279,7 +279,7 @@ class AddDevice extends Component {
                 width: "calc(100% - 48px)",
                 margin: "0 24px",
               }}
-              InputLabelProps={this.state.cpde && { shrink: true }}
+              InputLabelProps={this.state.code && { shrink: true }}
               InputProps={{
                 endAdornment: this.state.code && (
                   <InputAdornment position="end">
@@ -309,11 +309,11 @@ class AddDevice extends Component {
               onClick={
                 isUUID.v4(this.state.code)
                   ? () => {
-                      this.setState({
+                      this.setState(oldState => ({
                         manualCodeOpen: false,
                         authDialogOpen: true,
-                        deviceId: this.state.code,
-                      })
+                        deviceId: oldState.code,
+                      }))
                       this.props.close()
                     }
                   : () => {

@@ -32,7 +32,6 @@ function SlideTransition(props) {
 class CreateEnvironment extends React.Component {
   state = {
     name: "",
-    favorite: false,
     slideIndex: 0,
     nameEmpty: false,
   }

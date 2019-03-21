@@ -36,43 +36,15 @@ import Create from "@material-ui/icons/Create"
 class Card extends Component {
   state = {
     isCardFullScreen: false,
-    slideIndex: 0,
     renameCardOpen: false,
-    deleteCardOpen: false,
-    dataVisualizationDialogOpen: false,
     infoOpen: false,
     anchorEl: null,
     cardSizeOpen: false,
-    shareValueOpen: false,
     deleteOpen: false,
-  }
-
-  handleClick = event => {
-    // This prevents ghost click.
-    event.preventDefault()
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    })
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false,
-    })
   }
 
   handleRenameCardDialogClose = () => {
     this.setState({ renameCardOpen: false })
-  }
-
-  handleDeleteCardDialogClose = () => {
-    this.setState({ deleteCardOpen: false })
-  }
-
-  deleteClick = () => {
-    this.setState({ deleteCardOpen: true })
   }
 
   dataVisualizationDialogOpen = () => {

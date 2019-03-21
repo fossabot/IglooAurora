@@ -30,12 +30,9 @@ import Group from "@material-ui/icons/Group"
 
 export default class EnvironmentsBody extends Component {
   state = {
-    anchorEl: null,
     createOpen: false,
     pendingSharesOpen: false,
     pendingOwnerChangesOpen: false,
-    copyMessageOpen: false,
-    searchText: "",
     slideIndex: 0,
   }
 
@@ -90,7 +87,6 @@ export default class EnvironmentsBody extends Component {
                   userData={this.props.userData}
                   environment={environment}
                   nightMode={nightMode}
-                  showMessage={() => this.setState({ copyMessageOpen: true })}
                   lastEnvironment={!user.environments[1]}
                   client={this.props.client}
                 />
@@ -168,15 +164,14 @@ export default class EnvironmentsBody extends Component {
                   localStorage.getItem("nightMode") === "true"
                     ? user.environments.length >= 100 || !user.emailIsVerified
                       ? {
-                          backgroundColor: "#2f333d",
+                          backgroundColor: "rgba(0, 0, 0, 0.12)",
                           width: "256px",
                           height: "192px",
                           cursor: "pointer",
                           textAlign: "center",
-                          color: "white",
+                          color: "rgba(0, 0, 0, 0.26)",
                           borderRadius: "4px",
                           boxShadow: "none",
-                          opacity: "0.26",
                         }
                       : {
                           backgroundColor: "#2f333d",
@@ -195,8 +190,8 @@ export default class EnvironmentsBody extends Component {
                         textAlign: "center",
                         borderRadius: "4px",
                         boxShadow: "none",
-                        color: "rgba(0, 0, 0, 0.26)",
                         backgroundColor: "rgba(0, 0, 0, 0.12)",
+                        color: "rgba(0, 0, 0, 0.26)",
                       }
                     : {
                         backgroundColor: "#fff",
@@ -205,6 +200,7 @@ export default class EnvironmentsBody extends Component {
                         cursor: "pointer",
                         textAlign: "center",
                         borderRadius: "4px",
+                        color: "black",
                       }
                 }
               >
@@ -222,8 +218,23 @@ export default class EnvironmentsBody extends Component {
                     style={
                       typeof Storage !== "undefined" &&
                       localStorage.getItem("nightMode") === "true"
-                          ? { color: "white" }
-                          : { color: "black" }
+                        ? user.environments.length >= 100 ||
+                          !user.emailIsVerified
+                          ? {
+                              color: "black",
+                              opacity: 0.26,
+                            }
+                          : {
+                              color: "white",
+                            }
+                        : user.environments.length >= 100 ||
+                          !user.emailIsVerified
+                        ? {
+                            color: "rgba(0, 0, 0, 0.26)",
+                          }
+                        : {
+                            color: "black",
+                          }
                     }
                   >
                     New environment
@@ -254,7 +265,6 @@ export default class EnvironmentsBody extends Component {
                   userData={this.props.userData}
                   environment={environment}
                   nightMode={nightMode}
-                  showMessage={() => this.setState({ copyMessageOpen: true })}
                   lastEnvironment={!user.environments[1]}
                   client={this.props.client}
                 />
@@ -460,11 +470,12 @@ export default class EnvironmentsBody extends Component {
               </div>
             )}
             {user &&
-              ((user.environments[0] &&
+              (!!(
+                user.environments[0] &&
                 user.environments.filter(
                   environment => environment.myRole !== "OWNER"
-                )[0]) ||
-              (user && !!user.pendingEnvironmentShareCount) ? (
+                )[0]
+              ) || user.pendingEnvironmentShareCount ? (
                 <SwipeableViews
                   index={this.state.slideIndex}
                   onChangeIndex={slideIndex => this.setState({ slideIndex })}
@@ -557,13 +568,13 @@ export default class EnvironmentsBody extends Component {
                 </div>
               ))}
             {user &&
-              !!(
-                (user.environments[0] &&
-                  user.environments.filter(
-                    environment => environment.myRole !== "OWNER"
-                  )[0]) ||
-                (user && !!user.pendingEnvironmentShareCount)
-              ) && (
+              (!!(
+                user.environments[0] &&
+                user.environments.filter(
+                  environment => environment.myRole !== "OWNER"
+                )[0]
+              ) ||
+                user.pendingEnvironmentShareCount) && (
                 <AppBar
                   position="static"
                   style={{
@@ -751,11 +762,13 @@ export default class EnvironmentsBody extends Component {
                       {yourEnvironmentsList}
                     </ul>
                   </li>
-                  {((user.environments[0] &&
+                  {(!!(
+                    user.environments[0] &&
                     user.environments.filter(
                       environment => environment.myRole !== "OWNER"
-                    )[0]) ||
-                    (user && !!user.pendingEnvironmentShareCount)) && (
+                    )[0]
+                  ) ||
+                    user.pendingEnvironmentShareCount) && (
                     <li key="yourEnvironments">
                       <ul style={{ padding: "0" }}>
                         <ListSubheader

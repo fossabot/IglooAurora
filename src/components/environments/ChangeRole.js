@@ -22,7 +22,7 @@ class ChangeRole extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { email: "", value: null }
+    this.state = { value: null }
   }
 
   render() {

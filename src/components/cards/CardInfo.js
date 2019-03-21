@@ -18,8 +18,6 @@ function SlideTransition(props) {
 }
 
 class CardInfo extends React.Component {
-  state = { showHidden: false }
-
   render() {
     return (
       <Dialog
@@ -56,9 +54,9 @@ class CardInfo extends React.Component {
               "YYYY-MM-DDTh:mm:ss"
             )}
           </Moment>
-              <br />
-              <br className="notSelectable" />
-              <b>ID: </b> {this.props.id}
+          <br />
+          <br className="notSelectable" />
+          <b>ID: </b> {this.props.id}
         </div>
         <DialogActions>
           <Button onClick={this.props.handleInfoClose}>Close</Button>

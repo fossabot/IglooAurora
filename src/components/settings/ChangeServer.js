@@ -796,13 +796,13 @@ class ChangeServer extends React.Component {
         >
           <MenuItem
             onClick={() =>
-              this.setState({
+              this.setState(oldState=>({
                 editServerOpen: true,
                 anchorEl: false,
-                editName: this.state.menuTarget.name,
-                editUrl: this.state.menuTarget.url,
-                editUnsecure: this.state.menuTarget.unsecure,
-              })
+                editName: oldState.menuTarget.name,
+                editUrl: oldState.menuTarget.url,
+                editUnsecure: oldState.menuTarget.unsecure,
+              }))
             }
           >
             <ListItemIcon>

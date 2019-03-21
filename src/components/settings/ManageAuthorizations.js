@@ -104,7 +104,7 @@ class AuthDialog extends React.Component {
       ) {
         this.setState({ passwordError: "This account doesn't exist" })
       } else if (
-        (e.message = "GraphQL error: This user doesn't exist anymore")
+        (e.message === "GraphQL error: This user doesn't exist anymore")
       ) {
         this.props.logOut(true)
       } else {

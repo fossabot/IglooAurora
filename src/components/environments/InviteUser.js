@@ -22,7 +22,7 @@ function SlideTransition(props) {
 }
 
 class InviteUser extends Component {
-  state = { email: "", value: "" }
+  state = { email: "",  }
 
   async inviteUser() {
     try {

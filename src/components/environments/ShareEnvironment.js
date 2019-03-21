@@ -43,14 +43,12 @@ function SlideTransition(props) {
 
 class ShareEnvironment extends React.Component {
   state = {
-    menuOpen: false,
     inviteUserOpen: false,
     changeRoleOpen: false,
     stopSharingOpen: false,
     changeOwnerOpen: false,
     revokeOwnerChangeOpen: false,
     menuTarget: null,
-    email: "",
     selectedUserType: "",
     selectedUserForChangeRoleDialog: "",
   }

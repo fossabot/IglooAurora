@@ -24,7 +24,7 @@ class ChangePendingRole extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { email: "", value: "" }
+    this.state = { value: "" }
   }
 
   changePendingRole = role => {

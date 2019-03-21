@@ -911,11 +911,10 @@ export default class Login extends Component {
                               <InputAdornment position="end">
                                 <IconButton
                                   onClick={() =>
-                                    this.setState({
-                                      showPassword: !this.state.showPassword,
-                                    })
+                                    this.setState(oldState=>({
+                                      showPassword: !oldState.showPassword,
+                                    }))
                                   }
-                                  onMouseDown={this.handleMouseDownPassword}
                                   tabIndex="-1"
                                 >
                                   {/* fix for ToggleIcon glitch on Edge */}
@@ -1412,15 +1411,11 @@ export default class Login extends Component {
                                   endAdornment: this.props.password ? (
                                     <InputAdornment position="end">
                                       <IconButton
-                                        onClick={() =>
-                                          this.setState({
-                                            showPassword: !this.state
-                                              .showPassword,
-                                          })
-                                        }
-                                        onMouseDown={
-                                          this.handleMouseDownPassword
-                                        }
+                                  onClick={() =>
+                                    this.setState(oldState=>({
+                                      showPassword: !oldState.showPassword,
+                                    }))
+                                  }
                                         tabIndex="-1"
                                       >
                                         {/* fix for ToggleIcon glitch on Edge */}
@@ -1763,12 +1758,11 @@ export default class Login extends Component {
                           endAdornment: this.props.password ? (
                             <InputAdornment position="end">
                               <IconButton
-                                onClick={() =>
-                                  this.setState({
-                                    showPassword: !this.state.showPassword,
-                                  })
-                                }
-                                onMouseDown={this.handleMouseDownPassword}
+                                  onClick={() =>
+                                    this.setState(oldState=>({
+                                      showPassword: !oldState.showPassword,
+                                    }))
+                                  }
                                 tabIndex="-1"
                               >
                                 {/* fix for ToggleIcon glitch on Edge */}
