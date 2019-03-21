@@ -94,7 +94,7 @@ async function verifyToken(
       variables: { token },
     })
 
-    setSpecialBearer(verifyEmailTokenMutation.data.verifyEmailToken, tokenType)
+    setSpecialBearer(verifyEmailTokenMutation.data.verifyEmailToken)
 
     setRedirect("/?dialog=" + tokenType)
   } catch (e) {

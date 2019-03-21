@@ -146,6 +146,12 @@ class ChangeMailDialog extends React.Component {
       })
   }
 
+  componentDidMount() {
+    if (this.props.token) {
+      this.setState({ mailDialogOpen: true })
+    }
+  }
+
   render() {
     return (
       <React.Fragment>

@@ -1076,7 +1076,7 @@ this.setState({authDialogOpen:true,redirect:true}
           user={this.props.userData.user}
           client={this.props.client}
           logOut={this.props.logOut}
-          token={this.props.changeAuthenticationBearer}
+          token={this.props.managePermanentTokensBearer}
         />
         <TimeFormatDialog
           handleTimeFormatDialogClose={this.handleTimeFormatDialogClose}

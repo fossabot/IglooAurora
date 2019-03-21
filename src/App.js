@@ -768,8 +768,7 @@ class App extends Component {
               path="/login"
               render={() =>
                 this.state.bearer &&
-                !querystringify.parse(window.location.search).certificate &&
-                !querystringify.parse(window.location.search).user ? (
+                !querystringify.parse(window.location.search).certificate ? (
                   <Redirect to="/" />
                 ) : (
                   <UnauthenticatedMain

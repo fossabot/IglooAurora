@@ -173,6 +173,12 @@ class DeleteAccountDialog extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.token) {
+      this.setState({ deleteOpen: true })
+    }
+  }
+
   render() {
     return (
       <React.Fragment>

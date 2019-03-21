@@ -527,6 +527,12 @@ class AuthenticationOptions extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.token) {
+      this.setState({ selectAuthTypeOpen: true })
+    }
+  }
+
   render() {
     const { loading, error, user } = this.props
 

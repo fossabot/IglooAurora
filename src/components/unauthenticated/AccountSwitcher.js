@@ -211,21 +211,23 @@ export default class AccountSwitcher extends Component {
                       }
                     />
                     <ListItemSecondaryAction>
-                      <IconButton>
-                        <RemoveCircleOutline
-                          onClick={() => {
-                            localStorage.setItem(
-                              "accountList",
-                              JSON.stringify(
-                                JSON.parse(
-                                  localStorage.getItem("accountList")
-                                ).filter(
-                                  listAccount => listAccount.id !== account.id
-                                )
+                      <IconButton
+                        onClick={() => {
+                          localStorage.setItem(
+                            "accountList",
+                            JSON.stringify(
+                              JSON.parse(
+                                localStorage.getItem("accountList")
+                              ).filter(
+                                listAccount => listAccount.id !== account.id
                               )
                             )
-                            this.props.forceUpdate()
-                          }}
+                          )
+                          this.props.forceUpdate()
+                        }}
+                        style={this.props.mobile?{color:"white"}:{color:"black"}}
+                        >
+                        <RemoveCircleOutline
                         />
                       </IconButton>
                     </ListItemSecondaryAction>
