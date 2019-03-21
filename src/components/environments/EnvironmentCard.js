@@ -344,6 +344,7 @@ class EnvironmentCard extends Component {
               this.setState({ anchorEl: null })
               this.setState({ shareOpen: true })
             }}
+            disabled={!(this.props.userData.user && this.props.userData.user.emailIsVerified)}
           >
             <ListItemIcon>
               <Share />

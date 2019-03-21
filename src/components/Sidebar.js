@@ -40,7 +40,11 @@ class Sidebar extends Component {
     "alt+a": {
       priority: 1,
       handler: event => {
-        this.setState(oldState => ({ addDeviceOpen: !oldState.addDeviceOpen }))
+        this.props.userData.user &&
+          this.props.userData.user.emailIsVerified &&
+          this.setState(oldState => ({
+            addDeviceOpen: !oldState.addDeviceOpen,
+          }))
       },
     },
   }
@@ -125,9 +129,7 @@ class Sidebar extends Component {
         error.message === "GraphQL error: This id is not valid" ||
         error.message === "GraphQL error: The requested resource does not exist"
       ) {
-        if (
-          querystringify.parse(window.location.search).device
-        ) {
+        if (querystringify.parse(window.location.search).device) {
           // if a device is selected the sidebar keeps loading, waiting for the device to redirect the user
           sidebarContent = (
             <CenteredSpinner
@@ -142,7 +144,7 @@ class Sidebar extends Component {
               }
             />
           )
-        } else  {
+        } else {
           // if there's no environment with the id in the url and no device is selected, the user gets redirected
           return <Redirect to="/" />
         }
@@ -321,48 +323,50 @@ class Sidebar extends Component {
                 </ListItem>
               ))}
           </List>
-          <Zoom in={environment}>
-            <Fab
-              color="secondary"
-              style={
-                this.props.isMobile
-                  ? this.props.snackbarOpen
-                    ? {
-                        position: "absolute",
-                        right: "20px",
-                        bottom: "20px",
-                        transform: "translate3d(0, -64px, 0)",
-                        transition:
-                          "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                      }
-                    : {
-                        position: "absolute",
-                        right: "20px",
-                        bottom: "20px",
-                        transition:
-                          "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                      }
-                  : this.state.lessThan1080
-                  ? {
-                      position: "absolute",
-                      left: "calc(33vw - 76px)",
-                      bottom: "20px",
-                      transition:
-                        "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                    }
-                  : {
-                      position: "absolute",
-                      left: "284px",
-                      bottom: "20px",
-                      transition:
-                        "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                    }
-              }
-              onClick={() => this.setState({ addDeviceOpen: true })}
-            >
-              <Add />
-            </Fab>
-          </Zoom>
+              <Zoom in={environment}>
+                <Fab
+                  color="secondary"
+                  disabled={!(this.props.userData.user &&
+            this.props.userData.user.emailIsVerified)}
+                  style={
+                    this.props.isMobile
+                      ? this.props.snackbarOpen
+                        ? {
+                            position: "absolute",
+                            right: "20px",
+                            bottom: "20px",
+                            transform: "translate3d(0, -64px, 0)",
+                            transition:
+                              "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                          }
+                        : {
+                            position: "absolute",
+                            right: "20px",
+                            bottom: "20px",
+                            transition:
+                              "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                          }
+                      : this.state.lessThan1080
+                      ? {
+                          position: "absolute",
+                          left: "calc(33vw - 76px)",
+                          bottom: "20px",
+                          transition:
+                            "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                        }
+                      : {
+                          position: "absolute",
+                          left: "284px",
+                          bottom: "20px",
+                          transition:
+                            "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                        }
+                  }
+                  onClick={() => this.setState({ addDeviceOpen: true })}
+                >
+                  <Add />
+                </Fab>
+              </Zoom>
           <AddDevice
             open={this.state.addDeviceOpen}
             close={() => this.setState({ addDeviceOpen: false })}
@@ -476,8 +480,7 @@ class Sidebar extends Component {
                   )[0]
                 )
               }
-              style={ { marginTop: "8px" }
-              }
+              style={{ marginTop: "8px" }}
             >
               <Tune
                 style={

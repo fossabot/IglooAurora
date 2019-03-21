@@ -153,24 +153,50 @@ export default class EnvironmentsBody extends Component {
               </ButtonBase>
             </Grid>
           )}
-          {user.environments.length<100 && <Grid key="create" item style={{ margin: 8 }}>
+          <Grid key="create" item style={{ margin: 8 }}>
             <ButtonBase
               focusRipple
               style={{ borderRadius: "4px" }}
               onClick={() => this.setState({ createOpen: true })}
+              disabled={
+                user.environments.length >= 100 || !user.emailIsVerified
+              }
             >
               <Paper
                 style={
                   typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
+                    ? user.environments.length >= 100 || !user.emailIsVerified
+                      ? {
+                          backgroundColor: "#2f333d",
+                          width: "256px",
+                          height: "192px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          color: "white",
+                          borderRadius: "4px",
+                          boxShadow: "none",
+                          opacity: "0.26",
+                        }
+                      : {
+                          backgroundColor: "#2f333d",
+                          width: "256px",
+                          height: "192px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          color: "white",
+                          borderRadius: "4px",
+                        }
+                    : user.environments.length >= 100 || !user.emailIsVerified
                     ? {
-                        backgroundColor: "#2f333d",
                         width: "256px",
                         height: "192px",
                         cursor: "pointer",
                         textAlign: "center",
-                        color: "white",
                         borderRadius: "4px",
+                        boxShadow: "none",
+                        color: "rgba(0, 0, 0, 0.26)",
+                        backgroundColor: "rgba(0, 0, 0, 0.12)",
                       }
                     : {
                         backgroundColor: "#fff",
@@ -196,8 +222,8 @@ export default class EnvironmentsBody extends Component {
                     style={
                       typeof Storage !== "undefined" &&
                       localStorage.getItem("nightMode") === "true"
-                        ? { color: "white" }
-                        : {}
+                          ? { color: "white" }
+                          : { color: "black" }
                     }
                   >
                     New environment
@@ -205,7 +231,7 @@ export default class EnvironmentsBody extends Component {
                 </div>
               </Paper>
             </ButtonBase>
-          </Grid>}
+          </Grid>
         </Grid>
       )
 
