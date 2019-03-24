@@ -138,7 +138,7 @@ class MainBodyHeader extends Component {
           updatedAt
           starred
           notificationCount(filter: { read: false })
-          notifications {
+          notifications(limit: 20) {
             id
             content
             read
@@ -287,6 +287,7 @@ class MainBodyHeader extends Component {
               <IconButton
                 onClick={this.handleMenuOpen}
                 disabled={!(device && device.id)}
+                style={{color: "white",}}
               >
                 <MoreVert />
               </IconButton>
@@ -566,7 +567,7 @@ export default graphql(
         query($id: ID!) {
           device(id: $id) {
             id
-            values {
+            values(limit: 20) {
               id
             }
             myRole

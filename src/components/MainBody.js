@@ -15,6 +15,30 @@ class MainBody extends Component {
     redirect: false,
   }
 
+
+queryMore=()=>{
+  this.props.environmentData.fetchMore({
+            variables: {
+              offset: this.props.environmentData.environment.devices.length
+            },updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return prev
+        }
+
+        const newDevices = [
+          ...prev.environment.devices,
+          ...fetchMoreResult.environment.devices
+        ]
+
+        return {
+          environment: {
+            ...prev.environment,
+            devices: newDevices,
+          },
+        }
+      }
+            })}
+
   componentDidMount() {
     this.props.deviceData.refetch()
 
@@ -34,7 +58,7 @@ class MainBody extends Component {
           updatedAt
           starred
           notificationCount(filter: { read: false })
-          notifications {
+          notifications(limit: 20) {
             id
             content
             read
@@ -114,16 +138,31 @@ class MainBody extends Component {
           return prev
         }
 
+        if (subscriptionData.data.valueCreated.visibility==="VISIBLE") {
         const newValues = [
           ...prev.device.values,
           subscriptionData.data.valueCreated,
         ]
+
         return {
           device: {
             ...prev.device,
             values: newValues,
           },
-        }
+        }}
+
+        if (subscriptionData.data.valueCreated.visibility==="HIDDEN") {
+        const newHiddenValues = [
+          ...prev.device.hiddenValues,
+          subscriptionData.data.valueCreated,
+        ]
+
+        return {
+          device: {
+            ...prev.device,
+            hiddenValues: newHiddenValues,
+          },
+        }}
       },
     })
 
@@ -192,10 +231,15 @@ class MainBody extends Component {
           value => value.id !== subscriptionData.data.valueDeleted
         )
 
+        const newHiddenValues = prev.device.hiddenValues.filter(
+          value => value.id !== subscriptionData.data.valueDeleted
+        )
+
         return {
           device: {
             ...prev.device,
             values: newValues,
+            hiddenValues: newHiddenValues
           },
         }
       },
@@ -257,11 +301,6 @@ class MainBody extends Component {
     }
 
     if (device) {
-      const values = device.values
-      let visibleCards = values.filter(value => value.visibility === "VISIBLE")
-
-      let hiddenCards = values.filter(value => value.visibility === "HIDDEN")
-
       const renderCard = value => (
         <Card
           value={value}
@@ -276,8 +315,8 @@ class MainBody extends Component {
         />
       )
 
-      visibleCards = visibleCards.map(renderCard)
-      hiddenCards = hiddenCards.map(renderCard)
+      let visibleCards = device.values.map(renderCard)
+      let hiddenCards = device.hiddenValues.map(renderCard)
 
       let hiddenCardsUI = ""
 
@@ -397,7 +436,8 @@ export default graphql(
         environment {
           id
         }
-        values {
+        hiddenValues: values(limit: 20
+        filter:{visibility:HIDDEN}) {
           id
           visibility
           cardSize
@@ -427,7 +467,46 @@ export default graphql(
             permission
           }
           ... on PlotValue {
-            plotValue: value {
+            plotValue: value(limit: 20) {
+              id
+              value
+              timestamp
+            }
+            unitOfMeasurement
+            threshold
+          }}
+        values(limit: 20
+        filter:{visibility:VISIBLE}) {
+          id
+          visibility
+          cardSize
+          name
+          updatedAt
+          createdAt
+          myRole
+          device {
+            id
+          }
+          ... on FloatValue {
+            floatValue: value
+            precision
+            min
+            max
+            permission
+            unitOfMeasurement
+          }
+          ... on StringValue {
+            stringValue: value
+            maxChars
+            allowedValues
+            permission
+          }
+          ... on BooleanValue {
+            boolValue: value
+            permission
+          }
+          ... on PlotValue {
+            plotValue: value(limit: 20) {
               id
               value
               timestamp

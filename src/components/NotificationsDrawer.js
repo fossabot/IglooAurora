@@ -824,7 +824,7 @@ export default graphql(
     query($id: ID!) {
       device(id: $id) {
         id
-        notifications {
+        notifications(limit: 20) {
           id
           content
           date

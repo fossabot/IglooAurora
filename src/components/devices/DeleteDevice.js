@@ -260,6 +260,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
             color="primary"
             onClick={() => setUnclaimDeviceOpen(true)}
             style={{ margin: "0 4px" }}
+            disabled={!qrCode}
           >
             Next
           </Button>

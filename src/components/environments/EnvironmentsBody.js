@@ -20,7 +20,6 @@ import Helmet from "react-helmet"
 import PendingShares from "./PendingShares"
 import PendingOwnerChanges from "./PendingOwnerChanges"
 import People from "@material-ui/icons/People"
-//import AcUnit from "@material-ui/icons/AcUnit"
 import Add from "@material-ui/icons/Add"
 import Share from "@material-ui/icons/Share"
 import Search from "@material-ui/icons/Search"
@@ -762,7 +761,7 @@ export default class EnvironmentsBody extends Component {
                       {yourEnvironmentsList}
                     </ul>
                   </li>
-                  {(!!(
+                  {!!((
                     user.environments[0] &&
                     user.environments.filter(
                       environment => environment.myRole !== "OWNER"

@@ -22,6 +22,21 @@ class GraphQLFetcher extends Component {
           muted
           picture
           myRole
+          pendingOwnerChanges {
+            id
+            receiver {
+              id
+              profileIconColor
+              name
+              email
+            }
+            sender {
+              id
+              profileIconColor
+              name
+              email
+            }
+          }
           pendingEnvironmentShares {
             id
             role
@@ -31,22 +46,13 @@ class GraphQLFetcher extends Component {
               name
               email
             }
-          }
-          pendingOwnerChanges {
-            id
-            receiver {
+            sender {
               id
-              profileIconColor
               name
-              email
             }
-          }
-          devices {
-            id
-            muted
-            name
             environment {
-              myRole
+              id
+              name
             }
           }
           owner {
@@ -73,7 +79,7 @@ class GraphQLFetcher extends Component {
             name
             profileIconColor
           }
-        }
+                }
       }
     `
 
@@ -670,7 +676,7 @@ export default graphql(
           pendingEnvironmentShareAcceptedEmail
           permanentTokenCreatedEmail
         }
-        environments(sortBy: name, sortDirection: ASCENDING) {
+        environments(sortBy: name, sortDirection: ASCENDING, limit: 20) {
           id
           index
           name

@@ -210,28 +210,29 @@ class Main extends Component {
 
     const deviceClaimedSubscription = gql`
       subscription {
-        deviceClaimed {
-          id
-          index
-          name
-          online
-          batteryStatus
-          batteryCharging
-          signalStatus
-          deviceType
-          firmware
-          createdAt
-          updatedAt
-          starred
-          notificationCount(filter: { read: false })
-          lastReadNotification: lastNotification(filter: { read: true }) {
-            id
-          }
-          lastUnreadNotification: lastNotification(filter: { read: false }) {
-            id
-            content
-            read
-          }
+        deviceClaimed {id
+              index
+              name
+              online
+              batteryStatus
+              batteryCharging
+              signalStatus
+              deviceType
+              firmware
+              createdAt
+              updatedAt
+              starred
+              notificationCount(filter: { read: false })
+              lastReadNotification: lastNotification(filter: { read: true }) {
+                id
+              }
+              lastUnreadNotification: lastNotification(
+                filter: { read: false }
+              ) {
+                id
+                content
+                read
+              }
         }
       }
     `
@@ -660,7 +661,7 @@ export default graphql(
   localStorage.getItem("sortBy") === "name"
     ? localStorage.getItem("sortDirection") === "ascending"
       ? gql`
-          query($id: ID!) {
+          query($id: ID!, $starredOffset: Int!, $offset: Int!) {
             environment(id: $id) {
               id
               name
@@ -668,6 +669,8 @@ export default graphql(
                 filter: { starred: true }
                 sortBy: name
                 sortDirection: ASCENDING
+                limit: 20
+                offset: $starredOffset
               ) {
                 id
                 index
@@ -697,6 +700,8 @@ export default graphql(
                 filter: { starred: false }
                 sortBy: name
                 sortDirection: ASCENDING
+                limit: 20
+                offset: $offset
               ) {
                 id
                 index
@@ -734,6 +739,8 @@ export default graphql(
                 filter: { starred: true }
                 sortBy: name
                 sortDirection: DESCENDING
+                limit: 20
+            offset: $starredOffset
               ) {
                 id
                 index
@@ -763,6 +770,8 @@ export default graphql(
                 filter: { starred: false }
                 sortBy: name
                 sortDirection: DESCENDING
+                limit: 20
+            offset: $offset
               ) {
                 id
                 index
@@ -796,7 +805,10 @@ export default graphql(
           environment(id: $id) {
             id
             name
-            devices(sortBy: index) {
+            devices(sortBy: index
+            limit: 20
+            offset: $offset
+            ) {
               id
               index
               name
@@ -826,6 +838,6 @@ export default graphql(
       `,
   {
     name: "environmentData",
-    options: ({ environmentId }) => ({ variables: { id: environmentId } }),
+    options: ({ environmentId }) => ({ variables: { id: environmentId,offset:0, starredOffset:0 } }),
   }
 )(hotkeys(Main))

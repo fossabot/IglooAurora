@@ -809,7 +809,7 @@ export default graphql(
     query {
       user {
         id
-        permanentTokens {
+        permanentTokens(limit:20) {
           id
           name
           lastUsed

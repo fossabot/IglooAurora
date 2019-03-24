@@ -26,6 +26,8 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import Star from "@material-ui/icons/Star"
 import Typography from "@material-ui/core/Typography"
 
+    let mergedArray = []
+
 class Sidebar extends Component {
   state = {
     popoverOpen: false,
@@ -48,6 +50,29 @@ class Sidebar extends Component {
       },
     },
   }
+
+queryMore=()=>{
+  this.props.environmentData.fetchMore({
+            variables: {
+              offset: this.props.environmentData.environment.devices.length
+            },updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return prev
+        }
+
+        const newDevices = [
+          ...prev.environment.devices,
+          ...fetchMoreResult.environment.devices
+        ]
+
+        return {
+          environment: {
+            ...prev.environment,
+            devices: newDevices,
+          },
+        }
+      }
+            })}
 
   updateDimensions() {
     if (window.innerWidth < 1080) {
@@ -151,8 +176,6 @@ class Sidebar extends Component {
       }
     }
 
-    let mergedArray = []
-
     if (environment) {
       if (localStorage.getItem("sortBy") === "name") {
         mergedArray = environment.starredDevices.concat(environment.devices)
@@ -190,6 +213,7 @@ class Sidebar extends Component {
               overscrollBehaviorY: "contain",
             }}
             subheader={<li />}
+            onScroll={event=> {if (event.target.scrollTop+event.target.clientHeight+1>=event.target.scrollHeight) this.queryMore() }}
           >
             {mergedArray
               .filter(
