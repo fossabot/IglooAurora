@@ -10,7 +10,7 @@ import { WebSocketLink } from "apollo-link-ws"
 import { split } from "apollo-link"
 import { getMainDefinition } from "apollo-utilities"
 import introspectionQueryResultData from "./fragmentTypes.json"
-import GraphQLFetcher from "./GraphQLFetcher"
+import UserFetcher from "./UserFetcher"
 
 class AuthenticatedApp extends Component {
   constructor(props) {
@@ -132,7 +132,7 @@ class AuthenticatedApp extends Component {
   render() {
     return (
       <ApolloProvider client={this.client}>
-        <GraphQLFetcher
+        <UserFetcher
           isMobile={this.props.isMobile}
           logOut={this.props.logOut}
           changeAccount={this.props.changeAccount}
@@ -142,9 +142,7 @@ class AuthenticatedApp extends Component {
           changeEmailBearer={this.props.changeEmailBearer}
           changeAuthenticationBearer={this.props.changeAuthenticationBearer}
           deleteUserBearer={this.props.deleteUserBearer}
-          managePermanentTokensBearer={
-            this.props.managePermanentTokensBearer
-          }
+          managePermanentTokensBearer={this.props.managePermanentTokensBearer}
         />
       </ApolloProvider>
     )

@@ -7,7 +7,7 @@ import AppBar from "@material-ui/core/AppBar"
 export default class StatusBar extends Component {
   render() {
     const {
-      environmentData: { environment },
+      data: { device },
     } = this.props
 
     let deviceStatus = ""
@@ -15,38 +15,20 @@ export default class StatusBar extends Component {
     let batteryStatus = ""
     let batteryCharging = ""
 
-    if (
-      environment &&
-      environment.devices.filter(device => device.id === this.props.deviceId)[0]
-    ) {
-      deviceStatus = environment.devices.filter(
-        device => device.id === this.props.deviceId
-      )[0].online ? (
+    if (device) {
+      deviceStatus = device.online ? (
         "Online"
       ) : (
         <React.Fragment>
-          Last seen{" "}
-          <Moment fromNow>
-            {moment.utc(
-              environment.devices.filter(
-                device => device.id === this.props.deviceId
-              )[0].updatedAt
-            )}
-          </Moment>
+          Last seen <Moment fromNow>{moment.utc(device.updatedAt)}</Moment>
         </React.Fragment>
       )
 
-      signalStatus = environment.devices.filter(
-        device => device.id === this.props.deviceId
-      )[0].signalStatus
+      signalStatus = device.signalStatus
 
-      batteryCharging = environment.devices.filter(
-        device => device.id === this.props.deviceId
-      )[0].batteryCharging
+      batteryCharging = device.batteryCharging
 
-      batteryStatus = environment.devices.filter(
-        device => device.id === this.props.deviceId
-      )[0].batteryStatus
+      batteryStatus = device.batteryStatus
     }
 
     let statusBarContent = (

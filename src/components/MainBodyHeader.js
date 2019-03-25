@@ -270,7 +270,6 @@ class MainBodyHeader extends Component {
             }}
           >
             <NotificationsDrawer
-              deviceId={this.props.deviceId}
               drawer={this.props.drawer}
               changeDrawerState={this.props.changeDrawerState}
               hiddenNotifications={this.props.hiddenNotifications}
@@ -287,7 +286,11 @@ class MainBodyHeader extends Component {
               <IconButton
                 onClick={this.handleMenuOpen}
                 disabled={!(device && device.id)}
-                style={{color: "white",}}
+                style={
+                  device && device.id
+                    ? { color: "white" }
+                    : { color: "white", opacity: 0.54 }
+                }
               >
                 <MoreVert />
               </IconButton>
@@ -561,37 +564,5 @@ export default graphql(
     {
       name: "ToggleStarred",
     }
-  )(
-    graphql(
-      gql`
-        query($id: ID!) {
-          device(id: $id) {
-            id
-            values(limit: 20) {
-              id
-            }
-            myRole
-            name
-            updatedAt
-            createdAt
-            muted
-            deviceType
-            firmware
-            starred
-            notificationCount(filter: { read: false })
-            environment {
-              id
-            }
-          }
-        }
-      `,
-      {
-        options: ({ deviceId }) => ({
-          variables: {
-            id: deviceId,
-          },
-        }),
-      }
-    )(hotkeys(MainBodyHeader))
-  )
+  )(hotkeys(MainBodyHeader))
 )

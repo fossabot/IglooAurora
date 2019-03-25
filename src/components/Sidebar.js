@@ -25,9 +25,8 @@ import Avatar from "@material-ui/core/Avatar"
 import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import Star from "@material-ui/icons/Star"
 import Typography from "@material-ui/core/Typography"
-import { debounce } from "debounce";
 
-    let mergedArray = []
+let mergedArray = []
 
 class Sidebar extends Component {
   state = {
@@ -52,18 +51,19 @@ class Sidebar extends Component {
     },
   }
 
-queryMore=()=>{
-  this.props.environmentData.fetchMore({
-            variables: {
-              offset: this.props.environmentData.environment.devices.length
-            },updateQuery: (prev, { fetchMoreResult }) => {
+  queryMore = () => {
+    this.props.environmentData.fetchMore({
+      variables: {
+        offset: this.props.environmentData.environment.devices.length,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev
         }
 
         const newDevices = [
           ...prev.environment.devices,
-          ...fetchMoreResult.environment.devices
+          ...fetchMoreResult.environment.devices,
         ]
 
         return {
@@ -72,8 +72,9 @@ queryMore=()=>{
             devices: newDevices,
           },
         }
-      }
-            })}
+      },
+    })
+  }
 
   updateDimensions() {
     if (window.innerWidth < 1080) {
@@ -214,7 +215,13 @@ queryMore=()=>{
               overscrollBehaviorY: "contain",
             }}
             subheader={<li />}
-            onScroll={event=> {if (event.target.scrollTop+event.target.clientHeight+1>=event.target.scrollHeight) debounce(this.queryMore) }}
+            onScroll={event => {
+              if (
+                event.target.scrollTop + event.target.clientHeight + 1 >=
+                event.target.scrollHeight
+              )
+                this.queryMore()
+            }}
           >
             {mergedArray
               .filter(
@@ -348,49 +355,54 @@ queryMore=()=>{
                 </ListItem>
               ))}
           </List>
-              <Zoom in={environment && this.props.userData.user &&
-            this.props.userData.user.emailIsVerified}>
-                <Fab
-                  color="secondary"
-                  style={
-                    this.props.isMobile
-                      ? this.props.snackbarOpen
-                        ? {
-                            position: "absolute",
-                            right: "20px",
-                            bottom: "20px",
-                            transform: "translate3d(0, -64px, 0)",
-                            transition:
-                              "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                          }
-                        : {
-                            position: "absolute",
-                            right: "20px",
-                            bottom: "20px",
-                            transition:
-                              "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                          }
-                      : this.state.lessThan1080
-                      ? {
-                          position: "absolute",
-                          left: "calc(33vw - 76px)",
-                          bottom: "20px",
-                          transition:
-                            "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                        }
-                      : {
-                          position: "absolute",
-                          left: "284px",
-                          bottom: "20px",
-                          transition:
-                            "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
-                        }
-                  }
-                  onClick={() => this.setState({ addDeviceOpen: true })}
-                >
-                  <Add />
-                </Fab>
-              </Zoom>
+          <Zoom
+            in={
+              environment &&
+              this.props.userData.user &&
+              this.props.userData.user.emailIsVerified
+            }
+          >
+            <Fab
+              color="secondary"
+              style={
+                this.props.isMobile
+                  ? this.props.snackbarOpen
+                    ? {
+                        position: "absolute",
+                        right: "20px",
+                        bottom: "20px",
+                        transform: "translate3d(0, -64px, 0)",
+                        transition:
+                          "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                      }
+                    : {
+                        position: "absolute",
+                        right: "20px",
+                        bottom: "20px",
+                        transition:
+                          "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                      }
+                  : this.state.lessThan1080
+                  ? {
+                      position: "absolute",
+                      left: "calc(33vw - 76px)",
+                      bottom: "20px",
+                      transition:
+                        "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "284px",
+                      bottom: "20px",
+                      transition:
+                        "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                    }
+              }
+              onClick={() => this.setState({ addDeviceOpen: true })}
+            >
+              <Add />
+            </Fab>
+          </Zoom>
           <AddDevice
             open={this.state.addDeviceOpen}
             close={() => this.setState({ addDeviceOpen: false })}

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import Main from "./Main"
+import EnvironmentFetcher from "./EnvironmentFetcher"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import { Switch, Route } from "react-router-dom"
@@ -79,7 +79,7 @@ class GraphQLFetcher extends Component {
             name
             profileIconColor
           }
-                }
+        }
       }
     `
 
@@ -89,29 +89,31 @@ class GraphQLFetcher extends Component {
         if (!subscriptionData.data) {
           return prev
         }
-if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
-        const newEnvironments = [
-          ...prev.user,
-          subscriptionData.data.environmentCreated,
-        ]
-
-        return {
-          user: {
+        if (subscriptionData.data.environmentCreated.myRole === "ADMIN") {
+          const newEnvironments = [
             ...prev.user,
-            environments: newEnvironments,
-          },
-        }}else {
-        const newSharedEnvironments = [
-          ...prev.user.sharedEnvironments,
-          subscriptionData.data.environmentCreated,
-        ]
+            subscriptionData.data.environmentCreated,
+          ]
 
-        return {
-          device: {
-            ...prev.user,
-            sharedEnvironments: newSharedEnvironments,
-          },
-        }}
+          return {
+            user: {
+              ...prev.user,
+              environments: newEnvironments,
+            },
+          }
+        } else {
+          const newSharedEnvironments = [
+            ...prev.user.sharedEnvironments,
+            subscriptionData.data.environmentCreated,
+          ]
+
+          return {
+            device: {
+              ...prev.user,
+              sharedEnvironments: newSharedEnvironments,
+            },
+          }
+        }
       },
     })
 
@@ -205,18 +207,20 @@ if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
         }
 
         const newEnvironments = prev.user.environments.filter(
-          environment => environment.id !== subscriptionData.data.environmentDeleted
+          environment =>
+            environment.id !== subscriptionData.data.environmentDeleted
         )
 
         const newSharedEnvironments = prev.user.environments.filter(
-          environment => environment.id !== subscriptionData.data.environmentDeleted
+          environment =>
+            environment.id !== subscriptionData.data.environmentDeleted
         )
 
         return {
           device: {
             ...prev.user,
             environments: newEnvironments,
-            sharedEnvironments: newSharedEnvironments
+            sharedEnvironments: newSharedEnvironments,
           },
         }
       },
@@ -541,7 +545,7 @@ if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
         if (querystringify.parse(window.location.search).device) {
           return (
             <React.Fragment>
-              <Main
+              <EnvironmentFetcher
                 mobile={this.props.isMobile}
                 logOut={this.props.logOut}
                 changeAccount={this.props.changeAccount}
@@ -579,7 +583,7 @@ if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
         } else {
           return (
             <React.Fragment>
-              <Main
+              <EnvironmentFetcher
                 mobile={this.props.isMobile}
                 logOut={this.props.logOut}
                 changeAccount={this.props.changeAccount}
@@ -633,9 +637,7 @@ if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
               mobile={this.props.isMobile}
               changeEmail={this.props.changeEmail}
               changeEmailBearer={this.props.changeEmailBearer}
-              changeAuthenticationBearer={
-                this.props.changeAuthenticationBearer
-              }
+              changeAuthenticationBearer={this.props.changeAuthenticationBearer}
               deleteUserBearer={this.props.deleteUserBearer}
               managePermanentTokensBearer={
                 this.props.managePermanentTokensBearer
@@ -643,9 +645,7 @@ if (subscriptionData.data.environmentCreated.myRole==="ADMIN") {
             />
             <EmailNotVerified
               mobile={this.props.isMobile}
-              open={
-                user && !user.emailIsVerified && this.state.snackbarOpen
-              }
+              open={user && !user.emailIsVerified && this.state.snackbarOpen}
               close={() => this.setState({ snackbarOpen: false })}
               email={user && user.email}
             />
@@ -691,7 +691,13 @@ export default graphql(
           pendingEnvironmentShareAcceptedEmail
           permanentTokenCreatedEmail
         }
-        environments(sortBy: name, sortDirection: ASCENDING, limit: 20, offset: $offset, filter: {myRole:{equals:OWNER}}) {
+        environments(
+          sortBy: name
+          sortDirection: ASCENDING
+          limit: 20
+          offset: $offset
+          filter: { myRole: { equals: OWNER } }
+        ) {
           id
           index
           name
@@ -758,7 +764,13 @@ export default graphql(
             profileIconColor
           }
         }
-        sharedEnvironments: environments(sortBy: name, sortDirection: ASCENDING, limit: 20, offset: $sharedOffset, filter: {myRole:{NOT:{equals:OWNER}}}) {
+        sharedEnvironments: environments(
+          sortBy: name
+          sortDirection: ASCENDING
+          limit: 20
+          offset: $sharedOffset
+          filter: { myRole: { NOT: { equals: OWNER } } }
+        ) {
           id
           index
           name
@@ -830,6 +842,6 @@ export default graphql(
   `,
   {
     name: "userData",
-    options:{ variables: {  offset: 0, sharedOffset: 0 } }
+    options: { variables: { offset: 0, sharedOffset: 0 } },
   }
 )(GraphQLFetcher)

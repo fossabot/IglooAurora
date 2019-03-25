@@ -1,19 +1,17 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Sidebar from "./components/Sidebar"
 import SidebarHeader from "./components/SidebarHeader"
-import MainBody from "./components/MainBody"
-import MainBodyHeader from "./components/MainBodyHeader"
 import "./styles/App.css"
 import "./styles/MobileApp.css"
 import "./styles/Cards.css"
 import { hotkeys } from "react-keyboard-shortcuts"
-import StatusBar from "./components/devices/StatusBar"
 import { Redirect } from "react-router-dom"
 import querystringify from "querystringify"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Helmet from "react-helmet"
 import AppBar from "@material-ui/core/AppBar"
+import DeviceFetcher from "./DeviceFetcher"
 
 class Main extends Component {
   state = {
@@ -210,29 +208,28 @@ class Main extends Component {
 
     const deviceClaimedSubscription = gql`
       subscription {
-        deviceClaimed {id
-              index
-              name
-              online
-              batteryStatus
-              batteryCharging
-              signalStatus
-              deviceType
-              firmware
-              createdAt
-              updatedAt
-              starred
-              notificationCount(filter: { read: false })
-              lastReadNotification: lastNotification(filter: { read: true }) {
-                id
-              }
-              lastUnreadNotification: lastNotification(
-                filter: { read: false }
-              ) {
-                id
-                content
-                read
-              }
+        deviceClaimed {
+          id
+          index
+          name
+          online
+          batteryStatus
+          batteryCharging
+          signalStatus
+          deviceType
+          firmware
+          createdAt
+          updatedAt
+          starred
+          notificationCount(filter: { read: false })
+          lastReadNotification: lastNotification(filter: { read: true }) {
+            id
+          }
+          lastUnreadNotification: lastNotification(filter: { read: false }) {
+            id
+            content
+            read
+          }
         }
       }
     `
@@ -471,56 +468,17 @@ class Main extends Component {
                 </div>
               </React.Fragment>
             ) : (
-              <React.Fragment>
-                <AppBar>
-                  <MainBodyHeader
-                    deviceId={this.props.selectedDevice}
-                    key="mainBodyHeader"
-                    drawer={this.state.drawer}
-                    changeDrawerState={this.changeDrawerState}
-                    hiddenNotifications={this.state.hiddenNotifications}
-                    showHiddenNotifications={this.showHiddenNotifications}
-                    nightMode={nightMode}
-                    environmentData={this.props.environmentData}
-                    environments={this.props.environments}
-                    isMobile={true}
-                    userData={this.props.userData}
-                    client={this.props.client}
-                  />
-                </AppBar>
-                <div
-                  key="mainBody"
-                  style={
-                    nightMode
-                      ? {
-                          background: "#2f333d",
-                          marginTop: "64px",
-                          overflowY: "auto",
-                        }
-                      : {
-                          background: "white",
-                          marginTop: "64px",
-                          overflowY: "auto",
-                        }
-                  }
-                >
-                  <MainBody
-                    deviceId={this.props.selectedDevice}
-                    showHidden={this.state.showMainHidden}
-                    changeShowHiddenState={this.changeShowHiddenState}
-                    isMobile={true}
-                    nightMode={nightMode}
-                    environmentData={this.props.environmentData}
-                    userData={this.props.userData}
-                  />
-                </div>
-                <StatusBar
-                  environmentData={this.props.environmentData}
-                  deviceId={this.props.selectedDevice}
-                  nightMode={nightMode}
-                  isMobile={true}
-                />
-              </React.Fragment>
+              <DeviceFetcher
+                deviceId={this.props.selectedDevice}
+                showHidden={this.state.showMainHidden}
+                changeShowHiddenState={this.changeShowHiddenState}
+                nightMode={nightMode}
+                environmentData={this.props.environmentData}
+                isMobile={true}
+                logOut={this.props.logOut}
+                environments={this.props.environments}
+                userData={this.props.userData}
+              />
             )}
           </div>
         ) : (
@@ -557,53 +515,26 @@ class Main extends Component {
               />
             </div>
             {this.props.selectedDevice !== null ? (
-              <MainBodyHeader
+              <DeviceFetcher
                 deviceId={this.props.selectedDevice}
-                key="mainBodyHeader"
-                drawer={this.state.drawer}
-                changeDrawerState={this.changeDrawerState}
-                hiddenNotifications={this.state.hiddenNotifications}
-                showHiddenNotifications={this.showHiddenNotifications}
+                showHidden={this.state.showMainHidden}
+                changeShowHiddenState={this.changeShowHiddenState}
                 nightMode={nightMode}
-                openSnackBar={() => {
-                  this.setState({ copyMessageOpen: true })
-                }}
                 environmentData={this.props.environmentData}
+                isMobile={false}
+                logOut={this.props.logOut}
                 environments={this.props.environments}
                 userData={this.props.userData}
-                client={this.props.client}
               />
             ) : (
-              <div
-                style={{
-                  gridArea: "mainBodyHeader",
-                  backgroundColor: "#0083ff",
-                }}
-                key="mainBodyHeader"
-              />
-            )}
-            {this.props.selectedDevice !== null ? (
-              <React.Fragment>
-                <MainBody
-                  deviceId={this.props.selectedDevice}
-                  showHidden={this.state.showMainHidden}
-                  changeShowHiddenState={this.changeShowHiddenState}
-                  nightMode={nightMode}
-                  environmentData={this.props.environmentData}
-                  isMobile={false}
-                  logOut={this.props.logOut}
-                  environments={this.props.environments}
-                  userData={this.props.userData}
+              <Fragment>
+                <div
+                  style={{
+                    gridArea: "mainBodyHeader",
+                    backgroundColor: "#0083ff",
+                  }}
+                  key="mainBodyHeader"
                 />
-                <StatusBar
-                  environmentData={this.props.environmentData}
-                  deviceId={this.props.selectedDevice}
-                  nightMode={nightMode}
-                  isMobile={false}
-                />
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
                 <div
                   style={
                     typeof Storage !== "undefined" &&
@@ -632,7 +563,7 @@ class Main extends Component {
                       : { background: "white" }
                   }
                 />
-              </React.Fragment>
+              </Fragment>
             )}
           </div>
         )}
@@ -740,7 +671,7 @@ export default graphql(
                 sortBy: name
                 sortDirection: DESCENDING
                 limit: 20
-            offset: $starredOffset
+                offset: $starredOffset
               ) {
                 id
                 index
@@ -771,7 +702,7 @@ export default graphql(
                 sortBy: name
                 sortDirection: DESCENDING
                 limit: 20
-            offset: $offset
+                offset: $offset
               ) {
                 id
                 index
@@ -805,10 +736,7 @@ export default graphql(
           environment(id: $id) {
             id
             name
-            devices(sortBy: index
-            limit: 20
-            offset: $offset
-            ) {
+            devices(sortBy: index, limit: 20, offset: $offset) {
               id
               index
               name
@@ -838,6 +766,8 @@ export default graphql(
       `,
   {
     name: "environmentData",
-    options: ({ environmentId }) => ({ variables: { id: environmentId,offset:0, starredOffset:0 } }),
+    options: ({ environmentId }) => ({
+      variables: { id: environmentId, offset: 0, starredOffset: 0 },
+    }),
   }
 )(hotkeys(Main))
