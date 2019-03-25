@@ -25,6 +25,7 @@ import Avatar from "@material-ui/core/Avatar"
 import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import Star from "@material-ui/icons/Star"
 import Typography from "@material-ui/core/Typography"
+import { debounce } from "debounce";
 
     let mergedArray = []
 
@@ -213,7 +214,7 @@ queryMore=()=>{
               overscrollBehaviorY: "contain",
             }}
             subheader={<li />}
-            onScroll={event=> {if (event.target.scrollTop+event.target.clientHeight+1>=event.target.scrollHeight) this.queryMore() }}
+            onScroll={event=> {if (event.target.scrollTop+event.target.clientHeight+1>=event.target.scrollHeight) debounce(this.queryMore) }}
           >
             {mergedArray
               .filter(
@@ -347,11 +348,10 @@ queryMore=()=>{
                 </ListItem>
               ))}
           </List>
-              <Zoom in={environment}>
+              <Zoom in={environment && this.props.userData.user &&
+            this.props.userData.user.emailIsVerified}>
                 <Fab
                   color="secondary"
-                  disabled={!(this.props.userData.user &&
-            this.props.userData.user.emailIsVerified)}
                   style={
                     this.props.isMobile
                       ? this.props.snackbarOpen

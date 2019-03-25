@@ -17,23 +17,23 @@ class MainBody extends Component {
 
 
 queryMore=()=>{
-  this.props.environmentData.fetchMore({
+  this.props.deviceData.fetchMore({
             variables: {
-              offset: this.props.environmentData.environment.devices.length
+              offset: this.props.deviceData.device.values.length
             },updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev
         }
 
-        const newDevices = [
-          ...prev.environment.devices,
-          ...fetchMoreResult.environment.devices
+        const newValues = [
+          ...prev.device.values,
+          ...fetchMoreResult.device.values
         ]
 
         return {
-          environment: {
-            ...prev.environment,
-            devices: newDevices,
+          device: {
+            ...prev.device,
+            values: newValues,
           },
         }
       }
@@ -427,7 +427,7 @@ queryMore=()=>{
 
 export default graphql(
   gql`
-    query($id: ID!) {
+    query($id: ID!, $offset: Int!, $hiddenOffset: Int!) {
       device(id: $id) {
         id
         batteryStatus
@@ -437,7 +437,8 @@ export default graphql(
           id
         }
         hiddenValues: values(limit: 20
-        filter:{visibility:HIDDEN}) {
+offset: $hiddenOffset
+        filter:{visibility:{equals:HIDDEN}}) {
           id
           visibility
           cardSize
@@ -476,7 +477,8 @@ export default graphql(
             threshold
           }}
         values(limit: 20
-        filter:{visibility:VISIBLE}) {
+        offset: $offset
+        filter:{visibility:{equals:VISIBLE}}) {
           id
           visibility
           cardSize
@@ -520,6 +522,6 @@ export default graphql(
   `,
   {
     name: "deviceData",
-    options: ({ deviceId }) => ({ variables: { id: deviceId } }),
+    options: ({ deviceId }) => ({ variables: { id: deviceId, offset: 0, hiddenOffset: 0 } }),
   }
 )(MainBody)
