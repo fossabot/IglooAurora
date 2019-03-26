@@ -119,39 +119,6 @@ class MainBodyHeader extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.data.refetch()
-
-    const deviceUpdatedSubscription = gql`
-      subscription {
-        deviceUpdated {
-          id
-          index
-          name
-          online
-          batteryStatus
-          batteryCharging
-          signalStatus
-          deviceType
-          firmware
-          createdAt
-          updatedAt
-          starred
-          notificationCount(filter: { read: false })
-          notifications(limit: 20) {
-            id
-            content
-            read
-          }
-        }
-      }
-    `
-
-    this.props.data.subscribeToMore({
-      document: deviceUpdatedSubscription,
-    })
-  }
-
   render() {
     const { device } = this.props.data
 

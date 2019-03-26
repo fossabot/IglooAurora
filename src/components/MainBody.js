@@ -84,6 +84,19 @@ export default class MainBody extends Component {
       },
     })
 
+    const deviceUnclaimedSubscription = gql`
+      subscription {
+        deviceUnclaimed
+      }
+    `
+
+    this.props.environmentData.subscribeToMore({
+      document: deviceUnclaimedSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        this.setState({ redirect: true })
+      },
+    })
+
     const valueCreatedSubscription = gql`
       subscription {
         valueCreated {

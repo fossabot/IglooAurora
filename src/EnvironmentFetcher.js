@@ -190,6 +190,40 @@ class Main extends Component {
           }
         })
 
+        if (localStorage.getItem("sortBy") === "name") {
+          if (localStorage.getItem("sortDirection") === "ascending") {
+            newDevices.sort(function(a, b) {
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return -1
+              }
+              if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                return 1
+              }
+              return 0
+            })
+          } else {
+            newDevices.sort(function(a, b) {
+              if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                return -1
+              }
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return 1
+              }
+              return 0
+            })
+          }
+        } else {
+          newDevices.sort(function(a, b) {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) {
+              return -1
+            }
+            if (a.name.toLowerCase() > b.name.toLowerCase()) {
+              return 1
+            }
+            return 0
+          })
+        }
+
         return subscriptionData.data.deviceUpdated.starred
           ? {
               environment: {
@@ -292,6 +326,50 @@ class Main extends Component {
         return prev.environment.starredDevices.some(
           starredDevice =>
             starredDevice.id === subscriptionData.data.deviceDeleted
+        )
+          ? {
+              environment: {
+                ...prev.environment,
+                starredDevice: newDevices,
+              },
+            }
+          : {
+              environment: {
+                ...prev.environment,
+                devices: newDevices,
+              },
+            }
+      },
+    })
+
+    const deviceUnclaimedSubscription = gql`
+      subscription {
+        deviceUnclaimed
+      }
+    `
+
+    this.props.environmentData.subscribeToMore({
+      document: deviceUnclaimedSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        const newDevices = prev.environment.starredDevices.some(
+          starredDevice =>
+            starredDevice.id === subscriptionData.data.deviceUnclaimed
+        )
+          ? prev.environment.starredDevices.filter(
+              starredDevice =>
+                starredDevice.id !== subscriptionData.data.deviceUnclaimed
+            )
+          : prev.environment.devices.filter(
+              device => device.id !== subscriptionData.data.deviceUnclaimed
+            )
+
+        return prev.environment.starredDevices.some(
+          starredDevice =>
+            starredDevice.id === subscriptionData.data.deviceUnclaimed
         )
           ? {
               environment: {
