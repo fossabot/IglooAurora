@@ -40,7 +40,7 @@ import Language from "@material-ui/icons/Language"
 import MailingOptions from "./MailingOptions"
 import AuthenticationOptions from "./AuthenticationOptions"
 import querystringify from "querystringify"
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -84,7 +84,7 @@ class SettingsDialog extends React.Component {
     isDeleteDisabled: true,
     stepIndex: 0,
     showHidden: false,
-    redirect:false,
+    redirect: false,
     ...allDialogsClosed,
   }
 
@@ -188,8 +188,15 @@ class SettingsDialog extends React.Component {
     this.setState({ nameDialogOpen: false })
   }
 
-  componentDidMount(){
-    if (querystringify.parse(window.location.search).dialog==="delete-user" || querystringify.parse(window.location.search).dialog==="change-email" || querystringify.parse(window.location.search).dialog === "manage-permanent-tokens" || querystringify.parse(window.location.search).dialog==="change-authentication") {
+  componentDidMount() {
+    if (
+      querystringify.parse(window.location.search).dialog === "delete-user" ||
+      querystringify.parse(window.location.search).dialog === "change-email" ||
+      querystringify.parse(window.location.search).dialog ===
+        "manage-permanent-tokens" ||
+      querystringify.parse(window.location.search).dialog ===
+        "change-authentication"
+    ) {
       this.props.setOpen(true)
     }
   }
@@ -198,24 +205,31 @@ class SettingsDialog extends React.Component {
     if (nextProps.isOpen !== this.props.isOpen && nextProps.isOpen) {
       this.setState(allDialogsClosed)
 
-    if (querystringify.parse(window.location.search).dialog==="delete-user") {
-      this.setState({deleteDialogOpen:true,redirect:true}
-        )
-    }
+      if (
+        querystringify.parse(window.location.search).dialog === "delete-user"
+      ) {
+        this.setState({ deleteDialogOpen: true, redirect: true })
+      }
 
-    if (querystringify.parse(window.location.search).dialog==="change-email") {
-      this.setState({ emailDialogOpen: true, redirect: true }
-      )
-    }
+      if (
+        querystringify.parse(window.location.search).dialog === "change-email"
+      ) {
+        this.setState({ emailDialogOpen: true, redirect: true })
+      }
 
-    if (querystringify.parse(window.location.search).dialog === "manage-permanent-tokens") {
-this.setState({authDialogOpen:true,redirect:true}
-        )
-    }
+      if (
+        querystringify.parse(window.location.search).dialog ===
+        "manage-permanent-tokens"
+      ) {
+        this.setState({ authDialogOpen: true, redirect: true })
+      }
 
-    if (querystringify.parse(window.location.search).dialog==="change-authentication") {
-      this.setState({ authenticationOpen: true, redirect: true })
-    }
+      if (
+        querystringify.parse(window.location.search).dialog ===
+        "change-authentication"
+      ) {
+        this.setState({ authenticationOpen: true, redirect: true })
+      }
     }
   }
 
@@ -876,7 +890,11 @@ this.setState({authDialogOpen:true,redirect:true}
                     }
                   />
                 </ListItem>
-                <ListItem button onClick={this.handleDeleteDialogOpen}>
+                <ListItem
+                  button
+                  onClick={this.handleDeleteDialogOpen}
+                  disabled={!user}
+                >
                   <ListItemText
                     primary={
                       <font style={{ color: "#f44336" }}>
@@ -983,11 +1001,7 @@ this.setState({authDialogOpen:true,redirect:true}
                   >
                     Settings
                   </Typography>
-                  <Tooltip
-                    id="tooltip-bottom"
-                    title="Close"
-                    placement="bottom"
-                  >
+                  <Tooltip id="tooltip-bottom" title="Close" placement="bottom">
                     <IconButton
                       onClick={() => this.props.setOpen(false)}
                       style={{

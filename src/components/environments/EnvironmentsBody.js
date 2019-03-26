@@ -78,17 +78,16 @@ export default class EnvironmentsBody extends Component {
             margin: "0",
           }}
         >
-          {user.environments
-            .map(environment => (
-              <Grid key={environment.id} item style={{ margin: 8 }}>
-                <EnvironmentCard
-                  userData={this.props.userData}
-                  environment={environment}
-                  nightMode={nightMode}
-                  client={this.props.client}
-                />
-              </Grid>
-            ))}
+          {user.environments.map(environment => (
+            <Grid key={environment.id} item style={{ margin: 8 }}>
+              <EnvironmentCard
+                userData={this.props.userData}
+                environment={environment}
+                nightMode={nightMode}
+                client={this.props.client}
+              />
+            </Grid>
+          ))}
           {!!user.pendingOwnerChangeCount && (
             <Grid key="pendingEnvironmentShares" item style={{ margin: 8 }}>
               <ButtonBase
@@ -254,17 +253,16 @@ export default class EnvironmentsBody extends Component {
             margin: "0",
           }}
         >
-          {user.sharedEnvironments
-            .map(environment => (
-              <Grid key={environment.id} item style={{ margin: 8 }}>
-                <EnvironmentCard
-                  userData={this.props.userData}
-                  environment={environment}
-                  nightMode={nightMode}
-                  client={this.props.client}
-                />
-              </Grid>
-            ))}
+          {user.sharedEnvironments.map(environment => (
+            <Grid key={environment.id} item style={{ margin: 8 }}>
+              <EnvironmentCard
+                userData={this.props.userData}
+                environment={environment}
+                nightMode={nightMode}
+                client={this.props.client}
+              />
+            </Grid>
+          ))}
           {!!user.pendingEnvironmentShareCount && (
             <Grid key="pendingEnvironmentShares" item style={{ margin: 8 }}>
               <ButtonBase
@@ -342,8 +340,7 @@ export default class EnvironmentsBody extends Component {
             style={
               nightMode
                 ? (user &&
-                    (user.environments[0] &&
-                      user.sharedEnvironments[0])) ||
+                    (user.environments[0] && user.sharedEnvironments[0])) ||
                   (user && user.pendingEnvironmentShareCount)
                   ? {
                       height: "calc(100vh - 128px)",
@@ -354,8 +351,7 @@ export default class EnvironmentsBody extends Component {
                       backgroundColor: "#21252b",
                     }
                 : (user &&
-                    (user.environments[0] &&
-                      user.sharedEnvironments[0])) ||
+                    (user.environments[0] && user.sharedEnvironments[0])) ||
                   (user && user.pendingEnvironmentShareCount)
                 ? {
                     height: "calc(100vh - 128px)",
@@ -392,7 +388,13 @@ export default class EnvironmentsBody extends Component {
                   onChange={event =>
                     this.props.searchEnvironments(event.target.value)
                   }
-                  disabled={loading || error || (user && !user.environments[0] && !user.sharedEnvironments[0])}
+                  disabled={
+                    loading ||
+                    error ||
+                    (user &&
+                      !user.environments[0] &&
+                      !user.sharedEnvironments[0])
+                  }
                   startAdornment={
                     <InputAdornment
                       position="start"
@@ -401,10 +403,22 @@ export default class EnvironmentsBody extends Component {
                       <Search
                         style={
                           nightMode
-                            ? !(loading || error || (user && !user.environments[0] && !user.sharedEnvironments[0]))
+                            ? !(
+                                loading ||
+                                error ||
+                                (user &&
+                                  !user.environments[0] &&
+                                  !user.sharedEnvironments[0])
+                              )
                               ? { color: "white" }
                               : { color: "white", opacity: "0.5" }
-                            : !(loading || error || (user && !user.environments[0] && !user.sharedEnvironments[0]))
+                            : !(
+                                loading ||
+                                error ||
+                                (user &&
+                                  !user.environments[0] &&
+                                  !user.sharedEnvironments[0])
+                              )
                             ? { color: "black" }
                             : { color: "black", opacity: "0.5" }
                         }
@@ -460,11 +474,9 @@ export default class EnvironmentsBody extends Component {
                 <CenteredSpinner style={{ paddingTop: "32px" }} />
               </div>
             )}
-            {user &&(
-              (!!(
-                user.environments[0] &&
-                user.sharedEnvironments)[0]
-              ) || user.pendingEnvironmentShareCount) ? (
+            {user &&
+              (!!(user.environments[0] && user.sharedEnvironments)[0] ||
+              user.pendingEnvironmentShareCount ? (
                 <SwipeableViews
                   index={this.state.slideIndex}
                   onChangeIndex={slideIndex => this.setState({ slideIndex })}
@@ -555,12 +567,9 @@ export default class EnvironmentsBody extends Component {
                     {yourEnvironmentsList}
                   </Grid>
                 </div>
-              )}
+              ))}
             {user &&
-              (!!(
-                user.environments[0] &&
-                user.sharedEnvironments[0]
-              ) ||
+              (!!(user.environments[0] && user.sharedEnvironments[0]) ||
                 user.pendingEnvironmentShareCount) && (
                 <AppBar
                   position="static"
@@ -658,7 +667,13 @@ export default class EnvironmentsBody extends Component {
                   onChange={event =>
                     this.props.searchEnvironments(event.target.value)
                   }
-                  disabled={loading || error || (user && !user.environments[0]&& !user.sharedEnvironments[0])}
+                  disabled={
+                    loading ||
+                    error ||
+                    (user &&
+                      !user.environments[0] &&
+                      !user.sharedEnvironments[0])
+                  }
                   startAdornment={
                     <InputAdornment
                       position="start"
@@ -668,10 +683,22 @@ export default class EnvironmentsBody extends Component {
                         style={
                           typeof Storage !== "undefined" &&
                           localStorage.getItem("nightMode") === "true"
-                            ? !(loading || error || (user && !user.environments[0]&& !user.sharedEnvironments[0]))
+                            ? !(
+                                loading ||
+                                error ||
+                                (user &&
+                                  !user.environments[0] &&
+                                  !user.sharedEnvironments[0])
+                              )
                               ? { color: "white" }
                               : { color: "white", opacity: "0.5" }
-                            : !(loading || error || (user && !user.environments[0]&& !user.sharedEnvironments[0]))
+                            : !(
+                                loading ||
+                                error ||
+                                (user &&
+                                  !user.environments[0] &&
+                                  !user.sharedEnvironments[0])
+                              )
                             ? { color: "black" }
                             : { color: "black", opacity: "0.5" }
                         }
@@ -711,6 +738,39 @@ export default class EnvironmentsBody extends Component {
                     }
               }
             >
+              {error && (
+                <Typography
+                  variant="h5"
+                  className="notSelectable defaultCursor"
+                  style={
+                    typeof Storage !== "undefined" &&
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                          color: "white",
+                        }
+                      : {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                        }
+                  }
+                >
+                  Unexpected error
+                </Typography>
+              )}
+              {loading && (
+                <div
+                  style={{
+                    overflowY: "auto",
+                    height: "calc(100vh - 128px)",
+                  }}
+                >
+                  <CenteredSpinner style={{ paddingTop: "32px" }} />
+                </div>
+              )}
               {user && (
                 <List subheader={<li />}>
                   <li key="yourEnvironments">
@@ -749,11 +809,10 @@ export default class EnvironmentsBody extends Component {
                       {yourEnvironmentsList}
                     </ul>
                   </li>
-                  {!!((
-                    user.environments[0] &&
-                    user.sharedEnvironments[0]
-                  ) ||
-                    user.pendingEnvironmentShareCount) && (
+                  {!!(
+                    (user.environments[0] && user.sharedEnvironments[0]) ||
+                    user.pendingEnvironmentShareCount
+                  ) && (
                     <li key="yourEnvironments">
                       <ul style={{ padding: "0" }}>
                         <ListSubheader
