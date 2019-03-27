@@ -76,6 +76,29 @@ class Sidebar extends Component {
     })
   }
 
+  searchMore = searchText => {
+    this.props.environmentData.fetchMore({
+      variables: { filter: { name: { like: searchText } } },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return prev
+        }
+
+        const newDevices = [
+          ...prev.environment.devices,
+          ...fetchMoreResult.environment.devices,
+        ]
+
+        return {
+          environment: {
+            ...prev.environment,
+            devices: newDevices,
+          },
+        }
+      },
+    })
+  }
+
   updateDimensions() {
     if (window.innerWidth < 1080) {
       this.setState({ lessThan1080: true })
@@ -228,6 +251,11 @@ class Sidebar extends Component {
                 device =>
                   this.state.visibleDeviceTypes.indexOf(device.deviceType) !==
                   -1
+              )
+              .filter(device =>
+                this.props.searchText
+                  ? device.name.includes(this.props.searchText)
+                  : true
               )
               .map(device => (
                 <ListItem
@@ -445,7 +473,10 @@ class Sidebar extends Component {
                 )
               }
               value={this.props.searchText}
-              onChange={event => this.props.searchDevices(event.target.value)}
+              onChange={event => {
+                this.props.searchDevices(event.target.value)
+                this.searchMore(event.target.value)
+              }}
               startAdornment={
                 <InputAdornment position="start" style={{ cursor: "default" }}>
                   <Search

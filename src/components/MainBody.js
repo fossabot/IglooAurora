@@ -77,10 +77,14 @@ export default class MainBody extends Component {
       }
     `
 
-    this.props.environmentData.subscribeToMore({
+    this.props.deviceData.subscribeToMore({
       document: deviceDeletedSubscription,
       updateQuery: (prev, { subscriptionData }) => {
-        this.setState({ redirect: true })
+        if (
+          subscriptionData.data.deviceDeleted ===
+          this.props.deviceData.variables.id
+        )
+          this.setState({ redirect: true })
       },
     })
 
@@ -277,7 +281,10 @@ export default class MainBody extends Component {
 
       if (
         error.message === "GraphQL error: This id is not valid" ||
-        error.message === "GraphQL error: The requested resource does not exist"
+        error.message ===
+          "GraphQL error: The requested resource does not exist" ||
+        error.message ===
+          "GraphQL error: You are not allowed to perform this operation"
       ) {
         return (
           <Redirect

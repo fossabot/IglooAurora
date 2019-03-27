@@ -282,6 +282,40 @@ class Main extends Component {
             ]
           : [...prev.environment.devices, subscriptionData.data.deviceClaimed]
 
+        if (localStorage.getItem("sortBy") === "name") {
+          if (localStorage.getItem("sortDirection") === "ascending") {
+            newDevices.sort(function(a, b) {
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return -1
+              }
+              if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                return 1
+              }
+              return 0
+            })
+          } else {
+            newDevices.sort(function(a, b) {
+              if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                return -1
+              }
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return 1
+              }
+              return 0
+            })
+          }
+        } else {
+          newDevices.sort(function(a, b) {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) {
+              return -1
+            }
+            if (a.name.toLowerCase() > b.name.toLowerCase()) {
+              return 1
+            }
+            return 0
+          })
+        }
+
         return subscriptionData.data.deviceClaimed.starred
           ? {
               environment: {
@@ -458,6 +492,13 @@ class Main extends Component {
     if (error) {
       if (error.message === "GraphQL error: This user doesn't exist anymore") {
         this.props.logOut(true)
+      }
+
+      if (
+        error.message ===
+        "GraphQL error: You are not allowed to perform this operation"
+      ) {
+        this.setState({ redirectToEnvironments: true })
       }
     }
 
@@ -670,7 +711,7 @@ export default graphql(
   localStorage.getItem("sortBy") === "name"
     ? localStorage.getItem("sortDirection") === "ascending"
       ? gql`
-          query($id: ID!, $starredOffset: Int!, $offset: Int!) {
+          query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
             environment(id: $id) {
               id
               name
@@ -679,7 +720,6 @@ export default graphql(
                 sortBy: name
                 sortDirection: ASCENDING
                 limit: 20
-                offset: $starredOffset
               ) {
                 id
                 index
@@ -706,7 +746,7 @@ export default graphql(
                 }
               }
               devices(
-                filter: { starred: false }
+                filter: { starred: false, AND: $filter }
                 sortBy: name
                 sortDirection: ASCENDING
                 limit: 20
@@ -740,7 +780,7 @@ export default graphql(
           }
         `
       : gql`
-          query($id: ID!) {
+          query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
             environment(id: $id) {
               id
               name
@@ -749,7 +789,6 @@ export default graphql(
                 sortBy: name
                 sortDirection: DESCENDING
                 limit: 20
-                offset: $starredOffset
               ) {
                 id
                 index
@@ -776,7 +815,7 @@ export default graphql(
                 }
               }
               devices(
-                filter: { starred: false }
+                filter: { starred: false, AND: $filter }
                 sortBy: name
                 sortDirection: DESCENDING
                 limit: 20
@@ -810,11 +849,16 @@ export default graphql(
           }
         `
     : gql`
-        query($id: ID!) {
+        query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
           environment(id: $id) {
             id
             name
-            devices(sortBy: index, limit: 20, offset: $offset) {
+            devices(
+              sortBy: index
+              limit: 20
+              offset: $offset
+              filter: $filter
+            ) {
               id
               index
               name
@@ -845,7 +889,11 @@ export default graphql(
   {
     name: "environmentData",
     options: ({ environmentId }) => ({
-      variables: { id: environmentId, offset: 0, starredOffset: 0 },
+      variables: {
+        id: environmentId,
+        offset: 0,
+        filter: {},
+      },
     }),
   }
 )(hotkeys(Main))
