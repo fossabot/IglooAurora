@@ -78,7 +78,7 @@ class Sidebar extends Component {
 
   searchMore = searchText => {
     this.props.environmentData.fetchMore({
-      variables: { filter: { name: { like: searchText } } },
+      variables: { filter: { name: { similarTo: searchText } } },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) {
           return prev

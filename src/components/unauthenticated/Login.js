@@ -71,7 +71,7 @@ const desktopTheme = createMuiTheme({
         "&$checked": { color: "#0083ff" },
       },
     },
-    MuiIconButton: {root:{color:"black"}},
+    MuiIconButton: { root: { color: "black" } },
     ...sharedStyles,
   },
 })
@@ -113,7 +113,7 @@ const mobileTheme = createMuiTheme({
       },
     },
     MuiInputBase: { root: { color: "white" } },
-    MuiIconButton: {root:{color:"white"}},
+    MuiIconButton: { root: { color: "white" } },
     ...sharedStyles,
   },
 })
@@ -239,7 +239,7 @@ export default class Login extends Component {
           await this.props.client.mutate({
             mutation: gql`
               mutation SendConfirmationEmail($email: String!) {
-                sendConfirmationEmail(email:$email,operation:LOG_IN)
+                sendConfirmationEmail(email: $email, operation: LOG_IN)
               }
             `,
             variables: {
@@ -374,20 +374,10 @@ export default class Login extends Component {
           totpCertificate: this.state.totpCertificate,
         },
       })
-
-      if (querystringify.parse(window.location.search).to) {
-        window.location.href =
-          querystringify.parse(window.location.search).to +
-          "?token=" +
-          loginMutation.data.logIn.token
-      } else {
-        this.props.signIn(
-          loginMutation.data.logIn.token,
-          loginMutation.data.logIn.user
-        )
-
-        this.props.changePassword("")
-      }
+      this.props.signIn(
+        loginMutation.data.logIn.token,
+        loginMutation.data.logIn.user
+      )
     } catch (e) {
       this.setState({ showLoading: false })
 
@@ -911,7 +901,7 @@ export default class Login extends Component {
                               <InputAdornment position="end">
                                 <IconButton
                                   onClick={() =>
-                                    this.setState(oldState=>({
+                                    this.setState(oldState => ({
                                       showPassword: !oldState.showPassword,
                                     }))
                                   }
@@ -1001,10 +991,13 @@ export default class Login extends Component {
                         this.setState({ logInEmailOpen: true })
 
                         this.props.client.mutate({
-            mutation: gql`
-              mutation SendConfirmationEmail($email: String!) {
-                sendConfirmationEmail(email:$email,operation:LOG_IN)
-              }
+                          mutation: gql`
+                            mutation SendConfirmationEmail($email: String!) {
+                              sendConfirmationEmail(
+                                email: $email
+                                operation: LOG_IN
+                              )
+                            }
                           `,
                           variables: {
                             email: this.state.user.email,
@@ -1156,10 +1149,13 @@ export default class Login extends Component {
                   onCompleted={data =>
                     !data.user.primaryAuthenticationMethods[0] &&
                     this.props.client.mutate({
-            mutation: gql`
-              mutation SendConfirmationEmail($email: String!) {
-                sendConfirmationEmail(email:$email,operation:LOG_IN)
-              }
+                      mutation: gql`
+                        mutation SendConfirmationEmail($email: String!) {
+                          sendConfirmationEmail(
+                            email: $email
+                            operation: LOG_IN
+                          )
+                        }
                       `,
                       variables: {
                         email: data.user.email,
@@ -1411,11 +1407,11 @@ export default class Login extends Component {
                                   endAdornment: this.props.password ? (
                                     <InputAdornment position="end">
                                       <IconButton
-                                  onClick={() =>
-                                    this.setState(oldState=>({
-                                      showPassword: !oldState.showPassword,
-                                    }))
-                                  }
+                                        onClick={() =>
+                                          this.setState(oldState => ({
+                                            showPassword: !oldState.showPassword,
+                                          }))
+                                        }
                                         tabIndex="-1"
                                       >
                                         {/* fix for ToggleIcon glitch on Edge */}
@@ -1758,11 +1754,11 @@ export default class Login extends Component {
                           endAdornment: this.props.password ? (
                             <InputAdornment position="end">
                               <IconButton
-                                  onClick={() =>
-                                    this.setState(oldState=>({
-                                      showPassword: !oldState.showPassword,
-                                    }))
-                                  }
+                                onClick={() =>
+                                  this.setState(oldState => ({
+                                    showPassword: !oldState.showPassword,
+                                  }))
+                                }
                                 tabIndex="-1"
                               >
                                 {/* fix for ToggleIcon glitch on Edge */}

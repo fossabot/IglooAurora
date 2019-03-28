@@ -62,19 +62,12 @@ export default class UnAuthenticatedMain extends Component {
         },
       })
 
-      if (querystringify.parse(window.location.search).to) {
-        window.location.href =
-          querystringify.parse(window.location.search).to +
-          "?token=" +
-          loginMutation.data.logIn.token
-      } else {
-        this.props.signIn(
-          loginMutation.data.logIn.token,
-          loginMutation.data.logIn.user
-        )
+      this.props.signIn(
+        loginMutation.data.logIn.token,
+        loginMutation.data.logIn.user
+      )
 
-        this.props.changePassword("")
-      }
+      this.props.changePassword("")
     } catch (e) {
       this.setState({ redirect: true })
     }
