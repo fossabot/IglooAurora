@@ -172,14 +172,18 @@ class NotificationsDrawer extends React.Component {
       device = nextProps.notificationData.device
     }
 
-    if (this.props.drawer !== nextProps.drawer && !nextProps.drawer) {
+    if (
+      this.props.drawer !== nextProps.drawer &&
+      !nextProps.drawer &&
+      unreadNotifications
+    ) {
       unreadNotifications
         .filter(
           notification => !markedAsUnreadNotifications.includes(notification.id)
         )
         .forEach(notification => readNotifications.push(notification))
 
-        unreadNotifications=unreadNotifications.filter(notification =>
+      unreadNotifications = unreadNotifications.filter(notification =>
         markedAsUnreadNotifications.includes(notification.id)
       )
 
@@ -268,27 +272,29 @@ class NotificationsDrawer extends React.Component {
     let readNotificationsUI = ""
 
     if (error) {
-      unreadNotificationsList = <Typography
-        variant="h5"
-        className="notSelectable defaultCursor"
-        style={
-          typeof Storage !== "undefined" &&
+      unreadNotificationsList = (
+        <Typography
+          variant="h5"
+          className="notSelectable defaultCursor"
+          style={
+            typeof Storage !== "undefined" &&
             localStorage.getItem("nightMode") === "true"
-            ? {
-              textAlign: "center",
-              marginTop: "32px",
-              marginBottom: "32px",
-              color: "white",
-            }
-            : {
-              textAlign: "center",
-              marginTop: "32px",
-              marginBottom: "32px",
-            }
-        }
-      >
-        Unexpected error
-          </Typography>
+              ? {
+                  textAlign: "center",
+                  marginTop: "32px",
+                  marginBottom: "32px",
+                  color: "white",
+                }
+              : {
+                  textAlign: "center",
+                  marginTop: "32px",
+                  marginBottom: "32px",
+                }
+          }
+        >
+          Unexpected error
+        </Typography>
+      )
 
       if (error.message === "GraphQL error: This user doesn't exist anymore") {
         this.props.logOut(true)

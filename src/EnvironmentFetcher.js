@@ -361,7 +361,7 @@ class Main extends Component {
               device => device.id !== subscriptionData.data.deviceDeleted
             )
 
-            const newDeviceCount = prev.deviceCount--
+        const newDeviceCount = prev.deviceCount--
 
         return prev.environment.starredDevices.some(
           starredDevice =>
@@ -371,14 +371,14 @@ class Main extends Component {
               environment: {
                 ...prev.environment,
                 starredDevice: newDevices,
-                deviceCount: newDeviceCount
+                deviceCount: newDeviceCount,
               },
             }
           : {
               environment: {
                 ...prev.environment,
                 devices: newDevices,
-                deviceCount: newDeviceCount
+                deviceCount: newDeviceCount,
               },
             }
       },
@@ -409,7 +409,7 @@ class Main extends Component {
               device => device.id !== subscriptionData.data.deviceUnclaimed
             )
 
-            const newDeviceCount = prev.deviceCount--
+        const newDeviceCount = prev.deviceCount--
 
         return prev.environment.starredDevices.some(
           starredDevice =>
@@ -419,14 +419,14 @@ class Main extends Component {
               environment: {
                 ...prev.environment,
                 starredDevice: newDevices,
-                deviceCount: newDeviceCount
+                deviceCount: newDeviceCount,
               },
             }
           : {
               environment: {
                 ...prev.environment,
                 devices: newDevices,
-                deviceCount: newDeviceCount
+                deviceCount: newDeviceCount,
               },
             }
       },
@@ -601,6 +601,7 @@ class Main extends Component {
             ) : (
               <DeviceFetcher
                 deviceId={this.props.selectedDevice}
+                drawer={this.state.drawer}
                 showHidden={this.state.showMainHidden}
                 changeShowHiddenState={this.changeShowHiddenState}
                 nightMode={nightMode}
@@ -647,6 +648,8 @@ class Main extends Component {
             </div>
             {this.props.selectedDevice !== null ? (
               <DeviceFetcher
+                changeDrawerState={this.changeDrawerState}
+                drawer={this.state.drawer}
                 deviceId={this.props.selectedDevice}
                 showHidden={this.state.showMainHidden}
                 changeShowHiddenState={this.changeShowHiddenState}
@@ -723,7 +726,12 @@ export default graphql(
   localStorage.getItem("sortBy") === "name"
     ? localStorage.getItem("sortDirection") === "ascending"
       ? gql`
-          query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
+          query(
+            $id: ID!
+            $offset: Int!
+            $filter: [DeviceFilter!]
+            $limit: PositiveInt!
+          ) {
             environment(id: $id) {
               id
               name
@@ -732,7 +740,7 @@ export default graphql(
                 filter: { starred: true }
                 sortBy: name
                 sortDirection: ASCENDING
-                limit: 20
+                limit: 5
               ) {
                 id
                 index
@@ -762,7 +770,7 @@ export default graphql(
                 filter: { starred: false, AND: $filter }
                 sortBy: name
                 sortDirection: ASCENDING
-                limit: 20
+                limit: $limit
                 offset: $offset
               ) {
                 id
@@ -793,7 +801,12 @@ export default graphql(
           }
         `
       : gql`
-          query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
+          query(
+            $id: ID!
+            $offset: Int!
+            $filter: [DeviceFilter!]
+            $limit: PositiveInt!
+          ) {
             environment(id: $id) {
               id
               name
@@ -802,7 +815,7 @@ export default graphql(
                 filter: { starred: true }
                 sortBy: name
                 sortDirection: DESCENDING
-                limit: 20
+                limit: 5
               ) {
                 id
                 index
@@ -832,7 +845,7 @@ export default graphql(
                 filter: { starred: false, AND: $filter }
                 sortBy: name
                 sortDirection: DESCENDING
-                limit: 20
+                limit: $limit
                 offset: $offset
               ) {
                 id
@@ -863,14 +876,19 @@ export default graphql(
           }
         `
     : gql`
-        query($id: ID!, $offset: Int!, $filter: [DeviceFilter!]) {
+        query(
+          $id: ID!
+          $offset: Int!
+          $filter: [DeviceFilter!]
+          $limit: PositiveInt!
+        ) {
           environment(id: $id) {
             id
             name
             deviceCount
             devices(
               sortBy: index
-              limit: 20
+              limit: $limit
               offset: $offset
               filter: $filter
             ) {
@@ -907,6 +925,7 @@ export default graphql(
       variables: {
         id: environmentId,
         offset: 0,
+        limit: 20,
         filter: {},
       },
     }),

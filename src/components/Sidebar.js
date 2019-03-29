@@ -64,6 +64,12 @@ class Sidebar extends Component {
         await this.props.environmentData.fetchMore({
           variables: {
             offset: this.props.environmentData.environment.devices.length,
+            limit:
+              this.props.environmentData.environment.deviceCount -
+                this.props.environmentData.environment.devices.length >=
+              20
+                ? 20
+                : this.props.environmentData.environment.deviceCount % 20,
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) {
