@@ -248,6 +248,7 @@ class MainBodyHeader extends Component {
               }
               logOut={this.props.logOut}
               isMobile={this.props.isMobile}
+              deviceId={this.props.deviceId}
             />
             <Tooltip id="tooltip-more" title="More" placement="bottom">
               <IconButton

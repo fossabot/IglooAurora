@@ -47,6 +47,7 @@ let unreadNotificationsList = ""
 
 class NotificationsDrawer extends React.Component {
   state = { showread: false }
+
   hot_keys = {
     "alt+n": {
       priority: 1,
@@ -84,6 +85,18 @@ class NotificationsDrawer extends React.Component {
         unreadNotifications.sort((a, b) =>
           +a.date > +b.date ? 1 : +a.date === +b.date ? 0 : -1
         )
+
+        const newNotification = [
+          ...prev.user.notifications,
+          subscriptionData.data.notificationCreated,
+        ]
+
+        return {
+          user: {
+            ...prev.user,
+            unreadNotifications: newNotification,
+          },
+        }
       },
     })
 
@@ -106,16 +119,26 @@ class NotificationsDrawer extends React.Component {
         if (!subscriptionData.data) {
           return prev
         }
+
         const newNotification = [
           ...prev.user.notifications,
           subscriptionData.data.notificationUpdated,
         ]
 
-        return {
-          user: {
-            ...prev.user,
-            notifications: newNotification,
-          },
+        if (subscriptionData.data.notificationUpdated.read) {
+          return {
+            user: {
+              ...prev.user,
+              readNotifications: newNotification,
+            },
+          }
+        } else {
+          return {
+            user: {
+              ...prev.user,
+              unreadNotifications: newNotification,
+            },
+          }
         }
       },
     })
@@ -137,10 +160,19 @@ class NotificationsDrawer extends React.Component {
           notification =>
             notification.id !== subscriptionData.data.notificationDeleted
         )
+
         readNotifications = readNotifications.filter(
           notification =>
             notification.id !== subscriptionData.data.notificationDeleted
         )
+
+        return {
+          user: {
+            ...prev.user,
+            readNotifications,
+            unreadNotifications,
+          },
+        }
       },
     })
   }
@@ -202,17 +234,13 @@ class NotificationsDrawer extends React.Component {
         readNotifications === undefined &&
         unreadNotifications === undefined
       ) {
-        readNotifications = device.notifications.filter(
-          notification => notification.read
-        )
+        readNotifications = device.readNotifications
 
-        unreadNotifications = device.notifications.filter(
-          notification => !notification.read
-        )
+        unreadNotifications = device.unreadNotifications
 
-        device.notifications
-          .filter(notification => !notification.read)
-          .forEach(notification => this.clearNotification(notification.id))
+        device.unreadNotifications.forEach(notification =>
+          this.clearNotification(notification.id)
+        )
       }
     }
   }
@@ -830,7 +858,16 @@ export default graphql(
     query($id: ID!) {
       device(id: $id) {
         id
-        notifications(limit: 20) {
+        unreadNotifications: notifications(limit: 20, filter: { read: false }) {
+          id
+          content
+          date
+          read
+          device {
+            id
+          }
+        }
+        readNotifications: notifications(limit: 20, filter: { read: true }) {
           id
           content
           date

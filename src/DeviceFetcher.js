@@ -23,6 +23,7 @@ function DeviceFetcher(props) {
           userData={props.userData}
           client={props.client}
           data={props.deviceData}
+          deviceId={props.deviceId}
         />
       </AppBar>
       <div
@@ -62,7 +63,7 @@ function DeviceFetcher(props) {
     <Fragment>
       {props.selectedDevice !== null ? (
         <MainBodyHeader
-          deviceId={props.selectedDevice}
+          deviceId={props.deviceId}
           key="mainBodyHeader"
           drawer={props.drawer}
           changeDrawerState={props.changeDrawerState}

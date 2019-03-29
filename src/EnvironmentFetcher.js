@@ -604,6 +604,8 @@ class Main extends Component {
                 drawer={this.state.drawer}
                 showHidden={this.state.showMainHidden}
                 changeShowHiddenState={this.changeShowHiddenState}
+                hiddenNotifications={this.state.hiddenNotifications}
+                showHiddenNotifications={this.showHiddenNotifications}
                 nightMode={nightMode}
                 environmentData={this.props.environmentData}
                 isMobile={true}
@@ -653,6 +655,8 @@ class Main extends Component {
                 deviceId={this.props.selectedDevice}
                 showHidden={this.state.showMainHidden}
                 changeShowHiddenState={this.changeShowHiddenState}
+                hiddenNotifications={this.state.hiddenNotifications}
+                showHiddenNotifications={this.showHiddenNotifications}
                 nightMode={nightMode}
                 environmentData={this.props.environmentData}
                 isMobile={false}
