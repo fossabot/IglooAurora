@@ -25,6 +25,7 @@ import Avatar from "@material-ui/core/Avatar"
 import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import Star from "@material-ui/icons/Star"
 import Typography from "@material-ui/core/Typography"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 let mergedArray = []
 
@@ -51,52 +52,84 @@ class Sidebar extends Component {
     },
   }
 
-  queryMore = () => {
-    this.props.environmentData.fetchMore({
-      variables: {
-        offset: this.props.environmentData.environment.devices.length,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev
-        }
+  queryMore = async () => {
+    if (
+      !this.queryMore.locked &&
+      this.props.environmentData.environment.deviceCount > mergedArray.length
+    ) {
+      this.queryMore.locked = true
 
-        const newDevices = [
-          ...prev.environment.devices,
-          ...fetchMoreResult.environment.devices,
-        ]
-
-        return {
-          environment: {
-            ...prev.environment,
-            devices: newDevices,
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.environmentData.fetchMore({
+          variables: {
+            offset: this.props.environmentData.environment.devices.length,
           },
-        }
-      },
-    })
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newDevices = [
+              ...prev.environment.devices,
+              ...fetchMoreResult.environment.devices,
+            ]
+
+            return {
+              environment: {
+                ...prev.environment,
+                devices: newDevices,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.queryMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
   }
 
-  searchMore = searchText => {
-    this.props.environmentData.fetchMore({
-      variables: { filter: { name: { similarTo: searchText } } },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev
-        }
+  searchMore = async searchText => {
+    if (
+      !this.searchMore.locked &&
+      this.props.environmentData.deviceCount > mergedArray.length
+    ) {
+      this.searchMore.locked = true
 
-        const newDevices = [
-          ...prev.environment.devices,
-          ...fetchMoreResult.environment.devices,
-        ]
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.environmentData.fetchMore({
+          variables: { filter: { name: { similarTo: searchText } } },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
 
-        return {
-          environment: {
-            ...prev.environment,
-            devices: newDevices,
+            const newDevices = [
+              ...prev.environment.devices,
+              ...fetchMoreResult.environment.devices,
+            ]
+
+            return {
+              environment: {
+                ...prev.environment,
+                devices: newDevices,
+              },
+            }
           },
-        }
-      },
-    })
+        })
+      } finally {
+        this.setState(() => {
+          this.searchMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
   }
 
   updateDimensions() {
@@ -240,8 +273,8 @@ class Sidebar extends Component {
             subheader={<li />}
             onScroll={event => {
               if (
-                event.target.scrollTop + event.target.clientHeight + 1 >=
-                event.target.scrollHeight
+                event.target.scrollTop + event.target.clientHeight >=
+                event.target.scrollHeight - 600
               )
                 this.queryMore()
             }}
@@ -383,6 +416,9 @@ class Sidebar extends Component {
                 </ListItem>
               ))}
           </List>
+          {this.state.fetchMoreLoading && (
+            <LinearProgress style={{ marginTop: "-4px" }} />
+          )}
           <Zoom
             in={
               environment &&

@@ -255,6 +255,10 @@ class Main extends Component {
           createdAt
           updatedAt
           starred
+          environment {
+            id
+            deviceCount
+          }
           notificationCount(filter: { read: false })
           lastReadNotification: lastNotification(filter: { read: true }) {
             id
@@ -357,6 +361,8 @@ class Main extends Component {
               device => device.id !== subscriptionData.data.deviceDeleted
             )
 
+            const newDeviceCount = prev.deviceCount--
+
         return prev.environment.starredDevices.some(
           starredDevice =>
             starredDevice.id === subscriptionData.data.deviceDeleted
@@ -365,12 +371,14 @@ class Main extends Component {
               environment: {
                 ...prev.environment,
                 starredDevice: newDevices,
+                deviceCount: newDeviceCount
               },
             }
           : {
               environment: {
                 ...prev.environment,
                 devices: newDevices,
+                deviceCount: newDeviceCount
               },
             }
       },
@@ -401,6 +409,8 @@ class Main extends Component {
               device => device.id !== subscriptionData.data.deviceUnclaimed
             )
 
+            const newDeviceCount = prev.deviceCount--
+
         return prev.environment.starredDevices.some(
           starredDevice =>
             starredDevice.id === subscriptionData.data.deviceUnclaimed
@@ -409,12 +419,14 @@ class Main extends Component {
               environment: {
                 ...prev.environment,
                 starredDevice: newDevices,
+                deviceCount: newDeviceCount
               },
             }
           : {
               environment: {
                 ...prev.environment,
                 devices: newDevices,
+                deviceCount: newDeviceCount
               },
             }
       },
@@ -715,6 +727,7 @@ export default graphql(
             environment(id: $id) {
               id
               name
+              deviceCount
               starredDevices: devices(
                 filter: { starred: true }
                 sortBy: name
@@ -784,6 +797,7 @@ export default graphql(
             environment(id: $id) {
               id
               name
+              deviceCount
               starredDevices: devices(
                 filter: { starred: true }
                 sortBy: name
@@ -853,6 +867,7 @@ export default graphql(
           environment(id: $id) {
             id
             name
+            deviceCount
             devices(
               sortBy: index
               limit: 20
