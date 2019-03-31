@@ -52,15 +52,16 @@ self.addEventListener("push", function(event) {
       break
   }
 
+  let options
   if ("actions" in Notification.prototype) {
-    const options = {
+    options = {
       body: pushData.content,
       dir: "auto",
       actions,
       timestamp: Date.parse(pushData.date),
     }
   } else {
-    const options = {
+    options = {
       body: pushData.content,
       dir: "auto",
       timestamp: Date.parse(pushData.date),
