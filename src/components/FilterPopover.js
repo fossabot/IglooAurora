@@ -16,29 +16,19 @@ import { Redirect } from "react-router-dom"
 import ExpandLess from "@material-ui/icons/ExpandLess"
 import ExpandMore from "@material-ui/icons/ExpandMore"
 import SortByAlpha from "@material-ui/icons/SortByAlpha"
+import { Query } from "react-apollo"
+import gql from "graphql-tag"
+import CenteredSpinner from "./CenteredSpinner"
 
-let removeDuplicates = inputArray => {
-  var obj = {}
-  var returnArray = []
-  for (var i = 0; i < inputArray.length; i++) {
-    obj[inputArray[i]] = true
-  }
-  for (var key in obj) {
-    returnArray.push(key)
-  }
-  return returnArray
-}
-
-let deviceTypeFirmwares = []
+let occurences = {}
+let firmwareOccurences = {}
+let firmwares = {}
+let deviceTypes = []
 
 export default class FilterPopover extends Component {
   state = {
-    checked: removeDuplicates(
-      this.props.devices.map(device => device.deviceType)
-    ),
-    firmwareChecked: removeDuplicates(
-      this.props.devices.map(device => device.deviceType + device.firmware)
-    ),
+    checked: [],
+    firmwareChecked: [],
     open: [],
   }
 
@@ -99,17 +89,6 @@ export default class FilterPopover extends Component {
     })
   }
 
-  //fix for .lenght returning undefined
-  getLenght = array => {
-    let count = 0
-
-    for (let i in array) {
-      if (i) count++
-    }
-
-    return count
-  }
-
   updateDimensions() {
     if (window.innerWidth < 272) {
       !this.state.lessThan272 && this.setState({ lessThan272: true })
@@ -129,58 +108,7 @@ export default class FilterPopover extends Component {
     window.removeEventListener("resize", this.updateDimensions.bind(this))
   }
 
-  componentWillReceiveProps(nextProps) {
-    deviceTypeFirmwares = []
-
-    nextProps.devices.forEach(device => {
-      if (
-        deviceTypeFirmwares.some(
-          deviceTypeFirmware =>
-            deviceTypeFirmware.deviceType === device.deviceType
-        )
-      ) {
-        let currentDeviceType = deviceTypeFirmwares.filter(
-          deviceTypeFirmware =>
-            deviceTypeFirmware.deviceType === device.deviceType
-        )[0]
-        if (
-          currentDeviceType.firmwares.some(
-            firmware => firmware.name === device.firmware
-          )
-        ) {
-          currentDeviceType.firmwares
-            .filter(firmware => firmware.name === device.firmware)[0]
-            .devices.push(device.id)
-        } else {
-          currentDeviceType.firmwares.push({
-            name: device.firmware,
-            devices: [device.id],
-          })
-        }
-      } else {
-        deviceTypeFirmwares.push({
-          deviceType: device.deviceType,
-          firmwares: [
-            {
-              name: device.firmware ? device.firmware : "noFirmware",
-              devices: [device.id],
-            },
-          ],
-        })
-      }
-    })
-  }
-
   render() {
-    let deviceTypeList = this.props.devices.map(device => device.deviceType)
-
-    let uniqueDeviceTypeList = removeDuplicates(deviceTypeList)
-
-    var occurrences = {}
-    for (var i = 0, j = deviceTypeList.length; i < j; i++) {
-      occurrences[deviceTypeList[i]] = (occurrences[deviceTypeList[i]] || 0) + 1
-    }
-
     return (
       <React.Fragment>
         <Popover
@@ -279,7 +207,13 @@ export default class FilterPopover extends Component {
                 )}
               </Toolbar>
             </ListSubheader>
-            <List>
+            <List
+              style={
+                this.state.lessThan272
+                  ? { width: "calc(100vw - 16px)" }
+                  : { width: "256px" }
+              }
+            >
               <ListItem
                 button
                 selected={
@@ -393,207 +327,284 @@ export default class FilterPopover extends Component {
                 </Typography>
               </Toolbar>
             </ListSubheader>
-            <List
-              style={
-                this.state.lessThan272
-                  ? { width: "calc(100vw - 16px)" }
-                  : { width: "256px" }
-              }
+            <Query
+              query={gql`
+                query($id: ID!) {
+                  environment(id: $id) {
+                    id
+                    uniqueFirmwares
+                  }
+                }
+              `}
+              skip={!this.props.open}
+              variables={{ id: this.props.environmentId }}
             >
-              {uniqueDeviceTypeList.map(deviceType => (
-                <React.Fragment>
-                  <ListItem
-                    key={deviceType}
-                    role={undefined}
-                    button
-                    onClick={this.handleToggle(deviceType)}
-                    style={{ cursor: "pointer" }}
+              {({ loading, error, data }) => {
+                if (loading)
+                  return (
+                    <div style={{ padding: "16px 0" }}>
+                      <CenteredSpinner />
+                    </div>
+                  )
+
+                if (error)
+                  return (
+                    <Typography
+                      variant="h5"
+                      className="notSelectable defaultCursor"
+                      style={
+                        typeof Storage !== "undefined" &&
+                        localStorage.getItem("nightMode") === "true"
+                          ? {
+                              textAlign: "center",
+                              marginTop: "32px",
+                              marginBottom: "32px",
+                              color: "white",
+                            }
+                          : {
+                              textAlign: "center",
+                              marginTop: "32px",
+                              marginBottom: "32px",
+                            }
+                      }
+                    >
+                      Unexpected error
+                    </Typography>
+                  )
+
+                if (data) {
+                  this.data = data
+
+                  occurences = {}
+                  firmwareOccurences = {}
+                  firmwares = {}
+                  deviceTypes = []
+
+                  //remove duplicates
+                  this.data.environment.uniqueFirmwares.forEach(
+                    deviceTypeFirmware => {
+                      if (!deviceTypes.includes(deviceTypeFirmware[0])) {
+                        deviceTypes.push(deviceTypeFirmware[0])
+                      }
+                    }
+                  )
+
+                  //count occurences
+                  this.data.environment.uniqueFirmwares.forEach(
+                    deviceTypeFirmware =>
+                      (occurences[deviceTypeFirmware[0]] =
+                        (occurences[deviceTypeFirmware[0]] || 0) + 1)
+                  )
+
+                  //count firmware occurences
+                  this.data.environment.uniqueFirmwares.forEach(
+                    deviceTypeFirmware =>
+                      (firmwareOccurences[
+                        deviceTypeFirmware[0] + deviceTypeFirmware[1]
+                      ] =
+                        (firmwareOccurences[
+                          deviceTypeFirmware[0] + deviceTypeFirmware[1]
+                        ] || 0) + 1)
+                  )
+
+                  //divide firmwares by device type
+                  this.data.environment.uniqueFirmwares.forEach(
+                    deviceTypeFirmware =>
+                      firmwares[deviceTypeFirmware[0]]
+                        ? firmwares[deviceTypeFirmware[0]].push(
+                            deviceTypeFirmware[1]
+                          )
+                        : (firmwares[deviceTypeFirmware[0]] = [
+                            deviceTypeFirmware[1],
+                          ])
+                  )
+                }
+
+                return (
+                  <List
+                    style={
+                      this.state.lessThan272
+                        ? { width: "calc(100vw - 16px)" }
+                        : { width: "256px" }
+                    }
                   >
-                    <Checkbox
-                      checked={this.state.checked.indexOf(deviceType) !== -1}
-                      color="primary"
-                      tabIndex={-1}
-                      disableRipple
-                      onChange={(event, checked) => {
-                        this.handleToggle(deviceType)
-                      }}
-                      indeterminate={
-                        this.state.firmwareChecked.filter(firmware =>
-                          firmware.startsWith(deviceType)
-                        ).length <
-                          removeDuplicates(
-                            this.props.devices
-                              .filter(
-                                device => device.deviceType === deviceType
-                              )
-                              .map(device => device.firmware)
-                          ).length &&
-                        this.state.firmwareChecked.filter(firmware =>
-                          firmware.startsWith(deviceType)
-                        ).length !== 0
-                      }
-                    />
-                    <ListItemText
-                      primary={
-                        <font
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "white" }
-                              : { color: "black" }
-                          }
+                    {deviceTypes.map(deviceType => (
+                      <React.Fragment>
+                        <ListItem
+                          key={deviceType}
+                          role={undefined}
+                          button
+                          onClick={this.handleToggle(deviceType)}
+                          style={{ cursor: "pointer" }}
                         >
-                          {deviceType}
-                        </font>
-                      }
-                      secondary={
-                        <font
-                          style={
-                            typeof Storage !== "undefined" &&
-                            localStorage.getItem("nightMode") === "true"
-                              ? { color: "#c1c2c5" }
-                              : { color: "#7a7a7a" }
-                          }
-                        >
-                          {occurrences[deviceType] +
-                            (occurrences[deviceType] === 1
-                              ? " device"
-                              : " devices")}
-                        </font>
-                      }
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        cursor: "pointer",
-                      }}
-                    />
-                    {deviceTypeFirmwares.filter(
-                      deviceTypeFirmware =>
-                        deviceTypeFirmware.deviceType === deviceType
-                    )[0] &&
-                      deviceTypeFirmwares.filter(
-                        deviceTypeFirmware =>
-                          deviceTypeFirmware.deviceType === deviceType
-                      )[0].firmwares[1] && (
-                        <ListItemSecondaryAction>
-                          <IconButton onClick={this.handleOpen(deviceType)}>
-                            {this.state.open.indexOf(deviceType) !== -1 ? (
-                              <ExpandLess />
-                            ) : (
-                              <ExpandMore
+                          <Checkbox
+                            checked={
+                              this.state.checked.indexOf(deviceType) === -1
+                            }
+                            color="primary"
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={(event, checked) => {
+                              this.handleToggle(deviceType[0])
+                            }}
+                            indeterminate={false}
+                          />
+                          <ListItemText
+                            primary={
+                              <font
                                 style={
                                   typeof Storage !== "undefined" &&
                                   localStorage.getItem("nightMode") === "true"
-                                    ? {
-                                        backgroundColor: "transparent",
-                                        color: "white",
-                                      }
-                                    : {
-                                        backgroundColor: "transparent",
-                                        color: "black",
-                                      }
+                                    ? { color: "white" }
+                                    : { color: "black" }
                                 }
-                              />
-                            )}
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      )}
-                  </ListItem>
-                  {deviceTypeFirmwares.filter(
-                    deviceTypeFirmware =>
-                      deviceTypeFirmware.deviceType === deviceType
-                  )[0] &&
-                    deviceTypeFirmwares.filter(
-                      deviceTypeFirmware =>
-                        deviceTypeFirmware.deviceType === deviceType
-                    )[0].firmwares[1] && (
-                      <Collapse
-                        in={this.state.open.indexOf(deviceType) !== -1}
-                        timeout="auto"
-                        unmountOnExit
-                      >
-                        <List component="div" disablePadding>
-                          {deviceTypeFirmwares
-                            .filter(
-                              deviceTypeFirmware =>
-                                deviceTypeFirmware.deviceType === deviceType
-                            )[0]
-                            .firmwares.map(firmware => (
-                              <ListItem
-                                key={deviceType + firmware.name}
-                                role={undefined}
-                                button
-                                onClick={this.handleFirmwareToggle(
-                                  deviceType + firmware.name
-                                )}
-                                style={{
-                                  cursor: "pointer",
-                                  paddingLeft: "32px",
-                                }}
                               >
-                                <Checkbox
-                                  checked={
-                                    this.state.firmwareChecked.indexOf(
-                                      deviceType + firmware.name
-                                    ) !== -1
-                                  }
-                                  color="primary"
-                                  tabIndex={-1}
-                                  disableRipple
-                                  onChange={this.handleFirmwareToggle(
-                                    deviceType + firmware.name
+                                {deviceType}
+                              </font>
+                            }
+                            secondary={
+                              <font
+                                style={
+                                  typeof Storage !== "undefined" &&
+                                  localStorage.getItem("nightMode") === "true"
+                                    ? { color: "#c1c2c5" }
+                                    : { color: "#7a7a7a" }
+                                }
+                              >
+                                {occurences[deviceType] +
+                                  " " +
+                                  (occurences[deviceType] === 1
+                                    ? "device"
+                                    : "devices")}
+                              </font>
+                            }
+                            style={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              cursor: "pointer",
+                            }}
+                          />
+                          {firmwares[deviceType[0]] && (
+                            <ListItemSecondaryAction>
+                              <IconButton onClick={this.handleOpen(deviceType)}>
+                                {this.state.open.indexOf(deviceType) !== -1 ? (
+                                  <ExpandLess />
+                                ) : (
+                                  <ExpandMore
+                                    style={
+                                      typeof Storage !== "undefined" &&
+                                      localStorage.getItem("nightMode") ===
+                                        "true"
+                                        ? {
+                                            backgroundColor: "transparent",
+                                            color: "white",
+                                          }
+                                        : {
+                                            backgroundColor: "transparent",
+                                            color: "black",
+                                          }
+                                    }
+                                  />
+                                )}
+                              </IconButton>
+                            </ListItemSecondaryAction>
+                          )}
+                        </ListItem>
+                        {firmwares[deviceType] && (
+                          <Collapse
+                            in={this.state.open.indexOf(deviceType) !== -1}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <List component="div" disablePadding>
+                              {firmwares[deviceType].map(firmware => (
+                                <ListItem
+                                  key={deviceType + firmware}
+                                  role={undefined}
+                                  button
+                                  onClick={this.handleFirmwareToggle(
+                                    deviceType + firmware
                                   )}
-                                />
-                                <ListItemText
-                                  primary={
-                                    <font
-                                      style={
-                                        typeof Storage !== "undefined" &&
-                                        localStorage.getItem("nightMode") ===
-                                          "true"
-                                          ? { color: "white" }
-                                          : { color: "black" }
-                                      }
-                                    >
-                                      {firmware.name
-                                        ? firmware.name
-                                        : "No firmware"}
-                                    </font>
-                                  }
-                                  secondary={
-                                    <font
-                                      style={
-                                        typeof Storage !== "undefined" &&
-                                        localStorage.getItem("nightMode") ===
-                                          "true"
-                                          ? { color: "#c1c2c5" }
-                                          : { color: "#7a7a7a" }
-                                      }
-                                    >
-                                      {removeDuplicates(firmware.devices)
-                                        .length +
-                                        (removeDuplicates(firmware.devices)
-                                          .length === 1
-                                          ? " device"
-                                          : " devices")}
-                                    </font>
-                                  }
                                   style={{
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
                                     cursor: "pointer",
+                                    paddingLeft: "32px",
                                   }}
-                                />
-                              </ListItem>
-                            ))}
-                        </List>
-                      </Collapse>
-                    )}
-                </React.Fragment>
-              ))}
-            </List>
+                                >
+                                  <Checkbox
+                                    checked={
+                                      this.state.firmwareChecked.indexOf(
+                                        deviceType + firmware
+                                      ) === -1
+                                    }
+                                    color="primary"
+                                    tabIndex={-1}
+                                    disableRipple
+                                    onChange={this.handleFirmwareToggle(
+                                      deviceType + firmware
+                                    )}
+                                  />
+                                  <ListItemText
+                                    primary={
+                                      <font
+                                        style={
+                                          typeof Storage !== "undefined" &&
+                                          localStorage.getItem("nightMode") ===
+                                            "true"
+                                            ? {
+                                                color: "white",
+                                              }
+                                            : {
+                                                color: "black",
+                                              }
+                                        }
+                                      >
+                                        {firmware || "No firmware"}
+                                      </font>
+                                    }
+                                    secondary={
+                                      <font
+                                        style={
+                                          typeof Storage !== "undefined" &&
+                                          localStorage.getItem("nightMode") ===
+                                            "true"
+                                            ? {
+                                                color: "#c1c2c5",
+                                              }
+                                            : {
+                                                color: "#7a7a7a",
+                                              }
+                                        }
+                                      >
+                                        {firmwareOccurences[
+                                          deviceType + firmware
+                                        ] +
+                                          " " +
+                                          (firmwareOccurences[
+                                            deviceType + firmware
+                                          ] === 1
+                                            ? "device"
+                                            : "devices")}
+                                      </font>
+                                    }
+                                    style={{
+                                      whiteSpace: "nowrap",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Collapse>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </List>
+                )
+              }}
+            </Query>
           </ul>
         </Popover>
         {this.state.redirect && (

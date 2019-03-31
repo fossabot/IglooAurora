@@ -332,7 +332,7 @@ class App extends Component {
     super()
 
     let bearer = ""
-    // reuses previous session's bearer if present
+    // reuses the previous session bearer if present
     if (typeof Storage !== "undefined") {
       if (!localStorage.getItem("sortDirection")) {
         localStorage.setItem("sortDirection", "descending")

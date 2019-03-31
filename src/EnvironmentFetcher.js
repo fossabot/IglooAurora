@@ -883,7 +883,7 @@ export default graphql(
         query(
           $id: ID!
           $offset: Int!
-          $filter: [DeviceFilter!]
+          $filter: DeviceFilter
           $limit: PositiveInt!
         ) {
           environment(id: $id) {

@@ -14,12 +14,10 @@ self.addEventListener("push", function(event) {
         {
           action: "accept",
           title: "Accept",
-          icon: "/images/demos/action-1-128x128.png",
         },
         {
           action: "decline",
           title: "Decline",
-          icon: "/images/demos/action-2-128x128.png",
         },
       ]
       break
@@ -34,12 +32,10 @@ self.addEventListener("push", function(event) {
         {
           action: "accept",
           title: "Accept",
-          icon: "/images/demos/action-1-128x128.png",
         },
         {
           action: "decline",
           title: "Decline",
-          icon: "/images/demos/action-2-128x128.png",
         },
       ]
       break
@@ -59,12 +55,14 @@ self.addEventListener("push", function(event) {
       dir: "auto",
       actions,
       timestamp: Date.parse(pushData.date),
+      tag: pushData.id,
     }
   } else {
     options = {
       body: pushData.content,
       dir: "auto",
       timestamp: Date.parse(pushData.date),
+      tag: pushData.id,
     }
   }
 

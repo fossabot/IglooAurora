@@ -5,8 +5,6 @@ import DialogActions from "@material-ui/core/DialogActions"
 import Button from "@material-ui/core/Button"
 import Grow from "@material-ui/core/Grow"
 import Slide from "@material-ui/core/Slide"
-import { graphql } from "react-apollo"
-import gql from "graphql-tag"
 import withMobileDialog from "@material-ui/core/withMobileDialog"
 
 function GrowTransition(props) {
@@ -19,16 +17,6 @@ function SlideTransition(props) {
 
 class GDPRDataDownload extends React.Component {
   render() {
-    const {
-      userData: { error, user },
-    } = this.props
-
-    if (error) {
-      if (error.message === "GraphQL error: This user doesn't exist anymore") {
-        this.props.logOut(true)
-      }
-    }
-
     return (
       <React.Fragment>
         <Dialog
@@ -58,14 +46,12 @@ class GDPRDataDownload extends React.Component {
             <Button onClick={this.props.close} style={{ marginRight: "4px" }}>
               Never mind
             </Button>
-
             <Button
               variant="contained"
               color="primary"
               label="Download"
               primary={true}
               buttonStyle={{ backgroundColor: "#0083ff" }}
-              disabled={!user}
             >
               Download
             </Button>
@@ -76,13 +62,4 @@ class GDPRDataDownload extends React.Component {
   }
 }
 
-export default graphql(
-  gql`
-    query {
-      user {
-        id
-      }
-    }
-  `,
-  { name: "userData" }
-)(withMobileDialog({ breakpoint: "xs" })(GDPRDataDownload))
+export default withMobileDialog({ breakpoint: "xs" })(GDPRDataDownload)

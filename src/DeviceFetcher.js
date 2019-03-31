@@ -145,7 +145,7 @@ function DeviceFetcher(props) {
 
 export default graphql(
   gql`
-    query($id: ID!) {
+    query($id: ID!, $hiddenOffset: Int, $offset: Int) {
       device(id: $id) {
         id
         online
@@ -163,7 +163,7 @@ export default graphql(
         hiddenValues: values(
           limit: 20
           offset: $hiddenOffset
-          filter: { visibility: { equals: HIDDEN } }
+          filter: { visibility: HIDDEN }
         ) {
           id
           visibility
@@ -192,22 +192,9 @@ export default graphql(
           ... on BooleanValue {
             boolValue: value
             permission
-          }
-          ... on PlotValue {
-            plotValue: value(limit: 20) {
-              id
-              value
-              timestamp
-            }
-            unitOfMeasurement
-            threshold
           }
         }
-        values(
-          limit: 20
-          offset: $offset
-          filter: { visibility: { equals: VISIBLE } }
-        ) {
+        values(limit: 20, offset: $offset, filter: { visibility: VISIBLE }) {
           id
           visibility
           cardSize
@@ -235,15 +222,6 @@ export default graphql(
           ... on BooleanValue {
             boolValue: value
             permission
-          }
-          ... on PlotValue {
-            plotValue: value(limit: 20) {
-              id
-              value
-              timestamp
-            }
-            unitOfMeasurement
-            threshold
           }
         }
       }
@@ -254,6 +232,8 @@ export default graphql(
     options: ({ deviceId }) => ({
       variables: {
         id: deviceId,
+        offset: 0,
+        hiddenOffest: 0,
       },
     }),
   }

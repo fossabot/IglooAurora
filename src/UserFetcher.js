@@ -9,7 +9,7 @@ import querystringify from "querystringify"
 import EmailNotVerified from "./components/EmailNotVerified"
 import GenericDialog from "./components/GenericDialog"
 
-class GraphQLFetcher extends Component {
+class UserFetcher extends Component {
   componentDidMount() {
     const environmentCreatedSubscription = gql`
       subscription {
@@ -696,7 +696,7 @@ export default graphql(
           sortDirection: ASCENDING
           limit: 20
           offset: $offset
-          filter: { myRole: { equals: OWNER } }
+          filter: { myRole: { is: OWNER } }
         ) {
           id
           index
@@ -769,7 +769,7 @@ export default graphql(
           sortDirection: ASCENDING
           limit: 20
           offset: $sharedOffset
-          filter: { myRole: { NOT: { equals: OWNER } } }
+          filter: { myRole: { isNot: OWNER } }
         ) {
           id
           index
@@ -844,4 +844,4 @@ export default graphql(
     name: "userData",
     options: { variables: { offset: 0, sharedOffset: 0 } },
   }
-)(GraphQLFetcher)
+)(UserFetcher)

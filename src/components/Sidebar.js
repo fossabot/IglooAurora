@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import CenteredSpinner from "./CenteredSpinner"
 import FilterPopover from "./FilterPopover"
 import FormControl from "@material-ui/core/FormControl"
@@ -33,7 +33,7 @@ class Sidebar extends Component {
   state = {
     popoverOpen: false,
     dialOpen: false,
-    visibleDeviceTypes: [],
+    invisibleDeviceTypes: [],
     hidden: false,
     addDeviceOpen: false,
     lessThan1080: false,
@@ -248,7 +248,7 @@ class Sidebar extends Component {
       }
 
       sidebarContent = (
-        <React.Fragment>
+        <Fragment>
           <FilterPopover
             open={this.state.popoverOpen}
             environmentId={this.props.selectedEnvironment}
@@ -261,8 +261,10 @@ class Sidebar extends Component {
             close={() => this.setState({ popoverOpen: false })}
             anchorEl={this.anchorEl}
             devices={mergedArray}
-            setVisibleTypes={visibleTypes => {
-              this.setState({ visibleDeviceTypes: visibleTypes })
+            setVisibleTypes={invisibleDeviceTypes => {
+              this.setState({
+                invisibleDeviceTypes,
+              })
             }}
             nightMode={
               typeof Storage !== "undefined" &&
@@ -288,7 +290,7 @@ class Sidebar extends Component {
             {mergedArray
               .filter(
                 device =>
-                  this.state.visibleDeviceTypes.indexOf(device.deviceType) !==
+                  this.state.invisibleDeviceTypes.indexOf(device.deviceType) ===
                   -1
               )
               .filter(device =>
@@ -479,12 +481,12 @@ class Sidebar extends Component {
             userData={this.props.userData}
             environment={environment.id}
           />
-        </React.Fragment>
+        </Fragment>
       )
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <div style={{ width: "100%", height: "64px" }}>
           <FormControl
             style={{
@@ -508,9 +510,9 @@ class Sidebar extends Component {
                   environment &&
                   mergedArray.filter(
                     device =>
-                      this.state.visibleDeviceTypes.indexOf(
+                      this.state.invisibleDeviceTypes.indexOf(
                         device.deviceType
-                      ) !== -1
+                      ) === -1
                   )[1]
                 )
               }
@@ -529,9 +531,9 @@ class Sidebar extends Component {
                             environment &&
                             mergedArray.filter(
                               device =>
-                                this.state.visibleDeviceTypes.indexOf(
+                                this.state.invisibleDeviceTypes.indexOf(
                                   device.deviceType
-                                ) !== -1
+                                ) === -1
                             )[1]
                           )
                           ? { color: "white", opacity: "0.54" }
@@ -540,9 +542,9 @@ class Sidebar extends Component {
                             environment &&
                             mergedArray.filter(
                               device =>
-                                this.state.visibleDeviceTypes.indexOf(
+                                this.state.invisibleDeviceTypes.indexOf(
                                   device.deviceType
-                                ) !== -1
+                                ) === -1
                             )[1]
                           )
                         ? { color: "black", opacity: "0.54" }
@@ -580,50 +582,17 @@ class Sidebar extends Component {
               disabled={
                 !(
                   environment &&
-                  mergedArray.filter(device =>
-                    this.props.searchText
-                      ? device.name
-                          .toLowerCase()
-                          .includes(this.props.searchText.toLowerCase())
-                      : true
-                  )[0]
+                  (environment.devices[0] || !environment.starredDevices[0])
                 )
               }
               style={{ marginTop: "8px" }}
             >
-              <Tune
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? !(
-                        environment &&
-                        mergedArray.filter(
-                          device =>
-                            this.state.visibleDeviceTypes.indexOf(
-                              device.deviceType
-                            ) !== -1
-                        )[0]
-                      )
-                      ? { color: "white", opacity: "0.54" }
-                      : { color: "white" }
-                    : !(
-                        environment &&
-                        mergedArray.filter(
-                          device =>
-                            this.state.visibleDeviceTypes.indexOf(
-                              device.deviceType
-                            ) !== -1
-                        )[0]
-                      )
-                    ? { color: "black", opacity: "0.54" }
-                    : { color: "black" }
-                }
-              />
+              <Tune />
             </IconButton>
           </Tooltip>
         </div>
         {sidebarContent}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }
