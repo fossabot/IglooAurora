@@ -29,22 +29,6 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown"
 import Markunread from "@material-ui/icons/Markunread"
 import ChevronRight from "@material-ui/icons/ChevronRight"
 
-let device
-
-let loading
-
-let error
-
-let readNotifications
-
-let unreadNotifications
-
-let markedAsUnreadNotifications = []
-
-let readNotificationsList = ""
-
-let unreadNotificationsList = ""
-
 class NotificationsDrawer extends React.Component {
   state = { showread: false }
 
@@ -81,20 +65,19 @@ class NotificationsDrawer extends React.Component {
           return prev
         }
 
-        unreadNotifications.push(subscriptionData.data.notificationCreated)
-        unreadNotifications.sort((a, b) =>
-          +a.date > +b.date ? 1 : +a.date === +b.date ? 0 : -1
-        )
-
-        const newNotification = [
+        const newNotifications = [
           ...prev.user.notifications,
           subscriptionData.data.notificationCreated,
         ]
 
+        newNotifications.sort((a, b) =>
+          +a.date > +b.date ? 1 : +a.date === +b.date ? 0 : -1
+        )
+
         return {
-          user: {
-            ...prev.user,
-            unreadNotifications: newNotification,
+          device: {
+            ...prev.device,
+            unreadNotifications: newNotifications,
           },
         }
       },
@@ -106,6 +89,7 @@ class NotificationsDrawer extends React.Component {
           id
           content
           date
+          read
           device {
             id
           }
@@ -120,23 +104,28 @@ class NotificationsDrawer extends React.Component {
           return prev
         }
 
-        const newNotification = [
-          ...prev.user.notifications,
-          subscriptionData.data.notificationUpdated,
-        ]
-
         if (subscriptionData.data.notificationUpdated.read) {
+          const readNotifications = [
+            ...prev.device.readNotifications,
+            subscriptionData.data.notificationUpdated,
+          ]
+
           return {
-            user: {
-              ...prev.user,
-              readNotifications: newNotification,
+            device: {
+              ...prev.device,
+              readNotifications,
             },
           }
         } else {
+          const unreadNotifications = [
+            ...prev.device.unreadNotifications,
+            subscriptionData.data.notificationUpdated,
+          ]
+
           return {
-            user: {
-              ...prev.user,
-              unreadNotifications: newNotification,
+            device: {
+              ...prev.device,
+              unreadNotifications,
             },
           }
         }
@@ -156,19 +145,19 @@ class NotificationsDrawer extends React.Component {
           return prev
         }
 
-        unreadNotifications = unreadNotifications.filter(
+        const unreadNotifications = this.props.notificationData.device.unreadNotifications.filter(
           notification =>
             notification.id !== subscriptionData.data.notificationDeleted
         )
 
-        readNotifications = readNotifications.filter(
+        const readNotifications = this.props.notificationData.device.readNotifications.filter(
           notification =>
             notification.id !== subscriptionData.data.notificationDeleted
         )
 
         return {
-          user: {
-            ...prev.user,
+          device: {
+            ...prev.device,
             readNotifications,
             unreadNotifications,
           },
@@ -187,76 +176,21 @@ class NotificationsDrawer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      this.props.notificationData.error !== nextProps.notificationData.error
-    ) {
-      error = nextProps.notificationData.error
-    }
-
-    if (
-      this.props.notificationData.loading !== nextProps.notificationData.loading
-    ) {
-      loading = nextProps.notificationData.loading
-    }
-
-    if (
-      this.props.notificationData.device !== nextProps.notificationData.device
-    ) {
-      device = nextProps.notificationData.device
-    }
-
-    if (
       this.props.drawer !== nextProps.drawer &&
       !nextProps.drawer &&
-      unreadNotifications
+      this.props.notificationData
     ) {
-      unreadNotifications
-        .filter(
-          notification => !markedAsUnreadNotifications.includes(notification.id)
-        )
-        .forEach(notification => readNotifications.push(notification))
-
-      unreadNotifications = unreadNotifications.filter(notification =>
-        markedAsUnreadNotifications.includes(notification.id)
+      this.props.notificationData.device.unreadNotifications.forEach(
+        notification => this.clearNotification(notification)
       )
-
-      markedAsUnreadNotifications = []
-    }
-
-    if (
-      (this.props.drawer !== nextProps.drawer && nextProps.drawer) ||
-      (this.props.notificationData.device !==
-        nextProps.notificationData.device &&
-        nextProps.notificationData.device)
-    ) {
-      if (
-        nextProps.drawer &&
-        nextProps.notificationData.device &&
-        readNotifications === undefined &&
-        unreadNotifications === undefined
-      ) {
-        readNotifications = device.readNotifications
-
-        unreadNotifications = device.unreadNotifications
-
-        device.unreadNotifications.forEach(notification =>
-          this.clearNotification(notification.id)
-        )
-      }
     }
   }
 
   render() {
+    let unreadNotificationsList
+    let readNotificationsList
+
     let markAsUnread = id => {
-      unreadNotifications.push(
-        readNotifications.find(notification => notification.id === id)
-      )
-
-      readNotifications = readNotifications.filter(
-        notification => notification.id !== id
-      )
-
-      markedAsUnreadNotifications.push(id)
-
       this.props.MarkAsUnread({
         variables: {
           id: id,
@@ -273,13 +207,6 @@ class NotificationsDrawer extends React.Component {
     }
 
     let deleteNotification = id => {
-      unreadNotifications = unreadNotifications.filter(
-        notification => notification.id !== id
-      )
-      readNotifications = readNotifications.filter(
-        notification => notification.id !== id
-      )
-
       this.props.DeleteNotification({
         variables: {
           id: id,
@@ -294,12 +221,10 @@ class NotificationsDrawer extends React.Component {
       })
     }
 
-    let notificationCount = ""
-
     let noNotificationsUI = ""
     let readNotificationsUI = ""
 
-    if (error) {
+    if (this.props.notificationData.error) {
       unreadNotificationsList = (
         <Typography
           variant="h5"
@@ -324,12 +249,15 @@ class NotificationsDrawer extends React.Component {
         </Typography>
       )
 
-      if (error.message === "GraphQL error: This user doesn't exist anymore") {
+      if (
+        this.props.notificationData.error.message ===
+        "GraphQL error: This user doesn't exist anymore"
+      ) {
         this.props.logOut(true)
       }
     }
 
-    if (loading)
+    if (this.props.notificationData.loading)
       unreadNotificationsList = (
         <CenteredSpinner
           style={{
@@ -338,7 +266,7 @@ class NotificationsDrawer extends React.Component {
         />
       )
 
-    if (device) {
+    if (this.props.notificationData.device) {
       let determineDiff = notification =>
         moment().isSame(
           moment.utc(notification.date.split(".")[0], "YYYY-MM-DDTh:mm:ss"),
@@ -410,8 +338,8 @@ class NotificationsDrawer extends React.Component {
         return returnArray
       }
 
-      if (unreadNotifications) {
-        let notificationsSections = unreadNotifications
+      if (this.props.notificationData.device.unreadNotifications.length) {
+        let notificationsSections = this.props.notificationData.device.unreadNotifications
           .map(notification => determineDiff(notification))
           .reverse()
 
@@ -446,8 +374,8 @@ class NotificationsDrawer extends React.Component {
                     {section}
                   </font>
                 </ListSubheader>
-                {unreadNotifications &&
-                  unreadNotifications
+                {this.props.notificationData.device.unreadNotifications &&
+                  this.props.notificationData.device.unreadNotifications
                     .filter(
                       notification => determineDiff(notification) === section
                     )
@@ -508,8 +436,8 @@ class NotificationsDrawer extends React.Component {
         )
       }
 
-      if (readNotifications) {
-        let readNotificationsSections = readNotifications
+      if (this.props.notificationData.device.readNotifications) {
+        let readNotificationsSections = this.props.notificationData.device.readNotifications
           .map(notification => determineDiff(notification))
           .reverse()
 
@@ -544,8 +472,8 @@ class NotificationsDrawer extends React.Component {
                     {section}
                   </font>
                 </ListSubheader>
-                {readNotifications &&
-                  readNotifications
+                {this.props.notificationData.device.readNotifications &&
+                  this.props.notificationData.device.readNotifications
                     .filter(
                       notification => determineDiff(notification) === section
                     )
@@ -609,14 +537,7 @@ class NotificationsDrawer extends React.Component {
         )
       }
 
-      notificationCount = unreadNotifications && unreadNotifications.length
-
-      const readNotificationCount =
-        readNotifications &&
-        readNotifications.filter(notification => notification.read === true)
-          .length
-
-      if (!notificationCount) {
+      if (!this.props.notificationCount) {
         noNotificationsUI = (
           <Typography
             variant="h5"
@@ -641,7 +562,7 @@ class NotificationsDrawer extends React.Component {
         )
       }
 
-      if (readNotificationCount) {
+      if (this.props.notificationData.device.unreadNotifications.length) {
         readNotificationsUI = (
           <Button
             onClick={() => this.props.showHiddenNotifications()}
@@ -741,18 +662,11 @@ class NotificationsDrawer extends React.Component {
             }
           >
             <Badge
-              badgeContent={
-                (unreadNotifications && unreadNotifications.length) ||
-                this.props.notificationCount
-              }
+              badgeContent={this.props.notificationCount}
               color="primary"
-              invisible={
-                !(unreadNotifications && unreadNotifications.length) &&
-                !this.props.notificationCount
-              }
+              invisible={!this.props.notificationCount}
             >
-              {(unreadNotifications && unreadNotifications.length) ||
-              this.props.notificationCount ? (
+              {this.props.notificationCount ? (
                 <Notifications />
               ) : (
                 <NotificationsNone />

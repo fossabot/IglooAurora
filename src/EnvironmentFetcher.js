@@ -600,6 +600,7 @@ class Main extends Component {
               </React.Fragment>
             ) : (
               <DeviceFetcher
+                changeDrawerState={this.changeDrawerState}
                 deviceId={this.props.selectedDevice}
                 drawer={this.state.drawer}
                 showHidden={this.state.showMainHidden}
