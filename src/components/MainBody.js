@@ -1,12 +1,9 @@
 import React, { Component } from "react"
 import Card from "./cards/Card"
 import CenteredSpinner from "./CenteredSpinner"
-import Button from "@material-ui/core/Button"
 import gql from "graphql-tag"
 import { Redirect } from "react-router-dom"
 import querystringify from "querystringify"
-import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp"
-import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown"
 import Typography from "@material-ui/core/Typography"
 
 export default class MainBody extends Component {
@@ -168,20 +165,6 @@ export default class MainBody extends Component {
             },
           }
         }
-
-        if (subscriptionData.data.valueCreated.visibility === "HIDDEN") {
-          const newHiddenValues = [
-            ...prev.device.hiddenValues,
-            subscriptionData.data.valueCreated,
-          ]
-
-          return {
-            device: {
-              ...prev.device,
-              hiddenValues: newHiddenValues,
-            },
-          }
-        }
       },
     })
 
@@ -250,15 +233,10 @@ export default class MainBody extends Component {
           value => value.id !== subscriptionData.data.valueDeleted
         )
 
-        const newHiddenValues = prev.device.hiddenValues.filter(
-          value => value.id !== subscriptionData.data.valueDeleted
-        )
-
         return {
           device: {
             ...prev.device,
             values: newValues,
-            hiddenValues: newHiddenValues,
           },
         }
       },
@@ -337,47 +315,6 @@ export default class MainBody extends Component {
       )
 
       let visibleCards = device.values.map(renderCard)
-      let hiddenCards = device.hiddenValues.map(renderCard)
-
-      let hiddenCardsUI = ""
-
-      if (hiddenCards.length !== 0) {
-        hiddenCardsUI = [
-          <Button
-            onClick={() => {
-              this.props.changeShowHiddenState()
-            }}
-            fullWidth
-            className="divider notSelectable"
-            key="showMoreLessButton"
-            style={
-              this.props.showHidden
-                ? typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                  ? { backgroundColor: "#282c34", color: "white" }
-                  : { backgroundColor: "#d4d4d4", color: "black" }
-                : typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                ? { backgroundColor: "transparent", color: "white" }
-                : { backgroundColor: "transparent", color: "black" }
-            }
-          >
-            {this.props.showHidden ? (
-              <KeyboardArrowUp />
-            ) : (
-              <KeyboardArrowDown />
-            )}
-            {this.props.showHidden ? "Show less" : "Show more"}
-          </Button>,
-          this.props.showHidden ? (
-            <div className="itemsList hiddenItems" key="hiddenCardsContainer">
-              {hiddenCards}
-            </div>
-          ) : (
-            ""
-          ),
-        ]
-      }
 
       //changes the environment id in the url so that it is the correct one for the device
       if (
@@ -398,7 +335,6 @@ export default class MainBody extends Component {
           <div className="itemsList" key="visibleCardsContainer">
             {visibleCards}
           </div>
-          {hiddenCardsUI}
         </React.Fragment>
       )
     }

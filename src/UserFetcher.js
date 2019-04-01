@@ -89,30 +89,17 @@ class UserFetcher extends Component {
         if (!subscriptionData.data) {
           return prev
         }
-        if (subscriptionData.data.environmentCreated.myRole === "ADMIN") {
-          const newEnvironments = [
+
+        const newEnvironments = [
+          ...prev.user,
+          subscriptionData.data.environmentCreated,
+        ]
+
+        return {
+          user: {
             ...prev.user,
-            subscriptionData.data.environmentCreated,
-          ]
-
-          return {
-            user: {
-              ...prev.user,
-              environments: newEnvironments,
-            },
-          }
-        } else {
-          const newSharedEnvironments = [
-            ...prev.user.sharedEnvironments,
-            subscriptionData.data.environmentCreated,
-          ]
-
-          return {
-            device: {
-              ...prev.user,
-              sharedEnvironments: newSharedEnvironments,
-            },
-          }
+            environments: newEnvironments,
+          },
         }
       },
     })
@@ -211,16 +198,10 @@ class UserFetcher extends Component {
             environment.id !== subscriptionData.data.environmentDeleted
         )
 
-        const newSharedEnvironments = prev.user.environments.filter(
-          environment =>
-            environment.id !== subscriptionData.data.environmentDeleted
-        )
-
         return {
           device: {
             ...prev.user,
             environments: newEnvironments,
-            sharedEnvironments: newSharedEnvironments,
           },
         }
       },
@@ -666,7 +647,7 @@ class UserFetcher extends Component {
 
 export default graphql(
   gql`
-    query($offset: Int!, $sharedOffset: Int!) {
+    query($offset: Int!) {
       user {
         id
         quietMode
@@ -696,80 +677,6 @@ export default graphql(
           sortDirection: ASCENDING
           limit: 20
           offset: $offset
-          filter: { myRole: { is: OWNER } }
-        ) {
-          id
-          index
-          name
-          createdAt
-          updatedAt
-          muted
-          picture
-          myRole
-          pendingOwnerChanges {
-            id
-            receiver {
-              id
-              profileIconColor
-              name
-              email
-            }
-            sender {
-              id
-              profileIconColor
-              name
-              email
-            }
-          }
-          pendingEnvironmentShares {
-            id
-            role
-            receiver {
-              id
-              profileIconColor
-              name
-              email
-            }
-            sender {
-              id
-              name
-            }
-            environment {
-              id
-              name
-            }
-          }
-          owner {
-            id
-            email
-            name
-            profileIconColor
-          }
-          admins {
-            id
-            email
-            name
-            profileIconColor
-          }
-          editors {
-            id
-            email
-            name
-            profileIconColor
-          }
-          spectators {
-            id
-            email
-            name
-            profileIconColor
-          }
-        }
-        sharedEnvironments: environments(
-          sortBy: name
-          sortDirection: ASCENDING
-          limit: 20
-          offset: $sharedOffset
-          filter: { myRole: { isNot: OWNER } }
         ) {
           id
           index
@@ -842,6 +749,6 @@ export default graphql(
   `,
   {
     name: "userData",
-    options: { variables: { offset: 0, sharedOffset: 0 } },
+    options: { variables: { offset: 0 } },
   }
 )(UserFetcher)

@@ -160,41 +160,7 @@ export default graphql(
         firmware
         starred
         notificationCount(filter: { read: false })
-        hiddenValues: values(
-          limit: 20
-          offset: $hiddenOffset
-          filter: { visibility: HIDDEN }
-        ) {
-          id
-          visibility
-          cardSize
-          name
-          updatedAt
-          createdAt
-          myRole
-          device {
-            id
-          }
-          ... on FloatValue {
-            floatValue: value
-            precision
-            min
-            max
-            permission
-            unitOfMeasurement
-          }
-          ... on StringValue {
-            stringValue: value
-            maxChars
-            allowedValues
-            permission
-          }
-          ... on BooleanValue {
-            boolValue: value
-            permission
-          }
-        }
-        values(limit: 20, offset: $offset, filter: { visibility: VISIBLE }) {
+        values(limit: 20, offset: $offset) {
           id
           visibility
           cardSize

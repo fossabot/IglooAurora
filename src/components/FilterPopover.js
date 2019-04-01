@@ -20,8 +20,6 @@ import { Query } from "react-apollo"
 import gql from "graphql-tag"
 import CenteredSpinner from "./CenteredSpinner"
 
-let occurences = {}
-let firmwareOccurences = {}
 let firmwares = {}
 let deviceTypes = []
 
@@ -32,8 +30,13 @@ export default class FilterPopover extends Component {
     open: [],
   }
 
-  handleToggle = value => () => {
-    const { checked } = this.state
+  handleToggle = (value, _checked) => {
+    let checked
+    if (_checked) {
+      checked = _checked
+    } else {
+      checked = this.state.checked
+    }
     const currentIndex = checked.indexOf(value)
     const newChecked = [...checked]
 
@@ -106,6 +109,29 @@ export default class FilterPopover extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this))
+  }
+
+  setIndeterminate(uniqueFirmwares, deviceType) {
+    const tempArray = uniqueFirmwares.filter(
+      uniqueFirmware => uniqueFirmware[0] === deviceType
+    )
+
+    let allChecked = true
+    let noneChecked = true
+
+    for (let i in tempArray) {
+      if (!this.state.firmwareChecked.includes(deviceType + tempArray[i][1])) {
+        allChecked = false
+      }
+    }
+
+    for (let i in tempArray) {
+      if (this.state.firmwareChecked.includes(deviceType + tempArray[i][1])) {
+        noneChecked = false
+      }
+    }
+
+    return !allChecked && !noneChecked
   }
 
   render() {
@@ -375,8 +401,6 @@ export default class FilterPopover extends Component {
                 if (data) {
                   this.data = data
 
-                  occurences = {}
-                  firmwareOccurences = {}
                   firmwares = {}
                   deviceTypes = []
 
@@ -387,24 +411,6 @@ export default class FilterPopover extends Component {
                         deviceTypes.push(deviceTypeFirmware[0])
                       }
                     }
-                  )
-
-                  //count occurences
-                  this.data.environment.uniqueFirmwares.forEach(
-                    deviceTypeFirmware =>
-                      (occurences[deviceTypeFirmware[0]] =
-                        (occurences[deviceTypeFirmware[0]] || 0) + 1)
-                  )
-
-                  //count firmware occurences
-                  this.data.environment.uniqueFirmwares.forEach(
-                    deviceTypeFirmware =>
-                      (firmwareOccurences[
-                        deviceTypeFirmware[0] + deviceTypeFirmware[1]
-                      ] =
-                        (firmwareOccurences[
-                          deviceTypeFirmware[0] + deviceTypeFirmware[1]
-                        ] || 0) + 1)
                   )
 
                   //divide firmwares by device type
@@ -445,9 +451,15 @@ export default class FilterPopover extends Component {
                             tabIndex={-1}
                             disableRipple
                             onChange={(event, checked) => {
-                              this.handleToggle(deviceType[0])
+                              this.handleToggle(deviceType)
                             }}
-                            indeterminate={false}
+                            indeterminate={
+                              firmwares[deviceType] &&
+                              this.setIndeterminate(
+                                this.data.environment.uniqueFirmwares,
+                                deviceType
+                              )
+                            }
                           />
                           <ListItemText
                             primary={
@@ -462,22 +474,6 @@ export default class FilterPopover extends Component {
                                 {deviceType}
                               </font>
                             }
-                            secondary={
-                              <font
-                                style={
-                                  typeof Storage !== "undefined" &&
-                                  localStorage.getItem("nightMode") === "true"
-                                    ? { color: "#c1c2c5" }
-                                    : { color: "#7a7a7a" }
-                                }
-                              >
-                                {occurences[deviceType] +
-                                  " " +
-                                  (occurences[deviceType] === 1
-                                    ? "device"
-                                    : "devices")}
-                              </font>
-                            }
                             style={{
                               whiteSpace: "nowrap",
                               overflow: "hidden",
@@ -485,7 +481,7 @@ export default class FilterPopover extends Component {
                               cursor: "pointer",
                             }}
                           />
-                          {firmwares[deviceType[0]] && (
+                          {firmwares[deviceType] && (
                             <ListItemSecondaryAction>
                               <IconButton onClick={this.handleOpen(deviceType)}>
                                 {this.state.open.indexOf(deviceType) !== -1 ? (
@@ -540,9 +536,11 @@ export default class FilterPopover extends Component {
                                     color="primary"
                                     tabIndex={-1}
                                     disableRipple
-                                    onChange={this.handleFirmwareToggle(
-                                      deviceType + firmware
-                                    )}
+                                    onChange={() => {
+                                      this.handleFirmwareToggle(
+                                        deviceType + firmware
+                                      )
+                                    }}
                                   />
                                   <ListItemText
                                     primary={
@@ -560,31 +558,6 @@ export default class FilterPopover extends Component {
                                         }
                                       >
                                         {firmware || "No firmware"}
-                                      </font>
-                                    }
-                                    secondary={
-                                      <font
-                                        style={
-                                          typeof Storage !== "undefined" &&
-                                          localStorage.getItem("nightMode") ===
-                                            "true"
-                                            ? {
-                                                color: "#c1c2c5",
-                                              }
-                                            : {
-                                                color: "#7a7a7a",
-                                              }
-                                        }
-                                      >
-                                        {firmwareOccurences[
-                                          deviceType + firmware
-                                        ] +
-                                          " " +
-                                          (firmwareOccurences[
-                                            deviceType + firmware
-                                          ] === 1
-                                            ? "device"
-                                            : "devices")}
                                       </font>
                                     }
                                     style={{

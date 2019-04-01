@@ -28,8 +28,6 @@ import ListItemText from "@material-ui/core/ListItemText"
 import CardSize from "./CardSize"
 import MoreVert from "@material-ui/icons/MoreVert"
 import Info from "@material-ui/icons/Info"
-import VisibilityOff from "@material-ui/icons/VisibilityOff"
-import Visibility from "@material-ui/icons/Visibility"
 import AspectRatio from "@material-ui/icons/AspectRatio"
 import Create from "@material-ui/icons/Create"
 
@@ -168,22 +166,6 @@ class Card extends Component {
       specificCard = ""
     }
 
-    const updateShown = visibility =>
-      this.props.ChangeVisiility({
-        variables: {
-          id: value.id,
-          visibility,
-        },
-        optimisticResponse: {
-          __typename: "Mutation",
-          value: {
-            __typename: value.__typename,
-            id: value.id,
-            visibility,
-          },
-        },
-      })
-
     return (
       <React.Fragment>
         <Paper
@@ -312,27 +294,6 @@ class Card extends Component {
                 </MenuItem>
                 <Divider />
                 <MenuItem
-                  onClick={() => {
-                    value.visibility === "VISIBLE"
-                      ? updateShown("HIDDEN")
-                      : updateShown("VISIBLE")
-                    this.handleMenuClose()
-                  }}
-                >
-                  <ListItemIcon>
-                    {value.visibility === "VISIBLE" ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    inset
-                    primary={value.visibility === "VISIBLE" ? "Hide" : "Show"}
-                    disableTypography
-                  />
-                </MenuItem>
-                <MenuItem
                   primaryText="Resize"
                   onClick={() => {
                     this.setState({ cardSizeOpen: true })
@@ -345,21 +306,18 @@ class Card extends Component {
                   <ListItemText inset primary="Resize" disableTypography />
                 </MenuItem>
                 {value.myRole !== "SPECTATOR" && (
-                  <React.Fragment>
-                    <Divider />
-                    <MenuItem
-                      primaryText="Rename"
-                      onClick={() => {
-                        this.setState({ renameCardOpen: true })
-                        this.handleMenuClose()
-                      }}
-                    >
-                      <ListItemIcon>
-                        <Create />
-                      </ListItemIcon>
-                      <ListItemText inset primary="Rename" disableTypography />
-                    </MenuItem>
-                  </React.Fragment>
+                  <MenuItem
+                    primaryText="Rename"
+                    onClick={() => {
+                      this.setState({ renameCardOpen: true })
+                      this.handleMenuClose()
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Create />
+                    </ListItemIcon>
+                    <ListItemText inset primary="Rename" disableTypography />
+                  </MenuItem>
                 )}
               </Menu>
             </div>
