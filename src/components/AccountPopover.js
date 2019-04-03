@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Avatar from "@material-ui/core/Avatar"
 import IconButton from "@material-ui/core/IconButton"
 import Popover from "@material-ui/core/Popover"
@@ -13,7 +13,7 @@ import People from "@material-ui/icons/People"
 import { Link } from "react-router-dom"
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"
 
-export default class AccountPopover extends React.Component {
+export default class AccountPopover extends Component {
   state = { popoverOpen: false }
 
   getInitials = string => {
@@ -214,7 +214,7 @@ export default class AccountPopover extends React.Component {
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <IconButton
           onClick={() => this.setState({ popoverOpen: true })}
           buttonRef={node => {
@@ -263,7 +263,7 @@ export default class AccountPopover extends React.Component {
             {content}
           </Popover>
         )}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

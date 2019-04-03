@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, Fragment } from "react"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -68,12 +68,12 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeviceInfo(
         <b>Device type: </b>
         {props.device.deviceType}
         {props.device.firmware && (
-          <React.Fragment>
+          <Fragment>
             <br />
             <br />
             <b>Firmware: </b>
             {props.device.firmware}
-          </React.Fragment>
+          </Fragment>
         )}
         <br /> <br className="notSelectable" />
         <b>ID: </b> {props.device.id}

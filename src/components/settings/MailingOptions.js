@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -24,7 +24,7 @@ function SlideTransition(props) {
 
 let settings = []
 
-class MailingOptions extends React.Component {
+class MailingOptions extends Component {
   passwordChangeEmailMutation = passwordChangeEmail => {
     this.props.PasswordChangeEmail({
       variables: {
@@ -123,7 +123,7 @@ class MailingOptions extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={this.props.open}
           onClose={this.props.close}
@@ -211,9 +211,7 @@ class MailingOptions extends React.Component {
                       <Checkbox
                         checked={settings.passwordChangeEmail}
                         onChange={event =>
-                          this.passwordChangeEmailMutation(
-                            event.target.checked
-                          )
+                          this.passwordChangeEmailMutation(event.target.checked)
                         }
                         color="primary"
                         style={{ marginRight: "8px" }}
@@ -226,9 +224,7 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={
-                          settings.permanentTokenCreatedEmail
-                        }
+                        checked={settings.permanentTokenCreatedEmail}
                         onChange={event =>
                           this.permanentTokenCreatedEmailMutation(
                             event.target.checked
@@ -244,9 +240,7 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={
-                          settings.pendingOwnerChangeReceivedEmail
-                        }
+                        checked={settings.pendingOwnerChangeReceivedEmail}
                         onChange={event =>
                           this.pendingOwnerChangeReceivedEmailMutation(
                             event.target.checked
@@ -262,9 +256,7 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={
-                          settings.pendingOwnerChangeAcceptedEmail
-                        }
+                        checked={settings.pendingOwnerChangeAcceptedEmail}
                         onChange={event =>
                           this.changePendingOwnerChangeAcceptedEmail(
                             event.target.checked
@@ -280,9 +272,7 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={
-                          settings.pendingEnvironmentShareReceivedEmail
-                        }
+                        checked={settings.pendingEnvironmentShareReceivedEmail}
                         onChange={event =>
                           this.pendingEnvironmentShareReceivedEmailMutation(
                             event.target.checked
@@ -298,9 +288,7 @@ class MailingOptions extends React.Component {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={
-                          settings.pendingEnvironmentShareAcceptedEmail
-                        }
+                        checked={settings.pendingEnvironmentShareAcceptedEmail}
                         onChange={event =>
                           this.pendingEnvironmentShareAcceptedEmailMutation(
                             event.target.checked
@@ -320,7 +308,7 @@ class MailingOptions extends React.Component {
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

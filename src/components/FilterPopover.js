@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Popover from "@material-ui/core/Popover"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -136,7 +136,7 @@ export default class FilterPopover extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Popover
           open={this.props.open}
           onClose={this.props.close}
@@ -435,7 +435,7 @@ export default class FilterPopover extends Component {
                     }
                   >
                     {deviceTypes.map(deviceType => (
-                      <React.Fragment>
+                      <Fragment>
                         <ListItem
                           key={deviceType}
                           role={undefined}
@@ -572,7 +572,7 @@ export default class FilterPopover extends Component {
                             </List>
                           </Collapse>
                         )}
-                      </React.Fragment>
+                      </Fragment>
                     ))}
                   </List>
                 )
@@ -583,7 +583,7 @@ export default class FilterPopover extends Component {
         {this.state.redirect && (
           <Redirect to={"/?environment=" + this.props.environmentId} />
         )}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

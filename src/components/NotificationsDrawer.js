@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import CenteredSpinner from "./CenteredSpinner"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -21,7 +21,7 @@ import Notifications from "@material-ui/icons/Notifications"
 import Delete from "@material-ui/icons/Delete"
 import ChevronRight from "@material-ui/icons/ChevronRight"
 
-class NotificationsDrawer extends React.Component {
+class NotificationsDrawer extends Component {
   state = { showread: false }
 
   hot_keys = {
@@ -444,7 +444,7 @@ class NotificationsDrawer extends React.Component {
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Tooltip title="Notifications" placement="bottom">
           <IconButton
             style={{ color: "white" }}
@@ -523,7 +523,7 @@ class NotificationsDrawer extends React.Component {
             </div>
           </div>
         </SwipeableDrawer>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

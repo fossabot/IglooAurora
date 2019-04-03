@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import EnvironmentsHeader from "./components/environments/EnvironmentsHeader"
 import EnvironmentsBody from "./components/environments/EnvironmentsBody"
 import SettingsDialog from "./components/settings/SettingsDialog"
@@ -27,7 +27,7 @@ class Environments extends Component {
 
   render() {
     return this.props.mobile ? (
-      <React.Fragment>
+      <Fragment>
         <EnvironmentsBody
           userData={this.props.userData}
           selectEnvironment={this.props.selectEnvironment}
@@ -67,9 +67,9 @@ class Environments extends Component {
           deleteUserBearer={this.props.deleteUserBearer}
           managePermanentTokensBearer={this.props.managePermanentTokensBearer}
         />
-      </React.Fragment>
+      </Fragment>
     ) : (
-      <React.Fragment>
+      <Fragment>
         <EnvironmentsHeader
           logOut={this.props.logOut}
           changeBearer={this.props.changeBearer}
@@ -109,7 +109,7 @@ class Environments extends Component {
           deleteUserBearer={this.props.deleteUserBearer}
           managePermanentTokensBearer={this.props.managePermanentTokensBearer}
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

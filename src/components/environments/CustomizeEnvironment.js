@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Button from "@material-ui/core/Button"
@@ -29,7 +29,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class CustomizeEnvironment extends React.Component {
+class CustomizeEnvironment extends Component {
   state = {
     nameEmpty: false,
     slideIndex: 0,

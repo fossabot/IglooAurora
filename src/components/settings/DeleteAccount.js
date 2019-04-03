@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -29,7 +29,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class DeleteAccountDialog extends React.Component {
+class DeleteAccountDialog extends Component {
   constructor() {
     super()
     this.state = {
@@ -181,7 +181,7 @@ class DeleteAccountDialog extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <VerifyAuthentication
           open={this.props.open && !this.state.deleteOpen}
           close={this.props.close}
@@ -252,7 +252,7 @@ class DeleteAccountDialog extends React.Component {
             </MuiThemeProvider>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

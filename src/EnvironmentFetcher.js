@@ -529,7 +529,7 @@ class Main extends Component {
       localStorage.getItem("nightMode") === "true"
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Helmet>
           <title>
             {environment &&
@@ -552,7 +552,7 @@ class Main extends Component {
         {this.props.mobile ? (
           <div className="mobileMain" style={{ overflowY: "hidden" }}>
             {this.props.selectedDevice == null ? (
-              <React.Fragment>
+              <Fragment>
                 <div
                   key="sidebar"
                   style={
@@ -602,7 +602,7 @@ class Main extends Component {
                     mobile={true}
                   />
                 </AppBar>
-              </React.Fragment>
+              </Fragment>
             ) : (
               <DeviceFetcher
                 changeDrawerState={this.changeDrawerState}
@@ -727,7 +727,7 @@ class Main extends Component {
         )}
 
         {this.state.redirectToEnvironments && <Redirect push to="/" />}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

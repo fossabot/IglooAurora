@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import moment from "moment"
 import Moment from "react-moment"
 import SvgIcon from "@material-ui/core/SvgIcon"
@@ -19,9 +19,9 @@ export default class StatusBar extends Component {
       deviceStatus = device.online ? (
         "Online"
       ) : (
-        <React.Fragment>
+        <Fragment>
           Last seen <Moment fromNow>{moment.utc(device.updatedAt)}</Moment>
-        </React.Fragment>
+        </Fragment>
       )
 
       signalStatus = device.signalStatus

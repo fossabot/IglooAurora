@@ -145,7 +145,7 @@ export default class UnAuthenticatedMain extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Helmet>
           <title>
             {this.props.isLogin
@@ -333,7 +333,7 @@ export default class UnAuthenticatedMain extends Component {
           }
           forceUpdate={() => this.props.forceUpdate()}
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

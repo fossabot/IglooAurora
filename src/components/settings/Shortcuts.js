@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
 import TableCell from "@material-ui/core/TableCell"
@@ -21,10 +21,10 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ShortcutDialog extends React.Component {
+class ShortcutDialog extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={this.props.shortcutDialogOpen}
           onClose={this.props.handleShortcutDialogClose}
@@ -245,7 +245,7 @@ class ShortcutDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

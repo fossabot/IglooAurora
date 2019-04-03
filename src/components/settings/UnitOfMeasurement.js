@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import Button from "@material-ui/core/Button"
 import Grow from "@material-ui/core/Grow"
@@ -20,7 +20,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class UnitOfMeasumentDialog extends React.Component {
+class UnitOfMeasumentDialog extends Component {
   state = {
     lengthMass: "",
     temperature: "",

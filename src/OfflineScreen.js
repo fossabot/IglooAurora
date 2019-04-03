@@ -1,9 +1,9 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Typography from "@material-ui/core/Typography"
 import polarBear from "./styles/assets/polarBear.svg"
 import Helmet from "react-helmet"
 
-export default class OfflineScreen extends React.Component {
+export default class OfflineScreen extends Component {
   state = { isMobile: false }
 
   updateDimensions() {
@@ -27,7 +27,7 @@ export default class OfflineScreen extends React.Component {
     document.body.style.backgroundColor = "#0057cb"
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Helmet>
           <title>Igloo Aurora - Offline</title>
         </Helmet>
@@ -68,7 +68,7 @@ export default class OfflineScreen extends React.Component {
             In the meantime, why don't you have a nap?
           </Typography>
         </div>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

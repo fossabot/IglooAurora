@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -22,7 +22,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ChangeNameDialog extends React.Component {
+class ChangeNameDialog extends Component {
   state = {
     nameDialogOpen: false,
     name: "",
@@ -84,7 +84,7 @@ class ChangeNameDialog extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={this.props.confirmationDialogOpen}
           onClose={this.props.handleNameDialogClose}
@@ -185,7 +185,7 @@ class ChangeNameDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

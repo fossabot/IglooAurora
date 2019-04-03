@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import { Redirect } from "react-router-dom"
 import Button from "@material-ui/core/Button"
 import polarBearWithBucket from "./styles/assets/polarBearWithBucket.svg"
@@ -37,7 +37,7 @@ export default class Error404 extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Helmet>
           <title>Igloo Aurora - Page not found</title>
         </Helmet>
@@ -96,7 +96,7 @@ export default class Error404 extends Component {
             </Button>
           </MuiThemeProvider>
         </div>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

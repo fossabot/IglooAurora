@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -79,7 +79,7 @@ const allDialogsClosed = {
   authenticationOpen: false,
 }
 
-class SettingsDialog extends React.Component {
+class SettingsDialog extends Component {
   state = {
     isDeleteDisabled: true,
     stepIndex: 0,
@@ -911,7 +911,7 @@ class SettingsDialog extends React.Component {
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={
             this.props.isOpen &&
@@ -942,7 +942,7 @@ class SettingsDialog extends React.Component {
           fullScreen={this.props.fullScreen}
         >
           {!this.props.fullScreen ? (
-            <React.Fragment>
+            <Fragment>
               <DialogTitle style={{ padding: "0" }}>
                 <AppBar position="sticky">
                   <Tabs
@@ -980,9 +980,9 @@ class SettingsDialog extends React.Component {
                   Close
                 </Button>
               </DialogActions>
-            </React.Fragment>
+            </Fragment>
           ) : (
-            <React.Fragment>
+            <Fragment>
               <AppBar position="sticky" style={{ height: "64px" }}>
                 <Toolbar
                   style={{
@@ -1072,7 +1072,7 @@ class SettingsDialog extends React.Component {
                   />
                 </BottomNavigation>
               </AppBar>
-            </React.Fragment>
+            </Fragment>
           )}
         </Dialog>
         <DeleteAccountDialog
@@ -1164,7 +1164,7 @@ class SettingsDialog extends React.Component {
           token={this.props.changeAuthenticationBearer}
         />
         {this.state.redirect && <Redirect to="/" />}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

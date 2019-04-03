@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import IconButton from "@material-ui/core/IconButton"
 import Tooltip from "@material-ui/core/Tooltip"
 import Menu from "@material-ui/core/Menu"
@@ -154,7 +154,7 @@ class EnvironmentCard extends Component {
         this.props.environment.spectators[0])
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Paper
           style={
             typeof Storage !== "undefined" &&
@@ -344,7 +344,12 @@ class EnvironmentCard extends Component {
               this.setState({ anchorEl: null })
               this.setState({ shareOpen: true })
             }}
-            disabled={!(this.props.userData.user && this.props.userData.user.emailIsVerified)}
+            disabled={
+              !(
+                this.props.userData.user &&
+                this.props.userData.user.emailIsVerified
+              )
+            }
           >
             <ListItemIcon>
               <Share />
@@ -423,7 +428,7 @@ class EnvironmentCard extends Component {
               </MenuItem>
             )}
           {this.props.environment.myRole !== "SPECTATOR" && (
-            <React.Fragment>
+            <Fragment>
               <Divider />
               <MenuItem
                 onClick={() => {
@@ -436,7 +441,7 @@ class EnvironmentCard extends Component {
                 </ListItemIcon>
                 <ListItemText inset primary="Customize" disableTypography />
               </MenuItem>
-            </React.Fragment>
+            </Fragment>
           )}
           {(this.props.environment.myRole === "OWNER" ||
             this.props.environment.myRole === "ADMIN") && (
@@ -491,7 +496,7 @@ class EnvironmentCard extends Component {
             localStorage.getItem("nightMode") === "true"
           }
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

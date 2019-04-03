@@ -1,7 +1,7 @@
 // CONGRATULATIONS, YOU'VE DISCOVERED AURORA'S BEST KEPT SECRET!
 // P.S.: PLEASE DON'T TELL ANYONE ABOUT THIS
 
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -28,7 +28,7 @@ class GenericDialog extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Konami
           action={() => {
             this.setState({ open: true })
@@ -60,22 +60,22 @@ class GenericDialog extends Component {
               alignItems: "center",
             }}
           >
-          <div>
-            <CenteredSpinner
-              style={{ margin: "12px 0 32px 0" }}
-              noDelay
-              large
-            />
-            <div
-              style={{
-                paddingLeft: "24px",
-                paddingRight: "24px",
-                textAlign: "center",
-                marginBottom: "8px",
-              }}
-            >
-              Please wait, this could take a few minutes
-            </div>
+            <div>
+              <CenteredSpinner
+                style={{ margin: "12px 0 32px 0" }}
+                noDelay
+                large
+              />
+              <div
+                style={{
+                  paddingLeft: "24px",
+                  paddingRight: "24px",
+                  textAlign: "center",
+                  marginBottom: "8px",
+                }}
+              >
+                Please wait, this could take a few minutes
+              </div>
             </div>
           </div>
           <DialogActions>
@@ -137,7 +137,7 @@ class GenericDialog extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

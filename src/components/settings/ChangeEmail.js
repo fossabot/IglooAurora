@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -31,7 +31,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ChangeMailDialog extends React.Component {
+class ChangeMailDialog extends Component {
   state = {
     mailDialogOpen: false,
     password: "",
@@ -154,7 +154,7 @@ class ChangeMailDialog extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <VerifyAuthentication
           open={this.props.open && !this.state.mailDialogOpen}
           close={this.props.close}
@@ -250,7 +250,7 @@ class ChangeMailDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

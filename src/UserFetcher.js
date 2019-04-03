@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import EnvironmentFetcher from "./EnvironmentFetcher"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
@@ -525,7 +525,7 @@ class UserFetcher extends Component {
       ) {
         if (querystringify.parse(window.location.search).device) {
           return (
-            <React.Fragment>
+            <Fragment>
               <EnvironmentFetcher
                 mobile={this.props.isMobile}
                 logOut={this.props.logOut}
@@ -559,11 +559,11 @@ class UserFetcher extends Component {
                 email={user && user.email}
               />
               <GenericDialog />
-            </React.Fragment>
+            </Fragment>
           )
         } else {
           return (
-            <React.Fragment>
+            <Fragment>
               <EnvironmentFetcher
                 mobile={this.props.isMobile}
                 logOut={this.props.logOut}
@@ -595,12 +595,12 @@ class UserFetcher extends Component {
                 email={user && user.email}
               />
               <GenericDialog />
-            </React.Fragment>
+            </Fragment>
           )
         }
       } else {
         return (
-          <React.Fragment>
+          <Fragment>
             <Environments
               userData={this.props.userData}
               logOut={this.props.logOut}
@@ -631,7 +631,7 @@ class UserFetcher extends Component {
               email={user && user.email}
             />
             <GenericDialog />
-          </React.Fragment>
+          </Fragment>
         )
       }
     }

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Card from "./cards/Card"
 import CenteredSpinner from "./CenteredSpinner"
 import gql from "graphql-tag"
@@ -331,11 +331,11 @@ export default class MainBody extends Component {
       }
 
       content = (
-        <React.Fragment>
+        <Fragment>
           <div className="itemsList" key="visibleCardsContainer">
             {visibleCards}
           </div>
-        </React.Fragment>
+        </Fragment>
       )
     }
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Typography from "@material-ui/core/Typography"
 import Grid from "@material-ui/core/Grid"
 import IconButton from "@material-ui/core/IconButton"
@@ -12,7 +12,6 @@ import EnvironmentCard from "./EnvironmentCard"
 import CreateEnvironment from "./CreateEnvironment"
 import Helmet from "react-helmet"
 import PendingShares from "./PendingShares"
-import PendingOwnerChanges from "./PendingOwnerChanges"
 import Share from "@material-ui/icons/Share"
 import Add from "@material-ui/icons/Add"
 import Search from "@material-ui/icons/Search"
@@ -155,7 +154,7 @@ export default class EnvironmentsBody extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Helmet>
           <title>Igloo Aurora</title>
         </Helmet>
@@ -484,11 +483,7 @@ export default class EnvironmentsBody extends Component {
           open={this.state.pendingSharesOpen}
           close={() => this.setState({ pendingSharesOpen: false })}
         />
-        <PendingOwnerChanges
-          open={this.state.pendingOwnerChangesOpen}
-          close={() => this.setState({ pendingOwnerChangesOpen: false })}
-        />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

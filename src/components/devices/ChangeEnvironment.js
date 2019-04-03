@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Button from "@material-ui/core/Button"
@@ -20,7 +20,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ChangeEnvironment extends React.Component {
+class ChangeEnvironment extends Component {
   state = { newEnvironment: "" }
 
   changeEnvironment = value => {
@@ -43,7 +43,7 @@ class ChangeEnvironment extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.deviceEnvironment) {
       this.setState({
-        newEnvironment:this.props.deviceEnvironment,
+        newEnvironment: this.props.deviceEnvironment,
       })
     }
   }
@@ -62,26 +62,29 @@ class ChangeEnvironment extends React.Component {
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle disableTypography>Move device</DialogTitle><div style={{height:"100%"}}>
-        <RadioGroup
-          onChange={(event, value) => {
-            this.setState({ newEnvironment: value })
-            this.changeEnvironment(value)
-          }}
-          value={this.state.newEnvironment}
-          style={{ paddingLeft: "24px", paddingRight: "24px" }}
-        >
-          {this.props.environments &&
-            this.props.environments.filter(environment=>environment.myRole==="OWNER")
-              .map(environment => (
-                <FormControlLabel
-                  control={<Radio color="primary" />}
-                  value={environment.id}
-                  label={environment.name}
-                  className="notSelectable"
-                />
-              ))}
-        </RadioGroup></div>
+        <DialogTitle disableTypography>Move device</DialogTitle>
+        <div style={{ height: "100%" }}>
+          <RadioGroup
+            onChange={(event, value) => {
+              this.setState({ newEnvironment: value })
+              this.changeEnvironment(value)
+            }}
+            value={this.state.newEnvironment}
+            style={{ paddingLeft: "24px", paddingRight: "24px" }}
+          >
+            {this.props.environments &&
+              this.props.environments
+                .filter(environment => environment.myRole === "OWNER")
+                .map(environment => (
+                  <FormControlLabel
+                    control={<Radio color="primary" />}
+                    value={environment.id}
+                    label={environment.name}
+                    className="notSelectable"
+                  />
+                ))}
+          </RadioGroup>
+        </div>
         <DialogActions>
           <Button onClick={this.props.close}>Close</Button>
         </DialogActions>

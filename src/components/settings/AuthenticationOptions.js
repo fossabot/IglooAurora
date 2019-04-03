@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -63,7 +63,7 @@ function SlideTransition(props) {
 let secret = []
 let qrCode = []
 
-class AuthenticationOptions extends React.Component {
+class AuthenticationOptions extends Component {
   state = { selectAuthTypeOpen: false, code: "" }
 
   createToken = async () => {
@@ -647,7 +647,7 @@ class AuthenticationOptions extends React.Component {
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <VerifyAuthentication
           open={this.props.open && !this.state.selectAuthTypeOpen}
           close={this.props.close}
@@ -1030,7 +1030,7 @@ class AuthenticationOptions extends React.Component {
                 }
 
                 return (
-                  <React.Fragment>
+                  <Fragment>
                     <div className="notSelectable">
                       Scan this QR code with an application such as{" "}
                       <Link
@@ -1056,15 +1056,15 @@ class AuthenticationOptions extends React.Component {
                       .
                     </div>
                     <div
-                                          dangerouslySetInnerHTML={
-                      localStorage.getItem("nightMode") === "true"
-                        ? {
-                            __html: qrCode
-                              .replace(/#ffffff/g, "transparent")
-                              .replace(/#000000/g, "#ffffff"),
-                          }
-                        : { __html: qrCode }
-                    }
+                      dangerouslySetInnerHTML={
+                        localStorage.getItem("nightMode") === "true"
+                          ? {
+                              __html: qrCode
+                                .replace(/#ffffff/g, "transparent")
+                                .replace(/#000000/g, "#ffffff"),
+                            }
+                          : { __html: qrCode }
+                      }
                       style={{
                         margin: "8px auto",
                         width: "195px",
@@ -1123,7 +1123,7 @@ class AuthenticationOptions extends React.Component {
                         ),
                       }}
                     />
-                  </React.Fragment>
+                  </Fragment>
                 )
               }}
             </Query>
@@ -1482,7 +1482,7 @@ class AuthenticationOptions extends React.Component {
               </MenuItem>
             )}
         </Menu>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

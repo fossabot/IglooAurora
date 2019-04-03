@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -15,10 +15,10 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class GDPRDataDownload extends React.Component {
+class GDPRDataDownload extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={this.props.open}
           onClose={this.props.close}
@@ -57,7 +57,7 @@ class GDPRDataDownload extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

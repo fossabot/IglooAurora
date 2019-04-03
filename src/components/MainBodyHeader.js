@@ -345,7 +345,7 @@ class MainBodyHeader extends Component {
     )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <div
           className="notSelectable"
           style={
@@ -514,7 +514,7 @@ class MainBodyHeader extends Component {
         {this.state.goToDevices && (
           <Redirect to={"/?environment=" + this.props.environment} />
         )}
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

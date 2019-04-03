@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Paper from "@material-ui/core/Paper"
 import ReadOnlyBooleanCard from "./Booleans/ReadOnlyBooleanCard"
 import ReadWriteBooleanCard from "./Booleans/ReadWriteBooleanCard"
@@ -167,7 +167,7 @@ class Card extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Paper
           className={value.cardSize.toLowerCase()}
           zDepth={2}
@@ -356,7 +356,7 @@ class Card extends Component {
           name={value.name}
           close={() => this.setState({ deleteOpen: false })}
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

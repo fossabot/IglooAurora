@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -64,7 +64,7 @@ class AddDevice extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={
             this.props.open && !this.state.qrOpen && !this.state.manualCodeOpen
@@ -468,7 +468,7 @@ class AddDevice extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import gql from "graphql-tag"
 import Typography from "@material-ui/core/Typography"
 import List from "@material-ui/core/List"
@@ -92,7 +92,7 @@ export default class AccountSwitcher extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <div
           className="rightSide notSelectable"
           style={
@@ -225,10 +225,13 @@ export default class AccountSwitcher extends Component {
                           )
                           this.props.forceUpdate()
                         }}
-                        style={this.props.mobile?{color:"white"}:{color:"black"}}
-                        >
-                        <RemoveCircleOutline
-                        />
+                        style={
+                          this.props.mobile
+                            ? { color: "white" }
+                            : { color: "black" }
+                        }
+                      >
+                        <RemoveCircleOutline />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
@@ -294,7 +297,7 @@ export default class AccountSwitcher extends Component {
             </List>
           </div>
         </div>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

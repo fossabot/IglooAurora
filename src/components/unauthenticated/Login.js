@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import gql from "graphql-tag"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import Button from "@material-ui/core/Button"
@@ -588,7 +588,7 @@ export default class Login extends Component {
               Log in
             </Typography>
             {!querystringify.parse(window.location.search).user ? (
-              <React.Fragment>
+              <Fragment>
                 <TextField
                   variant="outlined"
                   id="desktop-login-email"
@@ -743,7 +743,7 @@ export default class Login extends Component {
                     </MuiThemeProvider>
                   )}
                 </div>
-              </React.Fragment>
+              </Fragment>
             ) : !this.state.showSecondFactor ? (
               this.state.user ? (
                 <div>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import classNames from "classnames"
 import IconButton from "@material-ui/core/IconButton"
 import Snackbar from "@material-ui/core/Snackbar"
@@ -103,7 +103,7 @@ const styles2 = theme => ({
   },
 })
 
-class CustomizedSnackbars extends React.Component {
+class CustomizedSnackbars extends Component {
   state = {
     dialogOpen: false,
   }
@@ -114,7 +114,7 @@ class CustomizedSnackbars extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -149,7 +149,7 @@ class CustomizedSnackbars extends React.Component {
           close={() => this.setState({ dialogOpen: false })}
           email={this.props.email}
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

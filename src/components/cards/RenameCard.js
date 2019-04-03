@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Button from "@material-ui/core/Button"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
@@ -21,7 +21,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class RenameCardDialog extends React.Component {
+class RenameCardDialog extends Component {
   state = { name: null }
 
   rename = () => {

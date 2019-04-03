@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import Button from "@material-ui/core/Button"
 import List from "@material-ui/core/List"
 import ListSubheader from "@material-ui/core/ListSubheader"
@@ -41,7 +41,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ShareEnvironment extends React.Component {
+class ShareEnvironment extends Component {
   state = {
     inviteUserOpen: false,
     changeRoleOpen: false,
@@ -103,7 +103,7 @@ class ShareEnvironment extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Dialog
           open={
             this.props.open &&
@@ -1144,7 +1144,7 @@ class ShareEnvironment extends React.Component {
           close={() => this.setState({ revokeOwnerChangeOpen: false })}
           menuTarget={this.state.menuTarget}
         />
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

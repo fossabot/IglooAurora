@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import gql from "graphql-tag"
 import zxcvbn from "zxcvbn"
 import Button from "@material-ui/core/Button"
@@ -84,7 +84,7 @@ const desktopTheme = createMuiTheme({
         "&$checked": { color: "#0083ff" },
       },
     },
-    MuiIconButton: {root:{color:"black"}},
+    MuiIconButton: { root: { color: "black" } },
     ...sharedStyles,
   },
 })
@@ -126,7 +126,7 @@ const mobileTheme = createMuiTheme({
       },
     },
     MuiInputBase: { root: { color: "white" } },
-    MuiIconButton: {root:{color:"white"}},
+    MuiIconButton: { root: { color: "white" } },
     ...sharedStyles,
   },
 })
@@ -740,7 +740,7 @@ export default class Signup extends Component {
           )}
           {!this.state.showSignupPassword ? (
             !this.state.showPasswordLess ? (
-              <React.Fragment>
+              <Fragment>
                 <Typography
                   variant="h3"
                   gutterBottom
@@ -820,11 +820,11 @@ export default class Signup extends Component {
                     label="Email"
                     value={this.props.email}
                     error={
-                      (this.props.emailError ||
-                        ((!this.state.isEmailValid && this.props.email) ||
-                        this.state.isMailEmpty
-                          ? true
-                          : false))
+                      this.props.emailError ||
+                      ((!this.state.isEmailValid && this.props.email) ||
+                      this.state.isMailEmpty
+                        ? true
+                        : false)
                     }
                     style={{
                       color: "black",
@@ -1049,9 +1049,9 @@ export default class Signup extends Component {
                     )}
                   </div>
                 </div>
-              </React.Fragment>
+              </Fragment>
             ) : (
-              <React.Fragment>
+              <Fragment>
                 <div
                   className="rightSide notSelectable"
                   style={{
@@ -1236,10 +1236,10 @@ export default class Signup extends Component {
                     </div>
                   </MuiThemeProvider>
                 </div>
-              </React.Fragment>
+              </Fragment>
             )
           ) : (
-            <React.Fragment>
+            <Fragment>
               <div
                 className="rightSide notSelectable"
                 style={{
@@ -1382,9 +1382,7 @@ export default class Signup extends Component {
                     }}
                     type={this.state.showConfirmPassword ? "text" : "password"}
                     value={this.state.confirmPassword}
-                    error={
-                      (this.state.isConfirmPasswordEmpty ? true : false)
-                    }
+                    error={this.state.isConfirmPasswordEmpty ? true : false}
                     helperText={
                       <font
                         style={
@@ -1551,7 +1549,7 @@ export default class Signup extends Component {
                   </MuiThemeProvider>
                 </div>
               </div>
-            </React.Fragment>
+            </Fragment>
           )}
         </div>
       </MuiThemeProvider>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, Fragment } from "react"
 import { ApolloClient } from "apollo-client"
 import { HttpLink } from "apollo-link-http"
 import {
@@ -51,7 +51,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class AuthDialog extends React.Component {
+class AuthDialog extends Component {
   constructor() {
     super()
     this.state = {
@@ -104,7 +104,7 @@ class AuthDialog extends React.Component {
       ) {
         this.setState({ passwordError: "This account doesn't exist" })
       } else if (
-        (e.message === "GraphQL error: This user doesn't exist anymore")
+        e.message === "GraphQL error: This user doesn't exist anymore"
       ) {
         this.props.logOut(true)
       } else {
@@ -489,7 +489,7 @@ class AuthDialog extends React.Component {
                   >
                     {this.state.tokenId !== token.id ? (
                       token.lastUsed ? (
-                        <React.Fragment>
+                        <Fragment>
                           Last used{" "}
                           <Moment fromNow>
                             {moment.utc(
@@ -497,7 +497,7 @@ class AuthDialog extends React.Component {
                               "YYYY-MM-DDTh:mm:ss"
                             )}
                           </Moment>
-                        </React.Fragment>
+                        </Fragment>
                       ) : (
                         "Never used"
                       )
@@ -549,7 +549,7 @@ class AuthDialog extends React.Component {
       )
 
     return (
-      <React.Fragment>
+      <Fragment>
         <VerifyAuthentication
           open={this.props.open && !this.state.authDialogOpen}
           close={this.props.close}
@@ -799,7 +799,7 @@ class AuthDialog extends React.Component {
             </ListItemText>
           </MenuItem>
         </Menu>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }
@@ -809,7 +809,7 @@ export default graphql(
     query {
       user {
         id
-        permanentTokens(limit:20) {
+        permanentTokens(limit: 20) {
           id
           name
           lastUsed

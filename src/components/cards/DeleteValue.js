@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -19,7 +19,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class DeleteValue extends React.Component {
+class DeleteValue extends Component {
   deleteValueMutation = () => {
     this.props.DeleteValue({
       variables: {
@@ -52,8 +52,7 @@ class DeleteValue extends React.Component {
         <font
           style={{ paddingLeft: "24px", paddingRight: "24px", height: "100%" }}
         >
-          Be careful,{" "}
-            {this.props.name}{" "}will be deleted permanently.
+          Be careful, {this.props.name} will be deleted permanently.
         </font>
         <DialogActions>
           <Button onClick={this.props.close}>Never mind</Button>

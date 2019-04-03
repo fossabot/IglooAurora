@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -19,7 +19,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class LeaveEnvironment extends React.Component {
+class LeaveEnvironment extends Component {
   leaveEnvironment = () => {
     this.props.LeaveEnvironment({
       variables: {

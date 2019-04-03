@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -17,7 +17,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class VerifyEmail extends React.Component {
+class VerifyEmail extends Component {
   render() {
     return (
       <Dialog

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Dialog from "@material-ui/core/Dialog"
 import Button from "@material-ui/core/Button"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -39,7 +39,7 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-class ChangeServer extends React.Component {
+class ChangeServer extends Component {
   state = {
     url: "",
     newServerOpen: false,
@@ -796,7 +796,7 @@ class ChangeServer extends React.Component {
         >
           <MenuItem
             onClick={() =>
-              this.setState(oldState=>({
+              this.setState(oldState => ({
                 editServerOpen: true,
                 anchorEl: false,
                 editName: oldState.menuTarget.name,
