@@ -12,7 +12,9 @@ import EnvironmentCard from "./EnvironmentCard"
 import CreateEnvironment from "./CreateEnvironment"
 import Helmet from "react-helmet"
 import PendingShares from "./PendingShares"
+import PendingOwnerChanges from "./PendingOwnerChanges"
 import Share from "@material-ui/icons/Share"
+import People from "@material-ui/icons/People"
 import Add from "@material-ui/icons/Add"
 import Search from "@material-ui/icons/Search"
 import Clear from "@material-ui/icons/Clear"
@@ -69,14 +71,69 @@ export default class EnvironmentsBody extends Component {
             margin: "0",
           }}
         >
-          {!!(
-            user.pendingOwnerChangeCount || user.pendingEnvironmentShareCount
-          ) && (
+          {!!user.pendingOwnerChangeCount && (
             <Grid key="pendingEnvironmentShares" item style={{ margin: 8 }}>
               <ButtonBase
                 focusRipple
                 style={{ borderRadius: "4px" }}
                 onClick={() => this.setState({ pendingOwnerChangesOpen: true })}
+              >
+                <Paper
+                  style={
+                    typeof Storage !== "undefined" &&
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          backgroundColor: "#2f333d",
+                          width: "256px",
+                          height: "192px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          color: "white",
+                        }
+                      : {
+                          backgroundColor: "#fff",
+                          width: "256px",
+                          height: "192px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                        }
+                  }
+                >
+                  <div
+                    style={{
+                      paddingTop: "47px",
+                      paddingBottom: "47px",
+                    }}
+                  >
+                    <People style={{ fontSize: "64px" }} />
+                    <br />
+                    <Typography
+                      variant="h5"
+                      style={
+                        typeof Storage !== "undefined" &&
+                        localStorage.getItem("nightMode") === "true"
+                          ? { color: "white" }
+                          : {}
+                      }
+                    >
+                      {user.pendingOwnerChangeCount > 99
+                        ? "99+ transfer requests"
+                        : user.pendingOwnerChangeCount +
+                          (user.pendingOwnerChangeCount === 1
+                            ? " transfer request"
+                            : " transfer requests")}
+                    </Typography>
+                  </div>
+                </Paper>
+              </ButtonBase>
+            </Grid>
+          )}
+          {!!user.pendingEnvironmentShareCount && (
+            <Grid key="pendingEnvironmentShares" item style={{ margin: 8 }}>
+              <ButtonBase
+                focusRipple
+                style={{ borderRadius: "4px" }}
+                onClick={() => this.setState({ pendingSharesOpen: true })}
               >
                 <Paper
                   style={
@@ -122,15 +179,10 @@ export default class EnvironmentsBody extends Component {
                           : {}
                       }
                     >
-                      {user.pendingOwnerChangeCount +
-                        user.pendingEnvironmentShareCount >
-                      99
+                      {user.pendingEnvironmentShareCount > 99
                         ? "99+ sharing requests"
-                        : user.pendingOwnerChangeCount +
-                          user.pendingEnvironmentShareCount +
-                          (user.pendingOwnerChangeCount +
-                            user.pendingEnvironmentShareCount ===
-                          1
+                        : user.pendingEnvironmentShareCount +
+                          (user.pendingEnvironmentShareCount === 1
                             ? " sharing request"
                             : " sharing requests")}
                     </Typography>
@@ -482,6 +534,10 @@ export default class EnvironmentsBody extends Component {
         <PendingShares
           open={this.state.pendingSharesOpen}
           close={() => this.setState({ pendingSharesOpen: false })}
+        />
+        <PendingOwnerChanges
+          open={this.state.pendingOwnerChangesOpen}
+          close={() => this.setState({ pendingOwnerChangesOpen: false })}
         />
       </Fragment>
     )

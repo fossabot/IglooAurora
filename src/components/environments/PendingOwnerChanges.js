@@ -27,41 +27,41 @@ function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
 
-let environmentShares = []
+let ownerChanges = []
 
-class PendingShares extends Component {
-  AcceptPendingEnvironmentShare = id =>
-    this.props.AcceptPendingEnvironmentShare({
+class PendingOwnerChanges extends Component {
+  AcceptOwnership = id =>
+    this.props.AcceptPendingOwnerChange({
       variables: {
-        pendingEnvironmentShareId: id,
+        pendingOwnerChangeId: id,
       },
       optimisticResponse: {
         __typename: "Mutation",
-        pendingEnvironmentShares: {
-          pendingEnvironmentShareId: id,
-          __typename: "EnvironmentShares",
+        pendingOwnerChanges: {
+          pendingOwnerChangeId: id,
+          __typename: "OwnerChange",
         },
       },
     })
 
-  DeclinePendingEnvironmentShare = id =>
-    this.props.DeclinePendingEnvironmentShare({
+  DeclineOwnership = id =>
+    this.props.DeclinePendingOwnerChange({
       variables: {
-        pendingEnvironmentShareId: id,
+        pendingOwnerChangeId: id,
       },
       optimisticResponse: {
         __typename: "Mutation",
-        pendingEnvironmentShares: {
-          pendingEnvironmentShareId: id,
-          __typename: "EnvironmentShares",
+        pendingOwnerChanges: {
+          pendingOwnerChangeId: id,
+          __typename: "OwnerChange",
         },
       },
     })
-  /*
-  componentDidMount() {
-    const pendingEnvironmentShareReceivedSubscription = gql`
+
+  /* componentDidMount() {
+    const pendingOwnerChangeReceivedSubscription = gql`
       subscription {
-        pendingEnvironmentShareReceived {
+        pendingOwnerChangeReceived {
           id
           receiver {
             id
@@ -81,30 +81,30 @@ class PendingShares extends Component {
       }
     `
 
-    this.props.environmentSharesData.subscribeToMore({
-      document: pendingEnvironmentShareReceivedSubscription,
+    this.props.ownerChangesData.subscribeToMore({
+      document: pendingOwnerChangeReceivedSubscription,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
           return prev
         }
 
-        const newPendingEnvironmentShares = [
-          ...prev.user.pendingEnvironmentShares,
-          subscriptionData.data.pendingEnvironmentShareReceived,
+        const newPendingOwnerChanges = [
+          ...prev.user.pendingOwnerChanges,
+          subscriptionData.data.pendingOwnerChangeReceived,
         ]
 
         return {
           user: {
             ...prev.user,
-            pendingEnvironmentShares: newPendingEnvironmentShares,
+            pendingOwnerChanges: newPendingOwnerChanges,
           },
         }
       },
     })
 
-    const pendingEnvironmentShareUpdatedSubscription = gql`
+    const pendingOwnerChangeUpdatedSubscription = gql`
       subscription {
-        pendingEnvironmentShareUpdated {
+        pendingOwnerChangeUpdated {
           id
           receiver {
             id
@@ -124,91 +124,91 @@ class PendingShares extends Component {
       }
     `
 
-    this.props.environmentSharesData.subscribeToMore({
-      document: pendingEnvironmentShareUpdatedSubscription,
+    this.props.ownerChangesData.subscribeToMore({
+      document: pendingOwnerChangeUpdatedSubscription,
     })
 
-    const pendingEnvironmentShareDeclinedSubscription = gql`
+    const pendingOwnerChangeAcceptedSubscription = gql`
       subscription {
-        pendingEnvironmentShareDeclined
-      }
-    `
-
-    this.props.environmentSharesData.subscribeToMore({
-      document: pendingEnvironmentShareDeclinedSubscription,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        const newPendingEnvironmentShares = prev.user.pendingEnvironmentShares.filter(
-          pendingEnvironmentShare =>
-            pendingEnvironmentShare.id !==
-            subscriptionData.data.pendingEnvironmentShareDeclined
-        )
-
-        return {
-          user: {
-            ...prev.user,
-            pendingEnvironmentShares: newPendingEnvironmentShares,
-          },
-        }
-      },
-    })
-
-    const pendingEnvironmentShareRevokedSubscription = gql`
-      subscription {
-        pendingEnvironmentShareRevoked
-      }
-    `
-
-    this.props.environmentSharesData.subscribeToMore({
-      document: pendingEnvironmentShareRevokedSubscription,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        const newPendingEnvironmentShares = prev.user.pendingEnvironmentShares.filter(
-          pendingEnvironmentShare =>
-            pendingEnvironmentShare.id !==
-            subscriptionData.data.pendingEnvironmentShareRevoked
-        )
-
-        return {
-          user: {
-            ...prev.user,
-            pendingEnvironmentShares: newPendingEnvironmentShares,
-          },
-        }
-      },
-    })
-
-    const pendingEnvironmentShareAcceptedSubscription = gql`
-      subscription {
-        pendingEnvironmentShareAccepted {
+        pendingOwnerChangeAccepted {
           id
         }
       }
     `
 
-    this.props.environmentSharesData.subscribeToMore({
-      document: pendingEnvironmentShareAcceptedSubscription,
+    this.props.ownerChangesData.subscribeToMore({
+      document: pendingOwnerChangeAcceptedSubscription,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) {
           return prev
         }
 
-        const newPendingEnvironmentShares = prev.user.pendingEnvironmentShares.filter(
-          pendingEnvironmentShare =>
-            pendingEnvironmentShare.id !==
-            subscriptionData.data.pendingEnvironmentShareAccepted.id
+        const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
+          pendingOwnerChange =>
+            pendingOwnerChange.id !==
+            subscriptionData.data.pendingOwnerChangeAccepted.id
         )
 
         return {
           user: {
             ...prev.user,
-            pendingEnvironmentShares: newPendingEnvironmentShares,
+            pendingOwnerChanges: newPendingOwnerChanges,
+          },
+        }
+      },
+    })
+
+    const pendingOwnerChangeDeclinedSubscription = gql`
+      subscription {
+        pendingOwnerChangeDeclined
+      }
+    `
+
+    this.props.ownerChangesData.subscribeToMore({
+      document: pendingOwnerChangeDeclinedSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
+          pendingOwnerChange =>
+            pendingOwnerChange.id !==
+            subscriptionData.data.pendingOwnerChangeDeclined
+        )
+
+        return {
+          user: {
+            ...prev.user,
+            pendingOwnerChanges: newPendingOwnerChanges,
+          },
+        }
+      },
+    })
+
+    const pendingOwnerChangeRevokedSubscription = gql`
+      subscription {
+        pendingOwnerChangeRevoked
+      }
+    `
+
+    this.props.ownerChangesData.subscribeToMore({
+      document: pendingOwnerChangeRevokedSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev
+        }
+
+        const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
+          pendingOwnerChange =>
+            pendingOwnerChange.id !==
+            subscriptionData.data.pendingOwnerChangeRevoked
+        )
+
+        return {
+          user: {
+            ...prev.user,
+            pendingOwnerChanges: newPendingOwnerChanges,
           },
         }
       },
@@ -228,14 +228,14 @@ class PendingShares extends Component {
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle disableTypography>Pending share requests</DialogTitle>
+        <DialogTitle disableTypography>Pending transfer requests</DialogTitle>
         <div style={{ height: "100%" }}>
           <Query
             query={gql`
               query($limit: PositiveInt!, $offset: Int) {
                 user {
                   id
-                  pendingEnvironmentShares(limit: $limit, offset: $offset) {
+                  pendingOwnerChanges(limit: $limit, offset: $offset) {
                     id
                     receiver {
                       id
@@ -286,12 +286,12 @@ class PendingShares extends Component {
                 )
 
               if (data) {
-                environmentShares = data.user.pendingEnvironmentShares
+                ownerChanges = data.user.pendingOwnerChanges
               }
 
               return (
                 <List style={{ width: "100%" }}>
-                  {environmentShares.map(pendingEnvironmentShare => (
+                  {ownerChanges.map(pendingOwnerChange => (
                     <ListItem style={{ paddingLeft: "24px" }}>
                       <ListItemText
                         primary={
@@ -303,7 +303,7 @@ class PendingShares extends Component {
                                 : { color: "black" }
                             }
                           >
-                            {pendingEnvironmentShare.environment.name}
+                            {pendingOwnerChange.environment.name}
                           </font>
                         }
                         secondary={
@@ -315,7 +315,7 @@ class PendingShares extends Component {
                                 : { color: "#7a7a7a" }
                             }
                           >
-                            {"Sent by " + pendingEnvironmentShare.sender.name}
+                            {"Sent by " + pendingOwnerChange.sender.name}
                           </font>
                         }
                         style={{
@@ -328,18 +328,14 @@ class PendingShares extends Component {
                       <ListItemSecondaryAction>
                         <IconButton
                           onClick={() =>
-                            this.AcceptPendingEnvironmentShare(
-                              pendingEnvironmentShare.id
-                            )
+                            this.AcceptOwnership(pendingOwnerChange.id)
                           }
                         >
                           <Done />
                         </IconButton>
                         <IconButton
                           onClick={() =>
-                            this.DeclinePendingEnvironmentShare(
-                              pendingEnvironmentShare.id
-                            )
+                            this.DeclineOwnership(pendingOwnerChange.id)
                           }
                         >
                           <Close />
@@ -362,28 +358,24 @@ class PendingShares extends Component {
 
 export default graphql(
   gql`
-    mutation AcceptPendingEnvironmentShare($pendingEnvironmentShareId: ID!) {
-      acceptPendingEnvironmentShare(
-        pendingEnvironmentShareId: $pendingEnvironmentShareId
-      ) {
+    mutation AcceptPendingOwnerChange($pendingOwnerChangeId: ID!) {
+      acceptPendingOwnerChange(pendingOwnerChangeId: $pendingOwnerChangeId) {
         id
       }
     }
   `,
   {
-    name: "AcceptPendingEnvironmentShare",
+    name: "AcceptPendingOwnerChange",
   }
 )(
   graphql(
     gql`
-      mutation DeclinePendingEnvironmentShare($pendingEnvironmentShareId: ID!) {
-        declinePendingEnvironmentShare(
-          pendingEnvironmentShareId: $pendingEnvironmentShareId
-        )
+      mutation DeclinePendingOwnerChange($pendingOwnerChangeId: ID!) {
+        declinePendingOwnerChange(pendingOwnerChangeId: $pendingOwnerChangeId)
       }
     `,
     {
-      name: "DeclinePendingEnvironmentShare",
+      name: "DeclinePendingOwnerChange",
     }
-  )(withMobileDialog({ breakpoint: "xs" })(PendingShares))
+  )(withMobileDialog({ breakpoint: "xs" })(PendingOwnerChanges))
 )
