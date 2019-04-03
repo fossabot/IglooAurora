@@ -13,10 +13,12 @@ import CreateEnvironment from "./CreateEnvironment"
 import Helmet from "react-helmet"
 import PendingShares from "./PendingShares"
 import PendingOwnerChanges from "./PendingOwnerChanges"
-import People from "@material-ui/icons/People"
+import Share from "@material-ui/icons/Share"
 import Add from "@material-ui/icons/Add"
 import Search from "@material-ui/icons/Search"
 import Clear from "@material-ui/icons/Clear"
+import Fab from "@material-ui/core/Fab"
+import Zoom from "@material-ui/core/Zoom"
 
 export default class EnvironmentsBody extends Component {
   state = {
@@ -68,17 +70,9 @@ export default class EnvironmentsBody extends Component {
             margin: "0",
           }}
         >
-          {user.environments.map(environment => (
-            <Grid key={environment.id} item style={{ margin: 8 }}>
-              <EnvironmentCard
-                userData={this.props.userData}
-                environment={environment}
-                nightMode={nightMode}
-                client={this.props.client}
-              />
-            </Grid>
-          ))}
-          {!!user.pendingOwnerChangeCount && (
+          {!!(
+            user.pendingOwnerChangeCount || user.pendingEnvironmentShareCount
+          ) && (
             <Grid key="pendingEnvironmentShares" item style={{ margin: 8 }}>
               <ButtonBase
                 focusRipple
@@ -112,7 +106,13 @@ export default class EnvironmentsBody extends Component {
                       paddingBottom: "47px",
                     }}
                   >
-                    <People style={{ fontSize: "64px" }} />
+                    <Share
+                      style={{
+                        fontSize: "48px",
+                        marginBottom: "8px",
+                        marginTop: "8px",
+                      }}
+                    />
                     <br />
                     <Typography
                       variant="h5"
@@ -123,112 +123,33 @@ export default class EnvironmentsBody extends Component {
                           : {}
                       }
                     >
-                      {user.pendingOwnerChangeCount > 99
-                        ? "99+ transfer requests"
+                      {user.pendingOwnerChangeCount +
+                        user.pendingEnvironmentShareCount >
+                      99
+                        ? "99+ sharing requests"
                         : user.pendingOwnerChangeCount +
-                          (user.pendingOwnerChangeCount === 1
-                            ? " transfer request"
-                            : " transfer requests")}
+                          user.pendingEnvironmentShareCount +
+                          (user.pendingOwnerChangeCount +
+                            user.pendingEnvironmentShareCount ===
+                          1
+                            ? " sharing request"
+                            : " sharing requests")}
                     </Typography>
                   </div>
                 </Paper>
               </ButtonBase>
             </Grid>
           )}
-          <Grid key="create" item style={{ margin: 8 }}>
-            <ButtonBase
-              focusRipple
-              style={{ borderRadius: "4px" }}
-              onClick={() => this.setState({ createOpen: true })}
-              disabled={
-                user.environments.length >= 100 || !user.emailIsVerified
-              }
-            >
-              <Paper
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? user.environments.length >= 100 || !user.emailIsVerified
-                      ? {
-                          backgroundColor: "rgba(0, 0, 0, 0.12)",
-                          width: "256px",
-                          height: "192px",
-                          cursor: "pointer",
-                          textAlign: "center",
-                          color: "rgba(0, 0, 0, 0.26)",
-                          borderRadius: "4px",
-                          boxShadow: "none",
-                        }
-                      : {
-                          backgroundColor: "#2f333d",
-                          width: "256px",
-                          height: "192px",
-                          cursor: "pointer",
-                          textAlign: "center",
-                          color: "white",
-                          borderRadius: "4px",
-                        }
-                    : user.environments.length >= 100 || !user.emailIsVerified
-                    ? {
-                        width: "256px",
-                        height: "192px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        borderRadius: "4px",
-                        boxShadow: "none",
-                        backgroundColor: "rgba(0, 0, 0, 0.12)",
-                        color: "rgba(0, 0, 0, 0.26)",
-                      }
-                    : {
-                        backgroundColor: "#fff",
-                        width: "256px",
-                        height: "192px",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        borderRadius: "4px",
-                        color: "black",
-                      }
-                }
-              >
-                <div
-                  style={{
-                    paddingTop: "47px",
-                    paddingBottom: "47px",
-                    borderRadius: "4px",
-                  }}
-                >
-                  <Add style={{ fontSize: "64px" }} />
-                  <br />
-                  <Typography
-                    variant="h5"
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? user.environments.length >= 100 ||
-                          !user.emailIsVerified
-                          ? {
-                              color: "black",
-                              opacity: 0.26,
-                            }
-                          : {
-                              color: "white",
-                            }
-                        : user.environments.length >= 100 ||
-                          !user.emailIsVerified
-                        ? {
-                            color: "rgba(0, 0, 0, 0.26)",
-                          }
-                        : {
-                            color: "black",
-                          }
-                    }
-                  >
-                    New environment
-                  </Typography>
-                </div>
-              </Paper>
-            </ButtonBase>
-          </Grid>
+          {user.environments.map(environment => (
+            <Grid key={environment.id} item style={{ margin: 8 }}>
+              <EnvironmentCard
+                userData={this.props.userData}
+                environment={environment}
+                nightMode={nightMode}
+                client={this.props.client}
+              />
+            </Grid>
+          ))}
         </Grid>
       )
     }
@@ -353,66 +274,49 @@ export default class EnvironmentsBody extends Component {
                 <CenteredSpinner style={{ paddingTop: "32px" }} />
               </div>
             )}
-            {user &&
-              (!!user.environments[0] || user.pendingEnvironmentShareCount ? (
-                <div
-                  style={
-                    nightMode
-                      ? {
-                          overflowY: "auto",
-                          height: "calc(100vh - 192px)",
-                          background: "#21252b",
-                        }
-                      : {
-                          overflowY: "auto",
-                          height: "calc(100vh - 192px)",
-                          background: "#f2f2f2",
-                        }
+            {user && (
+              <div
+                style={{
+                  height: "calc(100vh - 128px)",
+                  overflowY: "auto",
+                }}
+              >
+                <Grid
+                  container
+                  justify="center"
+                  spacing={16}
+                  className="notSelectable defaultCursor"
+                  style={{
+                    width: "calc(100% - 16px)",
+                    marginLeft: "8px",
+                    marginRight: "8px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {yourEnvironmentsList}
+                </Grid>
+                <Zoom
+                  in={
+                    user &&
+                    user.environments.length < 100 &&
+                    user.emailIsVerified
                   }
                 >
-                  <div
+                  <Fab
+                    color="secondary"
                     style={{
-                      height: "100%",
-                      overflowY: "auto",
+                      position: "absolute",
+                      bottom: "36px",
+                      left: "calc(50% - 28px)",
+                      zIndex: 1200,
                     }}
-                    className="containOverscrollY"
+                    onClick={() => this.setState({ createOpen: true })}
                   >
-                    <Grid
-                      container
-                      justify="center"
-                      spacing={16}
-                      className="notSelectable defaultCursor"
-                      style={{
-                        width: "calc(100% - 16px)",
-                        marginLeft: "8px",
-                        marginRight: "8px",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      {yourEnvironmentsList}
-                    </Grid>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  style={{ height: "calc(100vh - 128px)", overflowY: "auto" }}
-                >
-                  <Grid
-                    container
-                    justify="center"
-                    spacing={16}
-                    className="notSelectable defaultCursor"
-                    style={{
-                      width: "calc(100% - 16px)",
-                      marginLeft: "8px",
-                      marginRight: "8px",
-                      marginBottom: "8px",
-                    }}
-                  >
-                    {yourEnvironmentsList}
-                  </Grid>
-                </div>
-              ))}
+                    <Add />
+                  </Fab>
+                </Zoom>
+              </div>
+            )}
           </div>
         ) : (
           <div style={{ backgroundColor: "#f2f2f2" }}>
@@ -548,6 +452,27 @@ export default class EnvironmentsBody extends Component {
                 </div>
               )}
               {user && yourEnvironmentsList}
+              <Zoom
+                in={
+                  user && user.environments.length < 100 && user.emailIsVerified
+                }
+              >
+                <Fab
+                  variant="extended"
+                  color="secondary"
+                  onClick={() => this.setState({ createOpen: true })}
+                  style={{
+                    position: "absolute",
+                    right: "16px",
+                    bottom: "16px",
+                    transition:
+                      "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                  }}
+                >
+                  <Add style={{ marginRight: "8px" }} />
+                  Environment
+                </Fab>
+              </Zoom>
             </div>
           </div>
         )}

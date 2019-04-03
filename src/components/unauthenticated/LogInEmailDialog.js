@@ -67,8 +67,7 @@ let LogInEmailDialog = props => {
       >
         <DialogTitle disableTypography>Can't log in?</DialogTitle>
         <div style={{ height: "100%", padding: "0 24px" }}>
-          Check your inbox, you should have received an email with a log in
-          link.
+          Check your inbox, you should have received another log in email.
         </div>
         <DialogActions>
           <Button onClick={props.close}>Close</Button>

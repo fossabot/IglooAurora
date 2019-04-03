@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import NotificationsDrawer from "./NotificationsDrawer"
@@ -14,7 +14,7 @@ import Menu from "@material-ui/core/Menu"
 import DeleteDevice from "./devices/DeleteDevice"
 import RenameDevice from "./devices/RenameDevice"
 import ChangeEnvironment from "./devices/ChangeEnvironment"
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import { hotkeys } from "react-keyboard-shortcuts"
 import ArrowBack from "@material-ui/icons/ArrowBack"
 import MoreVert from "@material-ui/icons/MoreVert"
@@ -27,7 +27,8 @@ import SwapHoriz from "@material-ui/icons/SwapHoriz"
 import Delete from "@material-ui/icons/Delete"
 import Star from "@material-ui/icons/Star"
 import StarBorder from "@material-ui/icons/StarBorder"
-import { Redirect } from "react-router-dom"
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"
+import querystringify from "querystringify"
 
 class MainBodyHeader extends Component {
   hot_keys = {
@@ -156,6 +157,193 @@ class MainBodyHeader extends Component {
       })
     }
 
+    let content = device && (
+      <Fragment>
+        <MenuItem
+          onClick={() => {
+            this.setState({ infoOpen: true })
+            this.handleMenuClose()
+          }}
+          style={
+            typeof Storage !== "undefined" &&
+            localStorage.getItem("nightMode") === "true"
+              ? { color: "white" }
+              : { color: "black" }
+          }
+        >
+          <ListItemIcon>
+            <Info />
+          </ListItemIcon>
+          <ListItemText inset primary="Information" disableTypography />
+        </MenuItem>
+        <Divider />
+        {device.muted ? (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              toggleQuietMode(false)
+              this.handleMenuClose()
+            }}
+            disabled={
+              this.props.userData.user && this.props.userData.user.quietMode
+            }
+          >
+            <ListItemIcon>
+              <Notifications />
+            </ListItemIcon>
+            <ListItemText inset primary="Unmute" disableTypography />
+          </MenuItem>
+        ) : (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              toggleQuietMode(true)
+              this.handleMenuClose()
+            }}
+            disabled={
+              this.props.userData.user && this.props.userData.user.quietMode
+            }
+          >
+            <ListItemIcon>
+              <NotificationsOff />
+            </ListItemIcon>
+            <ListItemText inset primary="Mute" disableTypography />
+          </MenuItem>
+        )}
+        {localStorage.getItem("sortBy") === "name" && (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              toggleStarred(!device.starred)
+              this.handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              {device && device.starred ? <StarBorder /> : <Star />}
+            </ListItemIcon>
+            <ListItemText
+              inset
+              primary={device && device.starred ? "Unstar" : "Star"}
+              disableTypography
+            />
+          </MenuItem>
+        )}
+        {window.Windows && (
+          <MenuItem
+            onClick={() => {
+              this.createTile(
+                this.props.environment.name,
+                "device=" + this.props.device.id,
+                this.props.environment.id,
+                null,
+                null
+              )
+              this.handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <SvgIcon>
+                <svg
+                  style={{ width: "24px", height: "24px" }}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#000000"
+                    d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z"
+                  />
+                </svg>
+              </SvgIcon>
+            </ListItemIcon>
+            <ListItemText inset primary="Pin to start" disableTypography />
+          </MenuItem>
+        )}
+        {device.myRole !== "SPECTATOR" && <Divider />}
+        {device.myRole === "OWNER" && (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              this.setState({ changeEnvironmentOpen: true })
+              this.handleMenuClose()
+            }}
+            disabled={
+              !(this.props.environments && this.props.environments.length > 1)
+            }
+          >
+            <ListItemIcon>
+              <SwapHoriz />
+            </ListItemIcon>
+            <ListItemText inset primary="Move" disableTypography />
+          </MenuItem>
+        )}
+        {device.myRole !== "SPECTATOR" && (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              this.setState({ renameOpen: true })
+              this.handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <Create />
+            </ListItemIcon>
+            <ListItemText inset primary="Rename" disableTypography />
+          </MenuItem>
+        )}
+        {(device.myRole === "OWNER" || device.myRole === "ADMIN") && (
+          <MenuItem
+            className="notSelectable"
+            style={
+              typeof Storage !== "undefined" &&
+              localStorage.getItem("nightMode") === "true"
+                ? { color: "white" }
+                : { color: "black" }
+            }
+            onClick={() => {
+              this.setState({ deleteOpen: true })
+              this.handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <Delete style={{ color: "#f44336" }} />
+            </ListItemIcon>
+            <ListItemText inset>
+              <font style={{ color: "#f44336" }}>Delete</font>
+            </ListItemText>
+          </MenuItem>
+        )}
+      </Fragment>
+    )
+
     return (
       <React.Fragment>
         <div
@@ -191,12 +379,9 @@ class MainBodyHeader extends Component {
                 }}
                 component={Link}
                 to={
-                  this.props.environmentData.environment
-                    ? "/?environment=" +
-                      this.props.environmentData.environment.id
-                    : ""
+                  "/?environment=" +
+                  querystringify.parse(window.location.search).environment
                 }
-                disabled={!this.props.environmentData.environment}
               >
                 <ArrowBack />
               </IconButton>
@@ -296,7 +481,19 @@ class MainBodyHeader extends Component {
           device={device}
           deselectDevice={() => this.setState({ goToDevices: true })}
         />
-        {device && (
+        {this.props.isMobile ? (
+          <SwipeableDrawer
+            variant="temporary"
+            anchor="bottom"
+            open={this.state.anchorEl}
+            onClose={this.handleMenuClose}
+            swipeAreaWidth={0}
+            disableBackdropTransition={false}
+            disableDiscovery={true}
+          >
+            {content}
+          </SwipeableDrawer>
+        ) : (
           <Menu
             id="simple-menu"
             anchorEl={this.state.anchorEl}
@@ -311,192 +508,7 @@ class MainBodyHeader extends Component {
               horizontal: "right",
             }}
           >
-            <MenuItem
-              onClick={() => {
-                this.setState({ infoOpen: true })
-                this.handleMenuClose()
-              }}
-              style={
-                typeof Storage !== "undefined" &&
-                localStorage.getItem("nightMode") === "true"
-                  ? { color: "white" }
-                  : { color: "black" }
-              }
-            >
-              <ListItemIcon>
-                <Info />
-              </ListItemIcon>
-              <ListItemText inset primary="Information" disableTypography />
-            </MenuItem>
-            <Divider />
-            {device && device.muted ? (
-              <MenuItem
-                className="notSelectable"
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-                onClick={() => {
-                  toggleQuietMode(false)
-                  this.handleMenuClose()
-                }}
-                disabled={
-                  this.props.userData.user && this.props.userData.user.quietMode
-                }
-              >
-                <ListItemIcon>
-                  <Notifications />
-                </ListItemIcon>
-                <ListItemText inset primary="Unmute" disableTypography />
-              </MenuItem>
-            ) : (
-              <MenuItem
-                className="notSelectable"
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-                onClick={() => {
-                  toggleQuietMode(true)
-                  this.handleMenuClose()
-                }}
-                disabled={
-                  this.props.userData.user && this.props.userData.user.quietMode
-                }
-              >
-                <ListItemIcon>
-                  <NotificationsOff />
-                </ListItemIcon>
-                <ListItemText inset primary="Mute" disableTypography />
-              </MenuItem>
-            )}
-            {localStorage.getItem("sortBy") === "name" && (
-              <MenuItem
-                className="notSelectable"
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-                onClick={() => {
-                  toggleStarred(!device.starred)
-                  this.handleMenuClose()
-                }}
-              >
-                <ListItemIcon>
-                  {device && device.starred ? <StarBorder /> : <Star />}
-                </ListItemIcon>
-                <ListItemText
-                  inset
-                  primary={device && device.starred ? "Unstar" : "Star"}
-                  disableTypography
-                />
-              </MenuItem>
-            )}
-            {window.Windows && (
-              <MenuItem
-                onClick={() => {
-                  this.createTile(
-                    this.props.environment.name,
-                    "device=" + this.props.device.id,
-                    this.props.environment.id,
-                    null,
-                    null
-                  )
-                  this.handleMenuClose()
-                }}
-              >
-                <ListItemIcon>
-                  <SvgIcon>
-                    <svg
-                      style={{ width: "24px", height: "24px" }}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="#000000"
-                        d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z"
-                      />
-                    </svg>
-                  </SvgIcon>
-                </ListItemIcon>
-                <ListItemText inset primary="Pin to start" disableTypography />
-              </MenuItem>
-            )}
-            {device && device.myRole !== "SPECTATOR" && <Divider />}
-            {device && device.myRole === "OWNER" && (
-              <MenuItem
-                className="notSelectable"
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-                onClick={() => {
-                  this.setState({ changeEnvironmentOpen: true })
-                  this.handleMenuClose()
-                }}
-                disabled={
-                  !(
-                    this.props.environments &&
-                    this.props.environments.length > 1
-                  )
-                }
-              >
-                <ListItemIcon>
-                  <SwapHoriz />
-                </ListItemIcon>
-                <ListItemText inset primary="Move" disableTypography />
-              </MenuItem>
-            )}
-            {device && device.myRole !== "SPECTATOR" && (
-              <MenuItem
-                className="notSelectable"
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-                onClick={() => {
-                  this.setState({ renameOpen: true })
-                  this.handleMenuClose()
-                }}
-              >
-                <ListItemIcon>
-                  <Create />
-                </ListItemIcon>
-                <ListItemText inset primary="Rename" disableTypography />
-              </MenuItem>
-            )}
-            {device &&
-              (device.myRole === "OWNER" || device.myRole === "ADMIN") && (
-                <MenuItem
-                  className="notSelectable"
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { color: "white" }
-                      : { color: "black" }
-                  }
-                  onClick={() => {
-                    this.setState({ deleteOpen: true })
-                    this.handleMenuClose()
-                  }}
-                >
-                  <ListItemIcon>
-                    <Delete style={{ color: "#f44336" }} />
-                  </ListItemIcon>
-                  <ListItemText inset>
-                    <font style={{ color: "#f44336" }}>Delete</font>
-                  </ListItemText>
-                </MenuItem>
-              )}
+            {content}
           </Menu>
         )}
         {this.state.goToDevices && (

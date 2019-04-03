@@ -11,6 +11,7 @@ import ExitToApp from "@material-ui/icons/ExitToApp"
 import Settings from "@material-ui/icons/Settings"
 import People from "@material-ui/icons/People"
 import { Link } from "react-router-dom"
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"
 
 export default class AccountPopover extends React.Component {
   state = { popoverOpen: false }
@@ -35,6 +36,183 @@ export default class AccountPopover extends React.Component {
         account => account.id === localStorage.getItem("userId")
       )[0]
 
+    let content = (
+      <List>
+        {typeof Storage !== undefined &&
+          localStorage.getItem("accountList") &&
+          JSON.parse(localStorage.getItem("accountList")).map(account => (
+            <ListItem
+              button
+              selected={localStorage.getItem("userId") === account.id}
+              component={Link}
+              to={
+                account.token
+                  ? "/?user=" + account.id
+                  : "/login?user=" + account.id
+              }
+            >
+              <Avatar style={{ backgroundColor: account.profileIconColor }}>
+                {this.getInitials(account.name)}
+              </Avatar>
+              <ListItemText
+                style={{ cursor: "pointer" }}
+                primary={
+                  <font
+                    style={
+                      typeof Storage !== "undefined" &&
+                      localStorage.getItem("nightMode") === "true"
+                        ? {
+                            backgroundColor: "transparent",
+                            color: "white",
+                          }
+                        : {
+                            backgroundColor: "transparent",
+                            color: "black",
+                          }
+                    }
+                  >
+                    {account.name}
+                    {!account.token && (
+                      <font
+                        style={
+                          typeof Storage !== "undefined" &&
+                          localStorage.getItem("nightMode") === "true"
+                            ? { color: "white", opacity: 0.72 }
+                            : { color: "black", opacity: 0.72 }
+                        }
+                      >
+                        {" "}
+                        (signed out)
+                      </font>
+                    )}
+                  </font>
+                }
+                secondary={
+                  <font
+                    style={
+                      typeof Storage !== "undefined" &&
+                      localStorage.getItem("nightMode") === "true"
+                        ? {
+                            backgroundColor: "transparent",
+                            color: "white",
+                            opacity: 0.54,
+                          }
+                        : {
+                            backgroundColor: "transparent",
+                            color: "black",
+                            opacity: 0.54,
+                          }
+                    }
+                  >
+                    {account.email}
+                  </font>
+                }
+              />
+            </ListItem>
+          ))}
+        <ListItem button onClick={() => this.props.changeAccount("", false)}>
+          <ListItemAvatar>
+            <Avatar
+              style={
+                typeof Storage !== "undefined" &&
+                localStorage.getItem("nightMode") === "true"
+                  ? { backgroundColor: "transparent", color: "white" }
+                  : { backgroundColor: "transparent", color: "black" }
+              }
+            >
+              <People />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <font
+                style={
+                  typeof Storage !== "undefined" &&
+                  localStorage.getItem("nightMode") === "true"
+                    ? { backgroundColor: "transparent", color: "white" }
+                    : { backgroundColor: "transparent", color: "black" }
+                }
+              >
+                Manage accounts
+              </font>
+            }
+            style={{ cursor: "pointer" }}
+          />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            this.props.setOpen(!this.props.isOpen)
+            this.setState({ popoverOpen: false })
+          }}
+        >
+          <ListItemAvatar>
+            <Avatar
+              style={
+                typeof Storage !== "undefined" &&
+                localStorage.getItem("nightMode") === "true"
+                  ? { backgroundColor: "transparent", color: "white" }
+                  : { backgroundColor: "transparent", color: "black" }
+              }
+            >
+              <Settings />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <font
+                style={
+                  typeof Storage !== "undefined" &&
+                  localStorage.getItem("nightMode") === "true"
+                    ? { backgroundColor: "transparent", color: "white" }
+                    : { backgroundColor: "transparent", color: "black" }
+                }
+              >
+                Settings
+              </font>
+            }
+            style={{ cursor: "pointer" }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => {
+            this.props.logOut(false)
+            this.setState({ popoverOpen: false })
+          }}
+        >
+          <ListItemAvatar>
+            <Avatar
+              style={
+                typeof Storage !== "undefined" &&
+                localStorage.getItem("nightMode") === "true"
+                  ? { backgroundColor: "transparent", color: "white" }
+                  : { backgroundColor: "transparent", color: "black" }
+              }
+            >
+              <ExitToApp />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <font
+                style={
+                  typeof Storage !== "undefined" &&
+                  localStorage.getItem("nightMode") === "true"
+                    ? { backgroundColor: "transparent", color: "white" }
+                    : { backgroundColor: "transparent", color: "black" }
+                }
+              >
+                Log out
+              </font>
+            }
+            style={{ cursor: "pointer" }}
+          />
+        </ListItem>
+      </List>
+    )
+
     return (
       <React.Fragment>
         <IconButton
@@ -54,193 +232,37 @@ export default class AccountPopover extends React.Component {
             {this.getInitials(currentUser && currentUser.name)}
           </Avatar>
         </IconButton>
-        <Popover
-          open={this.state.popoverOpen}
-          onClose={() => this.setState({ popoverOpen: false })}
-          anchorEl={this.anchorEl}
-          marginThreshold={12}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          className="notSelectable"
-        >
-          <List>
-            {typeof Storage !== undefined &&
-              localStorage.getItem("accountList") &&
-              JSON.parse(localStorage.getItem("accountList")).map(account => (
-                <ListItem
-                  button
-                  selected={localStorage.getItem("userId") === account.id}
-                  component={Link}
-                  to={
-                    account.token
-                      ? "/?user=" + account.id
-                      : "/login?user=" + account.id
-                  }
-                >
-                  <Avatar style={{ backgroundColor: account.profileIconColor }}>
-                    {this.getInitials(account.name)}
-                  </Avatar>
-                  <ListItemText
-                    style={{ cursor: "pointer" }}
-                    primary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? { backgroundColor: "transparent", color: "white" }
-                            : { backgroundColor: "transparent", color: "black" }
-                        }
-                      >
-                        {account.name}
-                        {!account.token && (
-                          <font
-                            style={
-                              typeof Storage !== "undefined" &&
-                              localStorage.getItem("nightMode") === "true"
-                                ? { color: "white", opacity: 0.72 }
-                                : { color: "black", opacity: 0.72 }
-                            }
-                          >
-                            {" "}
-                            (signed out)
-                          </font>
-                        )}
-                      </font>
-                    }
-                    secondary={
-                      <font
-                        style={
-                          typeof Storage !== "undefined" &&
-                          localStorage.getItem("nightMode") === "true"
-                            ? {
-                                backgroundColor: "transparent",
-                                color: "white",
-                                opacity: 0.54,
-                              }
-                            : {
-                                backgroundColor: "transparent",
-                                color: "black",
-                                opacity: 0.54,
-                              }
-                        }
-                      >
-                        {account.email}
-                      </font>
-                    }
-                  />
-                </ListItem>
-              ))}
-            <ListItem
-              button
-              onClick={() => this.props.changeAccount("", false)}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { backgroundColor: "transparent", color: "white" }
-                      : { backgroundColor: "transparent", color: "black" }
-                  }
-                >
-                  <People />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <font
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { backgroundColor: "transparent", color: "white" }
-                        : { backgroundColor: "transparent", color: "black" }
-                    }
-                  >
-                    Manage accounts
-                  </font>
-                }
-                style={{ cursor: "pointer" }}
-              />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                this.props.setOpen(!this.props.isOpen)
-                this.setState({ popoverOpen: false })
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { backgroundColor: "transparent", color: "white" }
-                      : { backgroundColor: "transparent", color: "black" }
-                  }
-                >
-                  <Settings />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <font
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { backgroundColor: "transparent", color: "white" }
-                        : { backgroundColor: "transparent", color: "black" }
-                    }
-                  >
-                    Settings
-                  </font>
-                }
-                style={{ cursor: "pointer" }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                this.props.logOut(false)
-                this.setState({ popoverOpen: false })
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { backgroundColor: "transparent", color: "white" }
-                      : { backgroundColor: "transparent", color: "black" }
-                  }
-                >
-                  <ExitToApp />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <font
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { backgroundColor: "transparent", color: "white" }
-                        : { backgroundColor: "transparent", color: "black" }
-                    }
-                  >
-                    Log out
-                  </font>
-                }
-                style={{ cursor: "pointer" }}
-              />
-            </ListItem>
-          </List>
-        </Popover>
+        {this.props.mobile ? (
+          <SwipeableDrawer
+            variant="temporary"
+            anchor="bottom"
+            open={this.state.popoverOpen}
+            onClose={() => this.setState({ popoverOpen: false })}
+            swipeAreaWidth={0}
+            disableBackdropTransition={false}
+            disableDiscovery={true}
+          >
+            {content}
+          </SwipeableDrawer>
+        ) : (
+          <Popover
+            open={this.state.popoverOpen}
+            onClose={() => this.setState({ popoverOpen: false })}
+            anchorEl={this.anchorEl}
+            marginThreshold={12}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            className="notSelectable"
+          >
+            {content}
+          </Popover>
+        )}
       </React.Fragment>
     )
   }

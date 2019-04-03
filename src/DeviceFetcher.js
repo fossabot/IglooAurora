@@ -9,7 +9,47 @@ import gql from "graphql-tag"
 function DeviceFetcher(props) {
   return props.isMobile ? (
     <Fragment>
-      <AppBar>
+      <StatusBar
+        deviceId={props.selectedDevice}
+        nightMode={props.nightMode}
+        isMobile={props.isMobile}
+        data={props.deviceData}
+      />
+      <div
+        key="mainBody"
+        style={
+          props.nightMode
+            ? {
+                background: "#2f333d",
+                overflowY: "auto",
+              }
+            : {
+                background: "white",
+                overflowY: "auto",
+              }
+        }
+      >
+        <MainBody
+          showHidden={props.showMainHidden}
+          changeShowHiddenState={props.changeShowHiddenState}
+          isMobile={props.isMobile}
+          nightMode={props.nightMode}
+          environmentData={props.environmentData}
+          userData={props.userData}
+          deviceData={props.deviceData}
+        />
+      </div>
+      <AppBar
+        position="sticky"
+        style={
+          props.isMobile
+            ? {
+                boxShadow:
+                  "0px -2px 4px -1px rgba(0,0,0,0.2), 0px -4px 5px 0px rgba(0,0,0,0.14), 0px -1px 10px 0px rgba(0,0,0,0.12)",
+              }
+            : {}
+        }
+      >
         <MainBodyHeader
           key="mainBodyHeader"
           drawer={props.drawer}
@@ -26,38 +66,6 @@ function DeviceFetcher(props) {
           deviceId={props.deviceId}
         />
       </AppBar>
-      <div
-        key="mainBody"
-        style={
-          props.nightMode
-            ? {
-                background: "#2f333d",
-                marginTop: "64px",
-                overflowY: "auto",
-              }
-            : {
-                background: "white",
-                marginTop: "64px",
-                overflowY: "auto",
-              }
-        }
-      >
-        <MainBody
-          showHidden={props.showMainHidden}
-          changeShowHiddenState={props.changeShowHiddenState}
-          isMobile={props.isMobile}
-          nightMode={props.nightMode}
-          environmentData={props.environmentData}
-          userData={props.userData}
-          deviceData={props.deviceData}
-        />
-      </div>
-      <StatusBar
-        deviceId={props.selectedDevice}
-        nightMode={props.nightMode}
-        isMobile={props.isMobile}
-        data={props.deviceData}
-      />
     </Fragment>
   ) : (
     <Fragment>
@@ -145,9 +153,10 @@ function DeviceFetcher(props) {
 
 export default graphql(
   gql`
-    query($id: ID!, $hiddenOffset: Int, $offset: Int) {
+    query($id: ID!, $offset: Int) {
       device(id: $id) {
         id
+        name
         online
         batteryStatus
         batteryCharging
@@ -199,7 +208,6 @@ export default graphql(
       variables: {
         id: deviceId,
         offset: 0,
-        hiddenOffest: 0,
       },
     }),
   }

@@ -12,7 +12,7 @@ class EnvironmentsHeader extends Component {
     },
     "alt+.": {
       priority: 1,
-      handler: event => this.props.setOpen(!this.props.isOpen)
+      handler: event => this.props.setOpen(!this.props.isOpen),
     },
     "alt+q": {
       priority: 1,
@@ -24,9 +24,15 @@ class EnvironmentsHeader extends Component {
     return (
       <AppBar
         position="sticky"
-        style={{
-          height: "64px",
-        }}
+        style={
+          this.props.mobile
+            ? {
+                height: "64px",
+                boxShadow:
+                  "0px -2px 4px -1px rgba(0,0,0,0.2), 0px -4px 5px 0px rgba(0,0,0,0.14), 0px -1px 10px 0px rgba(0,0,0,0.12)",
+              }
+            : { height: "64px" }
+        }
       >
         <div
           className="sidebarHeader notSelectable"
@@ -59,6 +65,7 @@ class EnvironmentsHeader extends Component {
               setOpen={this.props.setOpen}
               isOpen={this.props.isOpen}
               user={this.props.userData}
+              mobile={this.props.mobile}
             />
           </div>
         </div>

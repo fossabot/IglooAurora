@@ -24,7 +24,6 @@ import Clear from "@material-ui/icons/Clear"
 import Avatar from "@material-ui/core/Avatar"
 import ListItemAvatar from "@material-ui/core/ListItemAvatar"
 import Star from "@material-ui/icons/Star"
-import Typography from "@material-ui/core/Typography"
 import LinearProgress from "@material-ui/core/LinearProgress"
 
 let mergedArray = []
@@ -168,52 +167,12 @@ class Sidebar extends Component {
 
   render() {
     const {
-      environmentData: { loading, error, environment },
+      environmentData: { error, environment },
     } = this.props
 
     let sidebarContent = ""
 
-    if (loading) {
-      sidebarContent = (
-        <CenteredSpinner
-          style={
-            typeof Storage !== "undefined" &&
-            localStorage.getItem("nightMode") === "true"
-              ? {
-                  height: "calc(100% - 96px)",
-                  paddingTop: "32px",
-                }
-              : { height: "calc(100% - 96px)", paddingTop: "32px" }
-          }
-        />
-      )
-    }
-
     if (error) {
-      sidebarContent = (
-        <Typography
-          variant="h5"
-          style={
-            typeof Storage !== "undefined" &&
-            localStorage.getItem("nightMode") === "true"
-              ? {
-                  textAlign: "center",
-                  marginTop: "32px",
-                  marginBottom: "32px",
-                  color: "white",
-                }
-              : {
-                  textAlign: "center",
-                  marginTop: "32px",
-                  marginBottom: "32px",
-                }
-          }
-          className="notSelectable defaultCursor"
-        >
-          Unexpected error
-        </Typography>
-      )
-
       if (
         error.message === "GraphQL error: This id is not valid" ||
         error.message === "GraphQL error: The requested resource does not exist"
@@ -394,9 +353,7 @@ class Sidebar extends Component {
                       >
                         {(device.lastUnreadNotification &&
                           device.lastUnreadNotification.content) ||
-                          (device.lastReadNotification
-                            ? "No unread notification"
-                            : "No notification")}
+                          "No notification"}
                       </font>
                     }
                   />
@@ -425,7 +382,13 @@ class Sidebar extends Component {
               ))}
           </List>
           {this.state.fetchMoreLoading && (
-            <LinearProgress style={{ marginTop: "-4px" }} />
+            <LinearProgress
+              style={
+                this.props.isMobile
+                  ? { position: "absolute", top: 0, width: "100%" }
+                  : { marginTop: "-4px" }
+              }
+            />
           )}
           <Zoom
             in={
@@ -441,31 +404,33 @@ class Sidebar extends Component {
                   ? this.props.snackbarOpen
                     ? {
                         position: "absolute",
-                        right: "20px",
-                        bottom: "20px",
+                        right: "16px",
+                        bottom: "36px",
                         transform: "translate3d(0, -64px, 0)",
+                        zIndex: 1200,
                         transition:
                           "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
                       }
                     : {
                         position: "absolute",
-                        right: "20px",
-                        bottom: "20px",
+                        right: "16px",
+                        bottom: "36px",
+                        zIndex: 1200,
                         transition:
                           "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
                       }
                   : this.state.lessThan1080
                   ? {
                       position: "absolute",
-                      left: "calc(33vw - 76px)",
-                      bottom: "20px",
+                      left: "calc(33vw - 80px)",
+                      bottom: "16px",
                       transition:
                         "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
                     }
                   : {
                       position: "absolute",
-                      left: "284px",
-                      bottom: "20px",
+                      left: "288px",
+                      bottom: "16px",
                       transition:
                         "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
                     }

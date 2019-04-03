@@ -210,14 +210,14 @@ export default class StatusBar extends Component {
       </div>
     )
 
-    if (this.props.isMobile)
-      if (deviceStatus)
+    if (this.props.isMobile) {
+      if (deviceStatus) {
         return (
           <AppBar position="static" color="default">
             {statusBarContent}
           </AppBar>
         )
-      else
+      } else {
         return (
           <AppBar position="static" color="default" style={{ height: "48px" }}>
             <div
@@ -241,7 +241,9 @@ export default class StatusBar extends Component {
             />
           </AppBar>
         )
-
-    return statusBarContent
+      }
+    } else {
+      return statusBarContent
+    }
   }
 }

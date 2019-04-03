@@ -10,23 +10,15 @@ import Badge from "@material-ui/core/Badge"
 import Tooltip from "@material-ui/core/Tooltip"
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"
 import IconButton from "@material-ui/core/IconButton"
-import MenuItem from "@material-ui/core/MenuItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListSubheader from "@material-ui/core/ListSubheader"
-import Menu from "@material-ui/core/Menu"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
-import Button from "@material-ui/core/Button"
 import { hotkeys } from "react-keyboard-shortcuts"
 import moment from "moment"
 import Moment from "react-moment"
 import NotificationsNone from "@material-ui/icons/NotificationsNone"
 import Notifications from "@material-ui/icons/Notifications"
 import Delete from "@material-ui/icons/Delete"
-import MoreVert from "@material-ui/icons/MoreVert"
-import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp"
-import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown"
-import Markunread from "@material-ui/icons/Markunread"
 import ChevronRight from "@material-ui/icons/ChevronRight"
 
 class NotificationsDrawer extends React.Component {
@@ -51,9 +43,6 @@ class NotificationsDrawer extends React.Component {
           content
           date
           read
-          device {
-            id
-          }
         }
       }
     `
@@ -66,7 +55,7 @@ class NotificationsDrawer extends React.Component {
         }
 
         const newNotifications = [
-          ...prev.user.notifications,
+          ...prev.device.unreadNotifications,
           subscriptionData.data.notificationCreated,
         ]
 
@@ -90,46 +79,12 @@ class NotificationsDrawer extends React.Component {
           content
           date
           read
-          device {
-            id
-          }
         }
       }
     `
 
     this.props.notificationData.subscribeToMore({
       document: updateQuery,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) {
-          return prev
-        }
-
-        if (subscriptionData.data.notificationUpdated.read) {
-          const readNotifications = [
-            ...prev.device.readNotifications,
-            subscriptionData.data.notificationUpdated,
-          ]
-
-          return {
-            device: {
-              ...prev.device,
-              readNotifications,
-            },
-          }
-        } else {
-          const unreadNotifications = [
-            ...prev.device.unreadNotifications,
-            subscriptionData.data.notificationUpdated,
-          ]
-
-          return {
-            device: {
-              ...prev.device,
-              unreadNotifications,
-            },
-          }
-        }
-      },
     })
 
     const subscribeToNotificationsDeletes = gql`
@@ -150,15 +105,9 @@ class NotificationsDrawer extends React.Component {
             notification.id !== subscriptionData.data.notificationDeleted
         )
 
-        const readNotifications = this.props.notificationData.device.readNotifications.filter(
-          notification =>
-            notification.id !== subscriptionData.data.notificationDeleted
-        )
-
         return {
           device: {
             ...prev.device,
-            readNotifications,
             unreadNotifications,
           },
         }
@@ -175,36 +124,19 @@ class NotificationsDrawer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.drawer !== nextProps.drawer &&
-      !nextProps.drawer &&
-      this.props.notificationData
-    ) {
-      this.props.notificationData.device.unreadNotifications.forEach(
-        notification => this.clearNotification(notification)
-      )
+    if (this.props.drawer !== nextProps.drawer && this.props.notificationData) {
+      if (nextProps.drawer) {
+        this.props.notificationData.refetch()
+      } else {
+        this.props.notificationData.device.unreadNotifications.forEach(
+          notification => this.clearNotification(notification.id)
+        )
+      }
     }
   }
 
   render() {
     let unreadNotificationsList
-    let readNotificationsList
-
-    let markAsUnread = id => {
-      this.props.MarkAsUnread({
-        variables: {
-          id: id,
-        },
-        optimisticResponse: {
-          __typename: "Mutation",
-          notification: {
-            id: id,
-            read: false,
-            __typename: "Notification",
-          },
-        },
-      })
-    }
 
     let deleteNotification = id => {
       this.props.DeleteNotification({
@@ -222,7 +154,6 @@ class NotificationsDrawer extends React.Component {
     }
 
     let noNotificationsUI = ""
-    let readNotificationsUI = ""
 
     if (this.props.notificationData.error) {
       unreadNotificationsList = (
@@ -436,107 +367,6 @@ class NotificationsDrawer extends React.Component {
         )
       }
 
-      if (this.props.notificationData.device.readNotifications) {
-        let readNotificationsSections = this.props.notificationData.device.readNotifications
-          .map(notification => determineDiff(notification))
-          .reverse()
-
-        let cleanedReadNotificationsSections = removeDuplicates(
-          readNotificationsSections
-        )
-
-        readNotificationsList = (
-          <List
-            style={{
-              padding: "0",
-            }}
-          >
-            {cleanedReadNotificationsSections.map(section => (
-              <li>
-                <ListSubheader
-                  style={
-                    typeof Storage !== "undefined" &&
-                    localStorage.getItem("nightMode") === "true"
-                      ? { backgroundColor: "#2f333d" }
-                      : { backgroundColor: "white" }
-                  }
-                >
-                  <font
-                    style={
-                      typeof Storage !== "undefined" &&
-                      localStorage.getItem("nightMode") === "true"
-                        ? { color: "#c1c2c5" }
-                        : { color: "#7a7a7a" }
-                    }
-                  >
-                    {section}
-                  </font>
-                </ListSubheader>
-                {this.props.notificationData.device.readNotifications &&
-                  this.props.notificationData.device.readNotifications
-                    .filter(
-                      notification => determineDiff(notification) === section
-                    )
-                    .map(notification => (
-                      <ListItem
-                        key={notification.id}
-                        className="notSelectable"
-                        id={notification.id}
-                      >
-                        <ListItemText
-                          primary={
-                            <font
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "white" }
-                                  : { color: "black" }
-                              }
-                            >
-                              {notification.content}
-                            </font>
-                          }
-                          secondary={
-                            <font
-                              style={
-                                typeof Storage !== "undefined" &&
-                                localStorage.getItem("nightMode") === "true"
-                                  ? { color: "#c1c2c5" }
-                                  : { color: "#7a7a7a" }
-                              }
-                            >
-                              <Moment fromNow>
-                                {moment.utc(
-                                  notification.date.split(".")[0],
-                                  "YYYY-MM-DDTh:mm:ss"
-                                )}
-                              </Moment>
-                            </font>
-                          }
-                        />
-                        <ListItemSecondaryAction>
-                          <Tooltip title="More" placement="bottom">
-                            <IconButton
-                              onClick={event =>
-                                this.setState({
-                                  anchorEl: event.currentTarget,
-                                  targetNotification: notification,
-                                })
-                              }
-                            >
-                              <MoreVert />
-                            </IconButton>
-                          </Tooltip>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ))
-                    .reverse()}
-              </li>
-            ))}
-          </List>
-        )
-      }
-
       if (!this.props.notificationCount) {
         noNotificationsUI = (
           <Typography
@@ -561,92 +391,60 @@ class NotificationsDrawer extends React.Component {
           </Typography>
         )
       }
-
-      if (this.props.notificationData.device.unreadNotifications.length) {
-        readNotificationsUI = (
-          <Button
-            onClick={() => this.props.showHiddenNotifications()}
-            fullWidth={true}
-            className="divider"
-            key="showMoreLessButton"
-            style={
-              this.props.hiddenNotifications
-                ? typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                  ? { backgroundColor: "#282c34", color: "white" }
-                  : { backgroundColor: "#d4d4d4", color: "black" }
-                : typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                ? { backgroundColor: "transparent", color: "white" }
-                : { backgroundColor: "transparent", color: "black" }
-            }
-          >
-            {this.props.hiddenNotifications ? (
-              <KeyboardArrowUp />
-            ) : (
-              <KeyboardArrowDown />
-            )}
-            {this.props.hiddenNotifications
-              ? "Hide read notifications"
-              : "Show read notifications"}
-          </Button>
-        )
-      }
     }
+
+    let appBar = (
+      <AppBar
+        position="sticky"
+        style={
+          this.props.isMobile
+            ? {
+                height: "64px",
+                boxShadow:
+                  "0px -2px 4px -1px rgba(0,0,0,0.2), 0px -4px 5px 0px rgba(0,0,0,0.14), 0px -1px 10px 0px rgba(0,0,0,0.12)",
+              }
+            : { height: "64px" }
+        }
+      >
+        <div
+          className="notSelectable"
+          style={
+            this.props.isMobile
+              ? {
+                  height: "64px",
+                  backgroundColor: "#0057cb",
+                  display: "flex",
+                  alignItems: "center",
+                }
+              : {
+                  height: "64px",
+                  backgroundColor: "#0083ff",
+                  display: "flex",
+                  alignItems: "center",
+                }
+          }
+        >
+          <Tooltip id="tooltip-bottom" title="Close drawer" placement="bottom">
+            <IconButton
+              onClick={() => {
+                this.props.changeDrawerState()
+              }}
+              style={{
+                color: "white",
+                marginTop: "auto",
+                marginBottom: "auto",
+                marginLeft: "8px",
+              }}
+            >
+              <ChevronRight />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </AppBar>
+    )
 
     return (
       <React.Fragment>
-        <Menu
-          open={this.state.anchorEl}
-          anchorEl={this.state.anchorEl}
-          onClose={() => {
-            this.setState({ anchorEl: null })
-          }}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              markAsUnread(this.state.targetNotification.id)
-              this.setState({ anchorEl: null })
-            }}
-          >
-            <ListItemIcon>
-              <Markunread />
-            </ListItemIcon>
-            <ListItemText>
-              <font
-                style={
-                  typeof Storage !== "undefined" &&
-                  localStorage.getItem("nightMode") === "true"
-                    ? { color: "white" }
-                    : { color: "black" }
-                }
-              >
-                Mark as unread
-              </font>
-            </ListItemText>
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              deleteNotification(this.state.targetNotification.id)
-              this.setState({ anchorEl: null })
-            }}
-          >
-            <ListItemIcon>
-              <Delete style={{ color: "#f44336" }} />
-            </ListItemIcon>
-            <ListItemText inset>
-              <font style={{ color: "#f44336" }}>Delete</font>
-            </ListItemText>
-          </MenuItem>
-        </Menu>
         <Tooltip title="Notifications" placement="bottom">
           <IconButton
             style={{ color: "white" }}
@@ -689,51 +487,20 @@ class NotificationsDrawer extends React.Component {
             style={
               typeof Storage !== "undefined" &&
               localStorage.getItem("nightMode") === "true"
-                ? { background: "#2f333d", height: "100%", overflowY: "hidden" }
-                : { background: "white", height: "100%", overflowY: "hidden" }
+                ? {
+                    background: "#2f333d",
+                    height: "100%",
+                    overflowY: "hidden",
+                  }
+                : {
+                    background: "white",
+                    height: "100%",
+                    overflowY: "hidden",
+                  }
             }
           >
             <div>
-              <AppBar position="sticky" style={{ height: "64px" }}>
-                <div
-                  className="notSelectable"
-                  style={
-                    this.props.isMobile
-                      ? {
-                          height: "64px",
-                          backgroundColor: "#0057cb",
-                          display: "flex",
-                          alignItems: "center",
-                        }
-                      : {
-                          height: "64px",
-                          backgroundColor: "#0083ff",
-                          display: "flex",
-                          alignItems: "center",
-                        }
-                  }
-                >
-                  <Tooltip
-                    id="tooltip-bottom"
-                    title="Close drawer"
-                    placement="bottom"
-                  >
-                    <IconButton
-                      onClick={() => {
-                        this.props.changeDrawerState()
-                      }}
-                      style={{
-                        color: "white",
-                        marginTop: "auto",
-                        marginBottom: "auto",
-                        marginLeft: "8px",
-                      }}
-                    >
-                      <ChevronRight />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </AppBar>
+              {!this.props.isMobile && appBar}
               <div
                 className="notSelectable"
                 style={
@@ -746,19 +513,13 @@ class NotificationsDrawer extends React.Component {
                     : {
                         overflowY: "auto",
                         height: "calc(100vh - 64px)",
-                        width: "90vw",
+                        width: "calc(100vw - 32px)",
                       }
                 }
               >
-                {noNotificationsUI}
-                {unreadNotificationsList}
-                {readNotificationsUI}
-                {readNotificationsUI
-                  ? this.props.hiddenNotifications
-                    ? readNotificationsList
-                    : ""
-                  : ""}
+                {unreadNotificationsList || noNotificationsUI}
               </div>
+              {this.props.isMobile && appBar}
             </div>
           </div>
         </SwipeableDrawer>
@@ -777,18 +538,6 @@ export default graphql(
           content
           date
           read
-          device {
-            id
-          }
-        }
-        readNotifications: notifications(limit: 20, filter: { read: true }) {
-          id
-          content
-          date
-          read
-          device {
-            id
-          }
         }
       }
     }
@@ -812,41 +561,13 @@ export default graphql(
   )(
     graphql(
       gql`
-        mutation MarkAsUnread($id: ID!) {
-          notification(id: $id, read: false) {
-            id
-            read
-          }
+        mutation DeleteNotification($id: ID!) {
+          deleteNotification(id: $id)
         }
       `,
       {
-        name: "MarkAsUnread",
+        name: "DeleteNotification",
       }
-    )(
-      graphql(
-        gql`
-          mutation DeleteNotification($id: ID!) {
-            deleteNotification(id: $id)
-          }
-        `,
-        {
-          name: "DeleteNotification",
-        }
-      )(
-        graphql(
-          gql`
-            mutation ToggleQuietMode($id: ID!, $muted: Boolean!) {
-              device(id: $id, muted: $muted) {
-                id
-                muted
-              }
-            }
-          `,
-          {
-            name: "ToggleQuietMode",
-          }
-        )(hotkeys(NotificationsDrawer))
-      )
-    )
+    )(hotkeys(NotificationsDrawer))
   )
 )

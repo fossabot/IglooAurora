@@ -553,15 +553,6 @@ class Main extends Component {
           <div className="mobileMain" style={{ overflowY: "hidden" }}>
             {this.props.selectedDevice == null ? (
               <React.Fragment>
-                <AppBar>
-                  <SidebarHeader
-                    logOut={this.props.logOut}
-                    key="sidebarHeader"
-                    selectedEnvironment={this.props.environmentId}
-                    environments={this.props.environments}
-                    snackbarOpen={this.props.snackbarOpen}
-                  />
-                </AppBar>
                 <div
                   key="sidebar"
                   style={
@@ -569,13 +560,11 @@ class Main extends Component {
                       ? {
                           background: "#21252b",
                           height: "calc(100vh - 64px)",
-                          marginTop: "64px",
                           overflowY: "hidden",
                         }
                       : {
                           background: "white",
                           height: "calc(100vh - 64px)",
-                          marginTop: "64px",
                           overflowY: "hidden",
                         }
                   }
@@ -597,6 +586,22 @@ class Main extends Component {
                     userData={this.props.userData}
                   />
                 </div>
+                <AppBar
+                  position="sticky"
+                  style={{
+                    boxShadow:
+                      "0px -2px 4px -1px rgba(0,0,0,0.2), 0px -4px 5px 0px rgba(0,0,0,0.14), 0px -1px 10px 0px rgba(0,0,0,0.12)",
+                  }}
+                >
+                  <SidebarHeader
+                    logOut={this.props.logOut}
+                    key="sidebarHeader"
+                    selectedEnvironment={this.props.environmentId}
+                    environments={this.props.environments}
+                    snackbarOpen={this.props.snackbarOpen}
+                    mobile={true}
+                  />
+                </AppBar>
               </React.Fragment>
             ) : (
               <DeviceFetcher

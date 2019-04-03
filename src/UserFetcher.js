@@ -91,7 +91,7 @@ class UserFetcher extends Component {
         }
 
         const newEnvironments = [
-          ...prev.user,
+          ...prev.user.environments,
           subscriptionData.data.environmentCreated,
         ]
 
@@ -199,7 +199,7 @@ class UserFetcher extends Component {
         )
 
         return {
-          device: {
+          user: {
             ...prev.user,
             environments: newEnvironments,
           },
