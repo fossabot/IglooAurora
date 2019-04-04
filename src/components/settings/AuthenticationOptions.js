@@ -119,7 +119,7 @@ class AuthenticationOptions extends Component {
       options: {
         reconnect: true,
         connectionParams: {
-          Authorization: "Bearer " + this.state.token,
+          Authorization: "Bearer " + (this.state.token || this.props.token),
         },
       },
     })
@@ -134,7 +134,7 @@ class AuthenticationOptions extends Component {
             "/graphql"
           : `https://bering.igloo.ooo/graphql`,
       headers: {
-        Authorization: "Bearer " + this.state.token,
+        Authorization: "Bearer " + (this.state.token || this.props.token),
       },
     })
 
@@ -225,7 +225,7 @@ class AuthenticationOptions extends Component {
       options: {
         reconnect: true,
         connectionParams: {
-          Authorization: "Bearer " + this.state.token,
+          Authorization: "Bearer " + (this.state.token || this.props.token),
         },
       },
     })
@@ -240,7 +240,7 @@ class AuthenticationOptions extends Component {
             "/graphql"
           : `https://bering.igloo.ooo/graphql`,
       headers: {
-        Authorization: "Bearer " + this.state.token,
+        Authorization: "Bearer " + (this.state.token || this.props.token),
       },
     })
 
@@ -355,7 +355,7 @@ class AuthenticationOptions extends Component {
       options: {
         reconnect: true,
         connectionParams: {
-          Authorization: "Bearer " + this.state.token,
+          Authorization: "Bearer " + (this.state.token || this.props.token),
         },
       },
     })
@@ -370,7 +370,7 @@ class AuthenticationOptions extends Component {
             "/graphql"
           : `https://bering.igloo.ooo/graphql`,
       headers: {
-        Authorization: "Bearer " + this.state.token,
+        Authorization: "Bearer " + (this.state.token || this.props.token),
       },
     })
 
@@ -453,7 +453,7 @@ class AuthenticationOptions extends Component {
       options: {
         reconnect: true,
         connectionParams: {
-          Authorization: "Bearer " + this.state.token,
+          Authorization: "Bearer " + (this.state.token || this.props.token),
         },
       },
     })
@@ -468,7 +468,7 @@ class AuthenticationOptions extends Component {
             "/graphql"
           : `https://bering.igloo.ooo/graphql`,
       headers: {
-        Authorization: "Bearer " + this.state.token,
+        Authorization: "Bearer " + (this.state.token || this.props.token),
       },
     })
 

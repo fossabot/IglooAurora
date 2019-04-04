@@ -94,7 +94,22 @@ async function verifyToken(
       variables: { token },
     })
 
-    setSpecialBearer(verifyEmailTokenMutation.data.verifyEmailToken)
+    const createTokenMutation = await client.mutate({
+      mutation: gql`
+        mutation($emailCertificate: String!, $tokenType: TokenType!) {
+          createToken(
+            emailCertificate: $emailCertificate
+            tokenType: $tokenType
+          )
+        }
+      `,
+      variables: {
+        emailCertificate: verifyEmailTokenMutation.data.verifyEmailToken,
+        tokenType: tokenType.replace("-", "_").toUpperCase(),
+      },
+    })
+
+    setSpecialBearer(createTokenMutation.data.createToken)
 
     setRedirect("/?dialog=" + tokenType)
   } catch (e) {
