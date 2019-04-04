@@ -123,9 +123,15 @@ class CustomizedSnackbars extends Component {
           open={this.props.open}
           style={
             this.props.mobile
-              ? { zIndex: 30 } // makes the snackbar appear over cards and subheaders, but under dialogs
+              ? {
+                  zIndex: 30,
+                  bottom: "108px",
+                  margin: "0 auto",
+                  width: "calc(100% - 32px)",
+                  maxWidth: "356px",
+                } // makes the snackbar appear over cards and subheaders, but under dialogs
               : {
-                  bottom: "64px",
+                  bottom: "80px",
                   right: "16px",
                   width: "356px",
                   left: "auto",
