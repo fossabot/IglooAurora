@@ -20,6 +20,7 @@ import Search from "@material-ui/icons/Search"
 import Clear from "@material-ui/icons/Clear"
 import Fab from "@material-ui/core/Fab"
 import Zoom from "@material-ui/core/Zoom"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 export default class EnvironmentsBody extends Component {
   state = {
@@ -36,7 +37,9 @@ export default class EnvironmentsBody extends Component {
           this.props.userData.user.pendingEnvironmentShareCount &&
         !nextProps.userData.user.pendingEnvironmentShareCount
       ) {
-        this.setState({ pendingSharesOpen: false })
+        this.setState({
+          pendingSharesOpen: false,
+        })
       }
 
       if (
@@ -44,7 +47,101 @@ export default class EnvironmentsBody extends Component {
           this.props.userData.user.pendingOwnerChangeCount &&
         !nextProps.userData.user.pendingOwnerChangeCount
       ) {
-        this.setState({ pendingOwnerChangesOpen: false })
+        this.setState({
+          pendingOwnerChangesOpen: false,
+        })
+      }
+    }
+  }
+
+  queryMore = async () => {
+    if (
+      !this.queryMore.locked &&
+      this.props.userData.user.environmentCount >
+        this.props.userData.user.environments.length
+    ) {
+      this.queryMore.locked = true
+
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.userData.fetchMore({
+          variables: {
+            offset: this.props.userData.environments.length,
+            limit:
+              this.props.userData.user.environmentCount -
+                this.props.userData.user.environments.length >=
+              20
+                ? 20
+                : this.props.userData.user.environments.length % 20,
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newEnvironments = [
+              ...prev.user.environment.devices,
+              ...fetchMoreResult.user.environments,
+            ]
+
+            return {
+              user: {
+                ...prev.user,
+                environments: newEnvironments,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.queryMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
+  }
+
+  searchMore = async searchText => {
+    if (
+      !this.searchMore.locked &&
+      this.props.userData.user.environmentCount >
+        this.props.userData.user.environments.length
+    ) {
+      this.searchMore.locked = true
+
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.userData.fetchMore({
+          variables: {
+            filter: {
+              name: { similarTo: searchText },
+            },
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newEnvironments = [
+              ...prev.user.environments,
+              ...fetchMoreResult.user.environments,
+            ]
+
+            return {
+              user: {
+                ...prev.user,
+                environments: newEnvironments,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.searchMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
       }
     }
   }
@@ -66,9 +163,12 @@ export default class EnvironmentsBody extends Component {
           container
           justify="center"
           className="notSelectable defaultCursor"
+          spacing={16}
           style={{
-            width: "100%",
-            margin: "0",
+            width: "calc(100% - 16px)",
+            marginLeft: "8px",
+            marginRight: "8px",
+            marginBottom: "8px",
           }}
         >
           {!!user.pendingOwnerChangeCount && (
@@ -76,7 +176,11 @@ export default class EnvironmentsBody extends Component {
               <ButtonBase
                 focusRipple
                 style={{ borderRadius: "4px" }}
-                onClick={() => this.setState({ pendingOwnerChangesOpen: true })}
+                onClick={() =>
+                  this.setState({
+                    pendingOwnerChangesOpen: true,
+                  })
+                }
               >
                 <Paper
                   style={
@@ -133,7 +237,11 @@ export default class EnvironmentsBody extends Component {
               <ButtonBase
                 focusRipple
                 style={{ borderRadius: "4px" }}
-                onClick={() => this.setState({ pendingSharesOpen: true })}
+                onClick={() =>
+                  this.setState({
+                    pendingSharesOpen: true,
+                  })
+                }
               >
                 <Paper
                   style={
@@ -253,7 +361,9 @@ export default class EnvironmentsBody extends Component {
                   startAdornment={
                     <InputAdornment
                       position="start"
-                      style={{ cursor: "default" }}
+                      style={{
+                        cursor: "default",
+                      }}
                     >
                       <Search
                         style={
@@ -263,15 +373,25 @@ export default class EnvironmentsBody extends Component {
                                 error ||
                                 (user && !user.environments[0])
                               )
-                              ? { color: "white" }
-                              : { color: "white", opacity: "0.5" }
+                              ? {
+                                  color: "white",
+                                }
+                              : {
+                                  color: "white",
+                                  opacity: "0.5",
+                                }
                             : !(
                                 loading ||
                                 error ||
                                 (user && !user.environments[0])
                               )
-                            ? { color: "black" }
-                            : { color: "black", opacity: "0.5" }
+                            ? {
+                                color: "black",
+                              }
+                            : {
+                                color: "black",
+                                opacity: "0.5",
+                              }
                         }
                       />
                     </InputAdornment>
@@ -322,7 +442,11 @@ export default class EnvironmentsBody extends Component {
                   height: "calc(100vh - 128px)",
                 }}
               >
-                <CenteredSpinner style={{ paddingTop: "32px" }} />
+                <CenteredSpinner
+                  style={{
+                    paddingTop: "32px",
+                  }}
+                />
               </div>
             )}
             {user && (
@@ -332,25 +456,13 @@ export default class EnvironmentsBody extends Component {
                   overflowY: "auto",
                 }}
               >
-                <Grid
-                  container
-                  justify="center"
-                  spacing={16}
-                  className="notSelectable defaultCursor"
-                  style={{
-                    width: "calc(100% - 16px)",
-                    marginLeft: "8px",
-                    marginRight: "8px",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {yourEnvironmentsList}
-                </Grid>
+                {yourEnvironmentsList}
                 <Zoom
                   in={
                     user &&
-                    user.environments.length < 100 &&
-                    user.emailIsVerified
+                    (user.emailIsVerified
+                      ? user.environments.length < 100
+                      : !user.environments.length)
                   }
                 >
                   <Fab
@@ -361,7 +473,11 @@ export default class EnvironmentsBody extends Component {
                       left: "calc(50% - 28px)",
                       zIndex: 1200,
                     }}
-                    onClick={() => this.setState({ createOpen: true })}
+                    onClick={() =>
+                      this.setState({
+                        createOpen: true,
+                      })
+                    }
                   >
                     <Add />
                   </Fab>
@@ -370,7 +486,11 @@ export default class EnvironmentsBody extends Component {
             )}
           </div>
         ) : (
-          <div style={{ backgroundColor: "#f2f2f2" }}>
+          <div
+            style={{
+              backgroundColor: "#f2f2f2",
+            }}
+          >
             <div
               style={
                 nightMode
@@ -405,14 +525,17 @@ export default class EnvironmentsBody extends Component {
                   className="notSelectable"
                   value={this.props.searchText}
                   style={nightMode ? { color: "white" } : { color: "black" }}
-                  onChange={event =>
+                  onChange={event => {
                     this.props.searchEnvironments(event.target.value)
-                  }
+                    this.searchMore(event.target.value)
+                  }}
                   disabled={loading || error || (user && !user.environments[0])}
                   startAdornment={
                     <InputAdornment
                       position="start"
-                      style={{ cursor: "default" }}
+                      style={{
+                        cursor: "default",
+                      }}
                     >
                       <Search
                         style={
@@ -423,15 +546,25 @@ export default class EnvironmentsBody extends Component {
                                 error ||
                                 (user && !user.environments[0])
                               )
-                              ? { color: "white" }
-                              : { color: "white", opacity: "0.5" }
+                              ? {
+                                  color: "white",
+                                }
+                              : {
+                                  color: "white",
+                                  opacity: "0.5",
+                                }
                             : !(
                                 loading ||
                                 error ||
                                 (user && !user.environments[0])
                               )
-                            ? { color: "black" }
-                            : { color: "black", opacity: "0.5" }
+                            ? {
+                                color: "black",
+                              }
+                            : {
+                                color: "black",
+                                opacity: "0.5",
+                              }
                         }
                       />
                     </InputAdornment>
@@ -499,28 +632,44 @@ export default class EnvironmentsBody extends Component {
                     height: "calc(100vh - 128px)",
                   }}
                 >
-                  <CenteredSpinner style={{ paddingTop: "32px" }} />
+                  <CenteredSpinner
+                    style={{
+                      paddingTop: "32px",
+                    }}
+                  />
                 </div>
               )}
               {user && yourEnvironmentsList}
               <Zoom
                 in={
-                  user && user.environments.length < 100 && user.emailIsVerified
+                  user &&
+                  (user.emailIsVerified
+                    ? user.environments.length < 100
+                    : !user.environments.length)
                 }
               >
                 <Fab
                   variant="extended"
                   color="secondary"
-                  onClick={() => this.setState({ createOpen: true })}
+                  onClick={() =>
+                    this.setState({
+                      createOpen: true,
+                    })
+                  }
                   style={{
                     position: "absolute",
                     right: "16px",
                     bottom: "16px",
                     transition:
                       "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, left 0s linear, right 0s linear, top 0s linear, bottom 0s linear",
+                    zIndex: 20,
                   }}
                 >
-                  <Add style={{ marginRight: "8px" }} />
+                  <Add
+                    style={{
+                      marginRight: "8px",
+                    }}
+                  />
                   Environment
                 </Fab>
               </Zoom>
@@ -529,16 +678,37 @@ export default class EnvironmentsBody extends Component {
         )}
         <CreateEnvironment
           open={this.state.createOpen}
-          close={() => this.setState({ createOpen: false })}
+          close={() =>
+            this.setState({
+              createOpen: false,
+            })
+          }
         />
         <PendingShares
           open={this.state.pendingSharesOpen}
-          close={() => this.setState({ pendingSharesOpen: false })}
+          close={() =>
+            this.setState({
+              pendingSharesOpen: false,
+            })
+          }
         />
         <PendingOwnerChanges
           open={this.state.pendingOwnerChangesOpen}
-          close={() => this.setState({ pendingOwnerChangesOpen: false })}
+          close={() =>
+            this.setState({
+              pendingOwnerChangesOpen: false,
+            })
+          }
         />
+        {this.state.fetchMoreLoading && (
+          <LinearProgress
+            style={
+              this.props.isMobile
+                ? { position: "absolute", top: 0, width: "100%" }
+                : { marginTop: "-4px" }
+            }
+          />
+        )}
       </Fragment>
     )
   }

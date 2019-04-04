@@ -1,1 +1,1 @@
-{"__schema":{"types":[{"kind":"INTERFACE","name":"Value","possibleTypes":[{"name":"FloatValue"},{"name":"StringValue"},{"name":"BooleanValue"},{"name":"PlotValue"},{"name":"CategoryPlotValue"}]}]}}
+{"__schema":{"types":[{"kind":"INTERFACE","name":"Value","possibleTypes":[{"name":"FloatValue"},{"name":"FileValue"},{"name":"StringValue"},{"name":"BooleanValue"},{"name":"FloatSeriesValue"},{"name":"CategorySeriesValue"}]}]}}

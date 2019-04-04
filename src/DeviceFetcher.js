@@ -168,6 +168,8 @@ export default graphql(
         deviceType
         firmware
         starred
+        updatedAt
+        createdAt
         notificationCount(filter: { read: false })
         values(limit: 20, offset: $offset) {
           id

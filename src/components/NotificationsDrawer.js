@@ -33,6 +33,94 @@ class NotificationsDrawer extends Component {
     },
   }
 
+  queryMore = async () => {
+    if (
+      !this.queryMore.locked &&
+      this.props.notificationData.device.notificationCount >
+        this.props.notificatinData.device.notifications.length
+    ) {
+      this.queryMore.locked = true
+
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.notificationData.fetchMore({
+          variables: {
+            offset: this.props.notificationData.device.notifications.length,
+            limit:
+              this.props.notificationData.device.notificationData -
+                this.props.notificationData.device.notifications.length >=
+              20
+                ? 20
+                : this.props.notificationData.device.notificationData % 20,
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newNotifications = [
+              ...prev.device.notifications,
+              ...fetchMoreResult.device.notifications,
+            ]
+
+            return {
+              device: {
+                ...prev.device,
+                notifications: newNotifications,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.queryMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
+  }
+
+  searchMore = async searchText => {
+    if (
+      !this.searchMore.locked &&
+      this.props.notificationData.device.notificationCount >
+        this.props.notificatinData.device.notifications.length
+    ) {
+      this.searchMore.locked = true
+
+      try {
+        this.setState({ fetchMoreLoading: true })
+        await this.props.notificationData.fetchMore({
+          variables: { filter: { name: { similarTo: searchText } } },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newNotifications = [
+              ...prev.device.notifications,
+              ...fetchMoreResult.device.notifications,
+            ]
+
+            return {
+              device: {
+                ...prev.device,
+                notifications: newNotifications,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.searchMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
+  }
+
   componentDidMount() {
     this.props.notificationData.refetch()
 
@@ -516,6 +604,13 @@ class NotificationsDrawer extends Component {
                         width: "calc(100vw - 32px)",
                       }
                 }
+                onScroll={event => {
+                  if (
+                    event.target.scrollTop + event.target.clientHeight >=
+                    event.target.scrollHeight - 600
+                  )
+                    this.queryMore()
+                }}
               >
                 {unreadNotificationsList || noNotificationsUI}
               </div>
