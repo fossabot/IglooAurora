@@ -716,6 +716,9 @@ export default class EnvironmentsBody extends Component {
               pendingSharesOpen: false,
             })
           }
+          pendingEnvironmentShareCount={
+           this.props.userData.user &&  this.props.userData.user.pendingEnvironmentShareCount
+          }
         />
         <PendingOwnerChanges
           open={this.state.pendingOwnerChangesOpen}

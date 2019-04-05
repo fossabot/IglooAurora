@@ -272,8 +272,14 @@ class AddDevice extends Component {
                 })
               }
               onKeyPress={event => {
-                if (event.key === "Enter" && !this.state.codeEmpty)
-                  this.setState({ manualCodeOpen: false })
+                if (event.key === "Enter" && !this.state.codeEmpty) {
+                  this.setState(oldState => ({
+                    manualCodeOpen: false,
+                    authDialogOpen: true,
+                    deviceId: oldState.code,
+                  }))
+                  this.props.close()
+                }
               }}
               style={{
                 width: "calc(100% - 48px)",
@@ -306,9 +312,7 @@ class AddDevice extends Component {
             </Button>
             <Button
               variant="contained"
-              onClick={
-                isUUID.v4(this.state.code)
-                  ? () => {
+              onClick={ () => {
                       this.setState(oldState => ({
                         manualCodeOpen: false,
                         authDialogOpen: true,
@@ -316,13 +320,9 @@ class AddDevice extends Component {
                       }))
                       this.props.close()
                     }
-                  : () => {
-                      this.setState({ codeError: "This isn't a valid code" })
-                      this.props.close()
-                    }
               }
               color="primary"
-              disabled={!this.state.code}
+              disabled={!isUUID.v4(this.state.code)}
             >
               Next
             </Button>

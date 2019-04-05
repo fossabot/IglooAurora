@@ -129,15 +129,6 @@ export default class MainBody extends Component {
             boolValue: value
             permission
           }
-          ... on PlotValue {
-            plotValue: value {
-              id
-              value
-              timestamp
-            }
-            unitOfMeasurement
-            threshold
-          }
         }
       }
     `

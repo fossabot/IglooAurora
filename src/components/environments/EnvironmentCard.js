@@ -147,12 +147,6 @@ class EnvironmentCard extends Component {
   }
 
   render() {
-    let isShared =
-      this.props.environment.myRole === "OWNER" &&
-      (this.props.environment.admins[0] ||
-        this.props.environment.editors[0] ||
-        this.props.environment.spectators[0])
-
     return (
       <Fragment>
         <Paper
@@ -231,7 +225,9 @@ class EnvironmentCard extends Component {
                           }
                     }
                   >
-                    {isShared && (
+                    {(this.props.environment.admins[0] ||
+                      this.props.environment.editors[0] ||
+                      this.props.environment.spectators[0]) && (
                       <Group
                         style={{ marginRight: "8px", marginBottom: "-5px" }}
                       />
