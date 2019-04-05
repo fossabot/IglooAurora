@@ -97,7 +97,6 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeviceInfo(
             return (
               <Button
                 onClick={() => downloadQr(qrCode, props.device.name)}
-                style={{ marginRight: "4px" }}
                 variant="contained"
                 color="primary"
               >

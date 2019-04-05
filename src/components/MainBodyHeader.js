@@ -235,6 +235,12 @@ class MainBodyHeader extends Component {
               toggleStarred(!device.starred)
               this.handleMenuClose()
             }}
+            disabled={
+              this.props.environmentData.environment &&
+              this.props.environmentData.environment.starredDevices.length >=
+                5 &&
+              !device.starred
+            }
           >
             <ListItemIcon>
               {device && device.starred ? <StarBorder /> : <Star />}
