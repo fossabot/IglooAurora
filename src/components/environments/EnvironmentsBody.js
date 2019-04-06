@@ -80,7 +80,7 @@ export default class EnvironmentsBody extends Component {
             }
 
             const newEnvironments = [
-              ...prev.user.environment.devices,
+              ...prev.user.environments,
               ...fetchMoreResult.user.environments,
             ]
 

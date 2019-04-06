@@ -518,7 +518,12 @@ class MainBodyHeader extends Component {
           </Menu>
         )}
         {this.state.goToDevices && (
-          <Redirect to={"/?environment=" + this.props.environment} />
+          <Redirect
+            to={
+              "/?environment=" +
+              querystringify.parse(window.location.search).environment
+            }
+          />
         )}
       </Fragment>
     )

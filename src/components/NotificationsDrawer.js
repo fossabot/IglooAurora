@@ -11,6 +11,7 @@ import Tooltip from "@material-ui/core/Tooltip"
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer"
 import IconButton from "@material-ui/core/IconButton"
 import ListSubheader from "@material-ui/core/ListSubheader"
+import LinearProgress from "@material-ui/core/LinearProgress"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import { hotkeys } from "react-keyboard-shortcuts"
@@ -37,7 +38,7 @@ class NotificationsDrawer extends Component {
     if (
       !this.queryMore.locked &&
       this.props.notificationData.device.notificationCount >
-        this.props.notificatinData.device.notifications.length
+        this.props.notificationData.device.unreadNotifications.length
     ) {
       this.queryMore.locked = true
 
@@ -45,13 +46,14 @@ class NotificationsDrawer extends Component {
         this.setState({ fetchMoreLoading: true })
         await this.props.notificationData.fetchMore({
           variables: {
-            offset: this.props.notificationData.device.notifications.length,
+            offset: this.props.notificationData.device.unreadNotifications
+              .length,
             limit:
               this.props.notificationData.device.notificationData -
-                this.props.notificationData.device.notifications.length >=
+                this.props.notificationData.device.unreadNotifications.length >=
               20
                 ? 20
-                : this.props.notificationData.device.notificationData % 20,
+                : this.props.notificationData.device.unreadNotifications % 20,
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) {
@@ -59,14 +61,14 @@ class NotificationsDrawer extends Component {
             }
 
             const newNotifications = [
-              ...prev.device.notifications,
-              ...fetchMoreResult.device.notifications,
+              ...prev.device.unreadNotifications,
+              ...fetchMoreResult.device.unreadNotifications,
             ]
 
             return {
               device: {
                 ...prev.device,
-                notifications: newNotifications,
+                unreadNotifications: newNotifications,
               },
             }
           },
@@ -85,7 +87,7 @@ class NotificationsDrawer extends Component {
     if (
       !this.searchMore.locked &&
       this.props.notificationData.device.notificationCount >
-        this.props.notificatinData.device.notifications.length
+        this.props.notificatinData.device.unreadNotifications.length
     ) {
       this.searchMore.locked = true
 
@@ -99,14 +101,14 @@ class NotificationsDrawer extends Component {
             }
 
             const newNotifications = [
-              ...prev.device.notifications,
-              ...fetchMoreResult.device.notifications,
+              ...prev.device.unreadNotifications,
+              ...fetchMoreResult.device.unreadNotifications,
             ]
 
             return {
               device: {
                 ...prev.device,
-                notifications: newNotifications,
+                unreadNotifications: newNotifications,
               },
             }
           },
@@ -475,7 +477,7 @@ class NotificationsDrawer extends Component {
                   }
             }
           >
-            No new notification
+            No new notifications
           </Typography>
         )
       }
@@ -613,6 +615,25 @@ class NotificationsDrawer extends Component {
                 }}
               >
                 {unreadNotificationsList || noNotificationsUI}
+                {this.state.fetchMoreLoading && (
+                  <LinearProgress
+                    style={
+                      this.props.isMobile
+                        ? {
+                            position: "absolute",
+                            top: 0,
+                            width: "100%",
+                            zIndex: 100,
+                          }
+                        : {
+                            position: "absolute",
+                            bottom: 0,
+                            width: "100%",
+                            zIndex: 100,
+                          }
+                    }
+                  />
+                )}
               </div>
               {this.props.isMobile && appBar}
             </div>
@@ -628,6 +649,7 @@ export default graphql(
     query($id: ID!) {
       device(id: $id) {
         id
+        notificationCount
         unreadNotifications: notifications(limit: 20, filter: { read: false }) {
           id
           content

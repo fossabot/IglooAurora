@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react"
+import React, { Component } from "react"
 import Card from "./cards/Card"
 import CenteredSpinner from "./CenteredSpinner"
 import gql from "graphql-tag"
@@ -11,29 +11,54 @@ export default class MainBody extends Component {
     redirect: false,
   }
 
-  queryMore = () => {
-    this.props.deviceData.fetchMore({
-      variables: {
-        offset: this.props.deviceData.device.values.length,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev
-        }
+  queryMore = async () => {
+    if (
+      !this.queryMore.locked &&
+      this.props.deviceData.device.valueCount >
+        this.props.deviceData.device.values.length
+    ) {
+      this.queryMore.locked = true
 
-        const newValues = [
-          ...prev.device.values,
-          ...fetchMoreResult.device.values,
-        ]
-
-        return {
-          device: {
-            ...prev.device,
-            values: newValues,
+      try {
+        this.setState({
+          fetchMoreLoading: true,
+        })
+        await this.props.deviceData.fetchMore({
+          variables: {
+            offset: this.props.deviceData.device.values.length,
+            limit:
+              this.props.deviceData.device.valueCount -
+                this.props.deviceData.device.values.length >=
+              20
+                ? 20
+                : this.props.deviceData.device.values.length % 20,
           },
-        }
-      },
-    })
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return prev
+            }
+
+            const newValues = [
+              ...prev.device.values,
+              ...fetchMoreResult.device.values,
+            ]
+
+            return {
+              user: {
+                ...prev.device,
+                values: newValues,
+              },
+            }
+          },
+        })
+      } finally {
+        this.setState(() => {
+          this.queryMore.locked = false
+
+          return { fetchMoreLoading: false }
+        })
+      }
+    }
   }
 
   componentDidMount() {
@@ -322,11 +347,9 @@ export default class MainBody extends Component {
       }
 
       content = (
-        <Fragment>
-          <div className="itemsList" key="visibleCardsContainer">
-            {visibleCards}
-          </div>
-        </Fragment>
+        <div className="itemsList" key="visibleCardsContainer">
+          {visibleCards}
+        </div>
       )
     }
 
@@ -354,6 +377,13 @@ export default class MainBody extends Component {
             width: "100%",
             overflowX: "hidden",
             height: "calc(100vh - 112px)",
+          }}
+          onScroll={event => {
+            if (
+              event.target.scrollTop + event.target.clientHeight >=
+              event.target.scrollHeight - 600
+            )
+              this.queryMore()
           }}
         >
           {content}

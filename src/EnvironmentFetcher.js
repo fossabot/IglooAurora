@@ -618,6 +618,7 @@ class Main extends Component {
                 logOut={this.props.logOut}
                 environments={this.props.environments}
                 userData={this.props.userData}
+                client={this.props.client}
               />
             )}
           </div>
@@ -669,6 +670,7 @@ class Main extends Component {
                 logOut={this.props.logOut}
                 environments={this.props.environments}
                 userData={this.props.userData}
+                client={this.props.client}
               />
             ) : (
               <Fragment>

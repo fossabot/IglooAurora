@@ -16,7 +16,6 @@ import TextField from "@material-ui/core/TextField"
 import IconButton from "@material-ui/core/IconButton"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import Clear from "@material-ui/icons/Clear"
-import isUUID from "is-uuid"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import SwitchCamera from "@material-ui/icons/SwitchCamera"
@@ -222,12 +221,11 @@ class AddDevice extends Component {
               facingMode={this.state.camera}
               onError={() => this.setState({ qrError: true })}
               onScan={deviceId => {
-                isUUID.v4(deviceId) &&
-                  this.setState({
-                    qrOpen: false,
-                    authDialogOpen: true,
-                    deviceId,
-                  })
+                this.setState({
+                  qrOpen: false,
+                  authDialogOpen: true,
+                  deviceId,
+                })
                 this.props.close()
               }}
             />
@@ -312,17 +310,15 @@ class AddDevice extends Component {
             </Button>
             <Button
               variant="contained"
-              onClick={ () => {
-                      this.setState(oldState => ({
-                        manualCodeOpen: false,
-                        authDialogOpen: true,
-                        deviceId: oldState.code,
-                      }))
-                      this.props.close()
-                    }
-              }
+              onClick={() => {
+                this.setState(oldState => ({
+                  manualCodeOpen: false,
+                  authDialogOpen: true,
+                  deviceId: oldState.code,
+                }))
+                this.props.close()
+              }}
               color="primary"
-              disabled={!isUUID.v4(this.state.code)}
             >
               Next
             </Button>
@@ -475,9 +471,13 @@ class AddDevice extends Component {
 
 export default graphql(
   gql`
-    mutation ClaimDevice($deviceId: ID!, $name: String!, $environmentId: ID!) {
+    mutation ClaimDevice(
+      $deviceId: String!
+      $name: String!
+      $environmentId: ID!
+    ) {
       claimDevice(
-        deviceId: $deviceId
+        claimCode: $deviceId
         name: $name
         environmentId: $environmentId
       ) {

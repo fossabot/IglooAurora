@@ -353,7 +353,7 @@ class Sidebar extends Component {
                       >
                         {(device.lastUnreadNotification &&
                           device.lastUnreadNotification.content) ||
-                          "No notification"}
+                          "No notifications"}
                       </font>
                     }
                   />

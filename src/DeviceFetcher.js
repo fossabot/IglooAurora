@@ -170,6 +170,7 @@ export default graphql(
         starred
         updatedAt
         createdAt
+        myRole
         notificationCount(filter: { read: false })
         values(limit: 20, offset: $offset) {
           id
