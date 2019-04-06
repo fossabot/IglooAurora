@@ -66,7 +66,7 @@ export default class EnvironmentsBody extends Component {
         this.setState({ fetchMoreLoading: true })
         await this.props.userData.fetchMore({
           variables: {
-            offset: this.props.userData.environments.length,
+            offset: this.props.userData.user.environments.length,
             limit:
               this.props.userData.user.environmentCount -
                 this.props.userData.user.environments.length >=
@@ -592,6 +592,7 @@ export default class EnvironmentsBody extends Component {
                       height: "calc(100vh - 128px)",
                       backgroundColor: "#21252b",
                       overflowY: "auto",
+                      overscrollBehaviorY: "none",
                     }
                   : {
                       width: "100vw",
@@ -601,6 +602,7 @@ export default class EnvironmentsBody extends Component {
                       overscrollBehaviorY: "none",
                     }
               }
+              onScroll={this.queryMore}
             >
               {error && (
                 <Typography
@@ -717,7 +719,8 @@ export default class EnvironmentsBody extends Component {
             })
           }
           pendingEnvironmentShareCount={
-           this.props.userData.user &&  this.props.userData.user.pendingEnvironmentShareCount
+            this.props.userData.user &&
+            this.props.userData.user.pendingEnvironmentShareCount
           }
         />
         <PendingOwnerChanges

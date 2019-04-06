@@ -244,6 +244,7 @@ class UserFetcher extends Component {
           name
           profileIconColor
           email
+          environmentCount
           pendingEnvironmentShareCount
           pendingOwnerChangeCount
           primaryAuthenticationMethods
@@ -655,6 +656,7 @@ export default graphql(
         name
         profileIconColor
         email
+        environmentCount
         pendingEnvironmentShareCount
         pendingOwnerChangeCount
         primaryAuthenticationMethods
