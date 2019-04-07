@@ -394,7 +394,7 @@ export default class FilterPopover extends Component {
                             }
                       }
                     >
-                      Unexpected error
+                      Error
                     </Typography>
                   )
 

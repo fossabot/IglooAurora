@@ -87,7 +87,7 @@ class InviteUser extends Component {
         })
       } else {
         this.setState({
-          emailError: "Unexpected error",
+          emailError: "Error",
         })
       }
     }

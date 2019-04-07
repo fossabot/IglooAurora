@@ -240,7 +240,7 @@ export default class Signup extends Component {
         this.props.changeEmailError("This email is already taken")
         this.props.changeLoginEmail(this.props.email)
       } else {
-        this.setState({ passwordError: "Unexpected error" })
+        this.setState({ passwordError: "Error" })
       }
     } finally {
       this.setState({ showSignUpLoading: false })
@@ -364,7 +364,7 @@ export default class Signup extends Component {
         this.setState({ passwordError: "Email already taken" })
       } else {
         this.setState({
-          passwordError: "Unexpected error",
+          passwordError: "Error",
         })
       }
 

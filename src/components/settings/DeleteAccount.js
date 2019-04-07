@@ -78,7 +78,7 @@ class DeleteAccountDialog extends Component {
         this.setState({ passwordError: "This account doesn't exist" })
       } else {
         this.setState({
-          passwordError: "Unexpected error",
+          passwordError: "Error",
         })
       }
 

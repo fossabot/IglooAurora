@@ -182,7 +182,7 @@ export default class VerifyAuthentication extends Component {
       if (e.message === "GraphQL error: Wrong password") {
         this.setState({ passwordError: "Wrong password" })
       } else {
-        this.setState({ passwordError: "Unexpected error" })
+        this.setState({ passwordError: "Error" })
       }
     } finally {
       this.setState({ loading: false })

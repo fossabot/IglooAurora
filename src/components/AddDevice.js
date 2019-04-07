@@ -212,7 +212,7 @@ class AddDevice extends Component {
                       }
                 }
               >
-                Unexpected error
+                Error
               </Typography>
             )}
             <QrReader
@@ -273,7 +273,7 @@ class AddDevice extends Component {
                 if (event.key === "Enter" && !this.state.codeEmpty) {
                   this.setState(oldState => ({
                     manualCodeOpen: false,
-                    authDialogOpen: true,
+                    deviceDetailsOpen: true,
                     deviceId: oldState.code,
                   }))
                   this.props.close()

@@ -129,7 +129,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
                             }
                       }
                     >
-                      Unexpected error
+                      Error
                     </Typography>
                   )
 

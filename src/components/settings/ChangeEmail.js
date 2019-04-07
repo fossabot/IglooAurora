@@ -124,7 +124,7 @@ class ChangeMailDialog extends Component {
         this.setState({ emailError: "Invalid email" })
       } else {
         this.setState({
-          emailError: "Unexpected error",
+          emailError: "Error",
         })
       }
 

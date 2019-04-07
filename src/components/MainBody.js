@@ -311,7 +311,7 @@ export default class MainBody extends Component {
                 }
           }
         >
-          Unexpected error
+          Error
         </Typography>
       )
     }

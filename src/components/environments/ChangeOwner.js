@@ -72,7 +72,7 @@ class ChangeOwner extends Component {
         })
       } else {
         this.setState({
-          emailError: "Unexpected error",
+          emailError: "Error",
         })
       }
     }

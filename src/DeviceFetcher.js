@@ -153,7 +153,7 @@ function DeviceFetcher(props) {
 
 export default graphql(
   gql`
-    query($id: ID!, $offset: Int) {
+    query($id: ID!, $offset: Int, $limit: PositiveInt!) {
       device(id: $id) {
         id
         name
@@ -173,7 +173,7 @@ export default graphql(
         myRole
         notificationCount(filter: { read: false })
         valueCount
-        values(limit: 20, offset: $offset) {
+        values(limit: $limit, offset: $offset) {
           id
           visibility
           cardSize
@@ -212,6 +212,7 @@ export default graphql(
       variables: {
         id: deviceId,
         offset: 0,
+        limit: 20,
       },
     }),
   }

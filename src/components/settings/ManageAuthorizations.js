@@ -109,7 +109,7 @@ class AuthDialog extends Component {
         this.props.logOut(true)
       } else {
         this.setState({
-          passwordError: "Unexpected error",
+          passwordError: "Error",
         })
       }
     }
@@ -193,7 +193,7 @@ class AuthDialog extends Component {
       })
     } catch (e) {
       this.setState({
-        tokenError: "Unexpected error",
+        tokenError: "Error",
       })
     }
   }
@@ -435,7 +435,7 @@ class AuthDialog extends Component {
           }
           className="notSelectable defaultCursor"
         >
-          Unexpected error
+          Error
         </Typography>
       )
 

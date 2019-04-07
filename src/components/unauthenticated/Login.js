@@ -253,7 +253,7 @@ export default class Login extends Component {
         if (e.message === "GraphQL error: User not found") {
           this.props.changeEmailError("This account doesn't exist")
         } else {
-          this.props.changeEmailError("Unexpected error")
+          this.props.changeEmailError("Error")
         }
       } finally {
         this.setState({ showEmailScreenLoading: false })
@@ -300,7 +300,7 @@ export default class Login extends Component {
         this.props.changeEmailError("This account doesn't exist")
         this.props.changeSignupEmail(this.props.email)
       } else {
-        this.props.changeEmailError("Unexpected error")
+        this.props.changeEmailError("Error")
       }
     }
   }
@@ -331,7 +331,7 @@ export default class Login extends Component {
       if (e.message === "GraphQL error: Code and secret do not match") {
         this.setState({ codeError: "Wrong code" })
       } else {
-        this.setState({ codeError: "Unexpected error" })
+        this.setState({ codeError: "Error" })
       }
     } finally {
       this.setState({
@@ -390,7 +390,7 @@ export default class Login extends Component {
         this.props.changeEmailError("This account doesn't exist")
         this.props.changeSignupEmail(this.props.email)
       } else {
-        this.props.changeEmailError("Unexpected error")
+        this.props.changeEmailError("Error")
       }
     }
   }
@@ -1210,7 +1210,7 @@ export default class Login extends Component {
                           }
                           className="notSelectable defaultCursor"
                         >
-                          Unexpected error
+                          Error
                         </Typography>
                       )
 

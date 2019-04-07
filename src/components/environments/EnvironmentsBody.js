@@ -440,7 +440,7 @@ export default class EnvironmentsBody extends Component {
                       }
                 }
               >
-                Unexpected error
+                Error
               </Typography>
             )}
             {loading && (
@@ -645,7 +645,7 @@ export default class EnvironmentsBody extends Component {
                         }
                   }
                 >
-                  Unexpected error
+                  Error
                 </Typography>
               )}
               {loading && (

@@ -97,7 +97,7 @@ class AuthenticationOptions extends Component {
         this.setState({ passwordError: "This account doesn't exist" })
       } else {
         this.setState({
-          passwordError: "Unexpected error",
+          passwordError: "Error",
         })
       }
     }
@@ -202,7 +202,7 @@ class AuthenticationOptions extends Component {
         this.setState({ emailError: "Email already taken" })
       } else {
         this.setState({
-          emailError: "Unexpected error",
+          emailError: "Error",
         })
       }
 
@@ -429,7 +429,7 @@ class AuthenticationOptions extends Component {
         this.setState({ codeError: "Wrong code" })
       } else {
         this.setState({
-          codeError: "Unexpected error",
+          codeError: "Error",
         })
       }
     } finally {
@@ -714,7 +714,7 @@ class AuthenticationOptions extends Component {
                       }
                 }
               >
-                Unexpected error
+                Error
               </Typography>
             )}
             {loading && <CenteredSpinner />}
@@ -1020,7 +1020,7 @@ class AuthenticationOptions extends Component {
                             }
                       }
                     >
-                      Unexpected error
+                      Error
                     </Typography>
                   )
 

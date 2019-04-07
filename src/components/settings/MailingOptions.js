@@ -188,7 +188,7 @@ class MailingOptions extends Component {
                     }
                     className="notSelectable defaultCursor"
                   >
-                    Unexpected error
+                    Error
                   </Typography>
                 )
 

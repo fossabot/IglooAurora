@@ -9,7 +9,7 @@ import ReadWriteStringCard from "./Strings/ReadWriteStringCard"
 import ReadWriteBoundedStringCard from "./Strings/ReadWriteBoundedStringCard"
 import ReadWriteBoundedFloatCard from "./Floats/ReadWriteBoundedFloatCard"
 import ReadWriteFloatCard from "./Floats/ReadWriteFloatCard"
-import PlotCard from "./PlotCard"
+import FloatSeriesCard from "./FloatSeriesCard"
 import FullScreenCard from "./FullScreenCard"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
@@ -154,14 +154,8 @@ class Card extends Component {
           maxChars={value.maxChars}
         />
       )
-    } else if (value.__typename === "PlotValue") {
-      specificCard = (
-        <PlotCard
-          value={value.plotValue}
-          threshold={value.threshold}
-          unitOfMeasurement={value.unitOfMeasurement}
-        />
-      )
+    } else if (value.__typename === "FloatSeriesValue") {
+      specificCard = <FloatSeriesCard id={value.id}/>
     } else {
       specificCard = ""
     }
@@ -227,7 +221,7 @@ class Card extends Component {
             <div
               className="notSelectable"
               style={
-                value.__typename === "PlotValue"
+                value.__typename === "FloatSeriesValue"
                   ? {
                       padding: "0",
                       marginLeft: "auto",
@@ -243,7 +237,7 @@ class Card extends Component {
                     }
               }
             >
-              {value.__typename === "PlotValue" ? (
+              {value.__typename === "FloatSeriesValue" ? (
                 <Tooltip
                   id="tooltip-fullscreen"
                   title="Fullscreen"

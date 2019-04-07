@@ -396,7 +396,7 @@ const PendingSharesContent = graphql(
                       }
                 }
               >
-                Unexpected error
+                Error
               </Typography>
             )
 

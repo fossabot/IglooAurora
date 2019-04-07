@@ -266,7 +266,7 @@ class NotificationsDrawer extends Component {
                 }
           }
         >
-          Unexpected error
+          Error
         </Typography>
       )
 
