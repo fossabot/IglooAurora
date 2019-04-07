@@ -396,7 +396,8 @@ class Sidebar extends Component {
             in={
               environment &&
               this.props.userData.user &&
-              this.props.userData.user.emailIsVerified
+              this.props.userData.user.emailIsVerified &&
+              this.props.environmentData.environment.myRole !== "SPECTATOR"
             }
           >
             <Fab

@@ -313,7 +313,7 @@ class AddDevice extends Component {
               onClick={() => {
                 this.setState(oldState => ({
                   manualCodeOpen: false,
-                  authDialogOpen: true,
+                  deviceDetailsOpen: true,
                   deviceId: oldState.code,
                 }))
                 this.props.close()
@@ -321,67 +321,6 @@ class AddDevice extends Component {
               color="primary"
             >
               Next
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-          open={this.state.authDialogOpen}
-          onClose={() => this.setState({ authDialogOpen: false })}
-          TransitionComponent={
-            this.props.fullScreen ? SlideTransition : GrowTransition
-          }
-          fullScreen={this.props.fullScreen}
-          disableBackdropClick={this.props.fullScreen}
-          className="notSelectable defaultCursor"
-          fullWidth
-          maxWidth="xs"
-        >
-          <DialogTitle disableTypography>Add device</DialogTitle>
-          <div
-            style={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-                ? {
-                    height: "100%",
-                    paddingRight: "24px",
-                    paddingLeft: "24px",
-                    background: "#2f333d",
-                  }
-                : {
-                    height: "100%",
-                    paddingRight: "24px",
-                    paddingLeft: "24px",
-                  }
-            }
-          >
-            <List
-              style={{
-                padding: "0",
-              }}
-            >
-              {[
-                "Read and write access to itself",
-                "Read and write access to other devices",
-              ].map(auth => (
-                <ListItem>{auth}</ListItem>
-              ))}
-            </List>
-          </div>
-          <DialogActions>
-            <Button onClick={() => this.setState({ authDialogOpen: false })}>
-              Decline
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() =>
-                this.setState({
-                  authDialogOpen: false,
-                  deviceDetailsOpen: true,
-                })
-              }
-              color="primary"
-            >
-              Accept
             </Button>
           </DialogActions>
         </Dialog>

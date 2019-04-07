@@ -126,7 +126,7 @@ export default class MainBody extends Component {
 
     const valueCreatedSubscription = gql`
       subscription {
-        valueCreated {
+        valueCreated(visibility:VISIBLE) {
           id
           visibility
           cardSize
@@ -187,7 +187,7 @@ export default class MainBody extends Component {
 
     const subscribeToValueUpdates = gql`
       subscription {
-        valueUpdated {
+        valueUpdated(visibility:VISIBLE) {
           id
           visibility
           cardSize
@@ -235,7 +235,7 @@ export default class MainBody extends Component {
 
     const subscribeToValuesDeletes = gql`
       subscription {
-        valueDeleted
+        valueDeleted(visibility:VISIBLE)
       }
     `
 
