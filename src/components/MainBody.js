@@ -5,6 +5,7 @@ import gql from "graphql-tag"
 import { Redirect } from "react-router-dom"
 import querystringify from "querystringify"
 import Typography from "@material-ui/core/Typography"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 export default class MainBody extends Component {
   state = {
@@ -44,7 +45,7 @@ export default class MainBody extends Component {
             ]
 
             return {
-              user: {
+              device: {
                 ...prev.device,
                 values: newValues,
               },
@@ -393,6 +394,15 @@ export default class MainBody extends Component {
             to={
               "/?environment=" +
               querystringify.parse(window.location.search).environment
+            }
+          />
+        )}
+        {this.state.fetchMoreLoading && (
+          <LinearProgress
+            style={
+              this.props.isMobile
+                ? { position: "absolute", top: 0, width: "100%" }
+                : { marginTop: "-4px" }
             }
           />
         )}

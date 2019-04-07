@@ -299,16 +299,24 @@ export default class EnvironmentsBody extends Component {
               </ButtonBase>
             </Grid>
           )}
-          {user.environments.map(environment => (
-            <Grid key={environment.id} item style={{ margin: 8 }}>
-              <EnvironmentCard
-                userData={this.props.userData}
-                environment={environment}
-                nightMode={nightMode}
-                client={this.props.client}
-              />
-            </Grid>
-          ))}
+          {user.environments
+            .filter(environment =>
+              this.props.searchText
+                ? environment.name
+                    .toLowerCase()
+                    .includes(this.props.searchText.toLowerCase())
+                : true
+            )
+            .map(environment => (
+              <Grid key={environment.id} item style={{ margin: 8 }}>
+                <EnvironmentCard
+                  userData={this.props.userData}
+                  environment={environment}
+                  nightMode={nightMode}
+                  client={this.props.client}
+                />
+              </Grid>
+            ))}
         </Grid>
       )
     }
@@ -454,6 +462,13 @@ export default class EnvironmentsBody extends Component {
                 style={{
                   height: "calc(100vh - 128px)",
                   overflowY: "auto",
+                }}
+                onScroll={event => {
+                  if (
+                    event.target.scrollTop + event.target.clientHeight >=
+                    event.target.scrollHeight - 600
+                  )
+                    this.queryMore()
                 }}
               >
                 {yourEnvironmentsList}
@@ -602,7 +617,13 @@ export default class EnvironmentsBody extends Component {
                       overscrollBehaviorY: "none",
                     }
               }
-              onScroll={this.queryMore}
+              onScroll={event => {
+                if (
+                  event.target.scrollTop + event.target.clientHeight >=
+                  event.target.scrollHeight - 600
+                )
+                  this.queryMore()
+              }}
             >
               {error && (
                 <Typography
@@ -734,7 +755,7 @@ export default class EnvironmentsBody extends Component {
         {this.state.fetchMoreLoading && (
           <LinearProgress
             style={
-              this.props.isMobile
+              this.props.mobile
                 ? { position: "absolute", top: 0, width: "100%" }
                 : { marginTop: "-4px" }
             }

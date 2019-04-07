@@ -172,6 +172,7 @@ export default graphql(
         createdAt
         myRole
         notificationCount(filter: { read: false })
+        valueCount
         values(limit: 20, offset: $offset) {
           id
           visibility

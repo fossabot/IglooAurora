@@ -254,7 +254,9 @@ class Sidebar extends Component {
               )
               .filter(device =>
                 this.props.searchText
-                  ? device.name.includes(this.props.searchText)
+                  ? device.name
+                      .toLowerCase()
+                      .includes(this.props.searchText.toLowerCase())
                   : true
               )
               .map(device => (
@@ -460,7 +462,7 @@ class Sidebar extends Component {
             }}
           >
             <Input
-              id="adornment-devices"
+              id="search-devices"
               placeholder="Search devices"
               color="primary"
               className="notSelectable"
