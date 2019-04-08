@@ -56,6 +56,79 @@ export default graphql(
       }
     }
 
+    componentDidMount() {
+      const floatSeriesNodeCreatedSubscription = gql`
+        subscription {
+          floatSeriesNodeCreated {
+            id
+            value
+            timestamp
+          }
+        }
+      `
+
+      this.props.floatSeriesData.subscribeToMore({
+        document: floatSeriesNodeCreatedSubscription,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return prev
+          }
+
+          const newNodes = [
+            ...prev.floatSeriesValue.nodes,
+            subscriptionData.data.floatSeriesNodeCreated,
+          ]
+
+          return {
+            floatSeriesValue: {
+              ...prev.floatSeriesValue,
+              nodes: newNodes,
+            },
+          }
+        },
+      })
+
+      const floatSeriesNodeUpdatedSubscription = gql`
+        subscription {
+          floatSeriesNodeUpdated {
+            id
+            value
+            timestamp
+          }
+        }
+      `
+
+      this.props.floatSeriesData.subscribeToMore({
+        document: floatSeriesNodeUpdatedSubscription,
+      })
+
+      const floatSeriesNodeDeletedSubscription = gql`
+        subscription {
+          floatSeriesNodeDeleted
+        }
+      `
+
+      this.props.floatSeriesData.subscribeToMore({
+        document: floatSeriesNodeDeletedSubscription,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return prev
+          }
+
+          const newNodes = prev.floatSeriesValue.nodes.filter(
+            node => node.id !== subscriptionData.data.floatSeriesNodeDeleted
+          )
+
+          return {
+            floatSeriesValue: {
+              ...prev.floatSeriesValue,
+              nodes: newNodes,
+            },
+          }
+        },
+      })
+    }
+
     render() {
       if (this.props.floatSeriesData.loading)
         return (

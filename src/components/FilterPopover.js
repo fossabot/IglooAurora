@@ -440,7 +440,7 @@ export default class FilterPopover extends Component {
                           key={deviceType}
                           role={undefined}
                           button
-                          onClick={this.handleToggle(deviceType)}
+                          onClick={() => this.handleToggle(deviceType)}
                           style={{ cursor: "pointer" }}
                         >
                           <Checkbox
