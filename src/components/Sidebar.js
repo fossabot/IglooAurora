@@ -33,6 +33,7 @@ class Sidebar extends Component {
     popoverOpen: false,
     dialOpen: false,
     invisibleDeviceTypes: [],
+    invisibleFirmwares: [],
     hidden: false,
     addDeviceOpen: false,
     lessThan1080: false,
@@ -220,7 +221,12 @@ class Sidebar extends Component {
             close={() => this.setState({ popoverOpen: false })}
             anchorEl={this.anchorEl}
             devices={mergedArray}
-            setVisibleTypes={invisibleDeviceTypes => {
+            setInvisibleFirmwares={invisibleFirmwares => {
+              this.setState({
+                invisibleFirmwares,
+              })
+            }}
+            setInvisibleTypes={invisibleDeviceTypes => {
               this.setState({
                 invisibleDeviceTypes,
               })
@@ -251,6 +257,12 @@ class Sidebar extends Component {
                 device =>
                   this.state.invisibleDeviceTypes.indexOf(device.deviceType) ===
                   -1
+              )
+              .filter(
+                device =>
+                  this.state.invisibleFirmwares.indexOf(
+                    device.deviceType + "|" + device.firmware
+                  ) === -1
               )
               .filter(device =>
                 this.props.searchText

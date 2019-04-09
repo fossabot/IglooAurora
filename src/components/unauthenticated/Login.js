@@ -566,7 +566,7 @@ export default class Login extends Component {
               }
             />
           )}
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", overflowX: "hidden" }}>
             <Typography
               variant="h3"
               gutterBottom

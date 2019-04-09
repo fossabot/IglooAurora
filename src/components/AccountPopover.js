@@ -259,6 +259,7 @@ export default class AccountPopover extends Component {
               horizontal: "right",
             }}
             className="notSelectable"
+            style={{maxWidth:"300px"}}
           >
             {content}
           </Popover>

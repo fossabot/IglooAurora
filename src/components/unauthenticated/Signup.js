@@ -235,12 +235,19 @@ export default class Signup extends Component {
     } catch (e) {
       this.setState({ showLoading: false })
       if (
-        e.message === "GraphQL error: A user with this email already exists"
+        e.message ===
+        "GraphQL error: A user with this email already exists"
       ) {
         this.props.changeEmailError("This email is already taken")
         this.props.changeLoginEmail(this.props.email)
+      } else if (
+        e.message ===
+        "GraphQL error: Invalid email"
+      ) {
+        this.props.changeEmailError("Enter a valid emai")
+        this.props.changeLoginEmail(this.props.email)
       } else {
-        this.setState({ passwordError: "Error" })
+        this.props.changeEmailError("Error")
       }
     } finally {
       this.setState({ showSignUpLoading: false })

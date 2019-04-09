@@ -53,7 +53,7 @@ export default class FilterPopover extends Component {
       newChecked.splice(currentIndex, 1)
     }
 
-    this.props.setVisibleTypes(newChecked)
+    this.props.setInvisibleTypes(newChecked)
 
     this.setState({
       checked: newChecked,
@@ -70,6 +70,8 @@ export default class FilterPopover extends Component {
     } else {
       newFirmwareChecked.splice(currentIndex, 1)
     }
+
+    this.props.setInvisibleFirmwares(newFirmwareChecked)
 
     this.setState({
       firmwareChecked: newFirmwareChecked,
@@ -101,7 +103,7 @@ export default class FilterPopover extends Component {
   }
 
   componentDidMount() {
-    this.props.setVisibleTypes(this.state.checked)
+    this.props.setInvisibleTypes(this.state.checked)
 
     this.updateDimensions()
     window.addEventListener("resize", this.updateDimensions.bind(this))
@@ -120,13 +122,17 @@ export default class FilterPopover extends Component {
     let noneChecked = true
 
     for (let i in tempArray) {
-      if (!this.state.firmwareChecked.includes(deviceType + tempArray[i][1])) {
+      if (
+        !this.state.firmwareChecked.includes(deviceType + "|" + tempArray[i][1])
+      ) {
         allChecked = false
       }
     }
 
     for (let i in tempArray) {
-      if (this.state.firmwareChecked.includes(deviceType + tempArray[i][1])) {
+      if (
+        this.state.firmwareChecked.includes(deviceType + "|" + tempArray[i][1])
+      ) {
         noneChecked = false
       }
     }
@@ -454,7 +460,7 @@ export default class FilterPopover extends Component {
                               this.handleToggle(deviceType)
                             }}
                             indeterminate={
-                              firmwares[deviceType] &&
+                              firmwares[deviceType][1] &&
                               this.setIndeterminate(
                                 this.data.environment.uniqueFirmwares,
                                 deviceType
@@ -481,7 +487,7 @@ export default class FilterPopover extends Component {
                               cursor: "pointer",
                             }}
                           />
-                          {firmwares[deviceType] && (
+                          {firmwares[deviceType][1] && (
                             <ListItemSecondaryAction>
                               <IconButton onClick={this.handleOpen(deviceType)}>
                                 {this.state.open.indexOf(deviceType) !== -1 ? (
@@ -507,7 +513,7 @@ export default class FilterPopover extends Component {
                             </ListItemSecondaryAction>
                           )}
                         </ListItem>
-                        {firmwares[deviceType] && (
+                        {firmwares[deviceType][1] && (
                           <Collapse
                             in={this.state.open.indexOf(deviceType) !== -1}
                             timeout="auto"
@@ -516,11 +522,11 @@ export default class FilterPopover extends Component {
                             <List component="div" disablePadding>
                               {firmwares[deviceType].map(firmware => (
                                 <ListItem
-                                  key={deviceType + firmware}
+                                  key={deviceType + "|" + firmware}
                                   role={undefined}
                                   button
                                   onClick={this.handleFirmwareToggle(
-                                    deviceType + firmware
+                                    deviceType + "|" + firmware
                                   )}
                                   style={{
                                     cursor: "pointer",
@@ -530,7 +536,7 @@ export default class FilterPopover extends Component {
                                   <Checkbox
                                     checked={
                                       this.state.firmwareChecked.indexOf(
-                                        deviceType + firmware
+                                        deviceType + "|" + firmware
                                       ) === -1
                                     }
                                     color="primary"
@@ -538,7 +544,7 @@ export default class FilterPopover extends Component {
                                     disableRipple
                                     onChange={() => {
                                       this.handleFirmwareToggle(
-                                        deviceType + firmware
+                                        deviceType + "|" + firmware
                                       )
                                     }}
                                   />
