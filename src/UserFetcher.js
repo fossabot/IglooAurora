@@ -93,7 +93,7 @@ class UserFetcher extends Component {
         const newEnvironments = [
           ...prev.user.environments,
           subscriptionData.data.environmentCreated,
-        ]
+        ].sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
 
         return {
           user: {
@@ -193,10 +193,12 @@ class UserFetcher extends Component {
           return prev
         }
 
-        const newEnvironments = prev.user.environments.filter(
-          environment =>
-            environment.id !== subscriptionData.data.environmentDeleted
-        )
+        const newEnvironments = prev.user.environments
+          .filter(
+            environment =>
+              environment.id !== subscriptionData.data.environmentDeleted
+          )
+          .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
 
         return {
           user: {

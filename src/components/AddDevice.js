@@ -20,6 +20,7 @@ import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import SwitchCamera from "@material-ui/icons/SwitchCamera"
 import Typography from "@material-ui/core/Typography"
+import CenteredSpinner from "./CenteredSpinner"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -32,22 +33,30 @@ function SlideTransition(props) {
 class AddDevice extends Component {
   state = { authDialogOpen: false, camera: "environment" }
 
-  claimDevice(deviceId, name, environmentId) {
-    this.props.ClaimDevice({
-      variables: {
-        deviceId,
-        name,
-        environmentId,
-      },
-      optimisticResponse: {
-        __typename: "Mutation",
-        claimDevice: {
+  async claimDevice(deviceId, name, environmentId) {
+    try {
+      this.setState({ claimLoading: true })
+
+      await this.props.ClaimDevice({
+        variables: {
           deviceId,
           name,
           environmentId,
         },
-      },
-    })
+        optimisticResponse: {
+          __typename: "Mutation",
+          claimDevice: {
+            deviceId,
+            name,
+            environmentId,
+          },
+        },
+      })
+
+      this.setState({ deviceDetailsOpen: false })
+    } catch (e) {
+      this.setState({ claimLoading: false })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -66,7 +75,10 @@ class AddDevice extends Component {
       <Fragment>
         <Dialog
           open={
-            this.props.open && !this.state.qrOpen && !this.state.manualCodeOpen
+            this.props.open &&
+            !this.state.qrOpen &&
+            !this.state.manualCodeOpen &&
+            !this.state.deviceDetailsOpen
           }
           onClose={this.props.close}
           TransitionComponent={
@@ -221,12 +233,13 @@ class AddDevice extends Component {
               facingMode={this.state.camera}
               onError={() => this.setState({ qrError: true })}
               onScan={deviceId => {
+                if (deviceId) {
                 this.setState({
                   qrOpen: false,
                   authDialogOpen: true,
                   deviceId,
                 })
-                this.props.close()
+                this.props.close()}
               }}
             />
           </div>
@@ -237,7 +250,7 @@ class AddDevice extends Component {
           </DialogActions>
         </Dialog>
         <Dialog
-          open={this.state.manualCodeOpen}
+          open={this.state.manualCodeOpen && !this.state.deviceDetailsOpen}
           onClose={() => this.setState({ manualCodeOpen: false })}
           TransitionComponent={
             this.props.fullScreen ? SlideTransition : GrowTransition
@@ -272,11 +285,9 @@ class AddDevice extends Component {
               onKeyPress={event => {
                 if (event.key === "Enter" && !this.state.codeEmpty) {
                   this.setState(oldState => ({
-                    manualCodeOpen: false,
                     deviceDetailsOpen: true,
                     deviceId: oldState.code,
                   }))
-                  this.props.close()
                 }
               }}
               style={{
@@ -306,19 +317,18 @@ class AddDevice extends Component {
                 this.setState({ manualCodeOpen: false })
               }}
             >
-              Never mind
+              Go back
             </Button>
             <Button
               variant="contained"
               onClick={() => {
                 this.setState(oldState => ({
-                  manualCodeOpen: false,
                   deviceDetailsOpen: true,
                   deviceId: oldState.code,
                 }))
-                this.props.close()
               }}
               color="primary"
+              disabled={this.state.codeEmpty || this.state.codeLoading}
             >
               Next
             </Button>
@@ -384,7 +394,7 @@ class AddDevice extends Component {
           </div>
           <DialogActions>
             <Button onClick={() => this.setState({ deviceDetailsOpen: false })}>
-              Never mind
+              Go back
             </Button>
             <Button
               variant="contained"
@@ -394,12 +404,12 @@ class AddDevice extends Component {
                   this.state.name,
                   this.props.environment
                 )
-                this.setState({ deviceDetailsOpen: false })
               }}
               color="primary"
-              disabled={!this.state.name}
+              disabled={!this.state.name || this.state.claimLoading}
             >
               Add
+              {this.state.claimLoading && <CenteredSpinner isInButton />}
             </Button>
           </DialogActions>
         </Dialog>
