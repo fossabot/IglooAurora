@@ -251,7 +251,7 @@ class NotificationsDrawer extends Component {
           variant="h5"
           className="notSelectable defaultCursor"
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -378,7 +378,7 @@ class NotificationsDrawer extends Component {
               <li>
                 <ListSubheader
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { backgroundColor: "#2f333d" }
                       : { backgroundColor: "white" }
@@ -386,7 +386,7 @@ class NotificationsDrawer extends Component {
                 >
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "#c1c2c5" }
                         : { color: "#7a7a7a" }
@@ -410,7 +410,7 @@ class NotificationsDrawer extends Component {
                           primary={
                             <font
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "white" }
                                   : { color: "black" }
@@ -422,7 +422,7 @@ class NotificationsDrawer extends Component {
                           secondary={
                             <font
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "#c1c2c5" }
                                   : { color: "#7a7a7a" }
@@ -462,7 +462,7 @@ class NotificationsDrawer extends Component {
           <Typography
             variant="h5"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     textAlign: "center",
@@ -575,7 +575,7 @@ class NotificationsDrawer extends Component {
         >
           <div
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     background: "#2f333d",

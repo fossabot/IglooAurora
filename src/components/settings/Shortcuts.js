@@ -41,7 +41,7 @@ class ShortcutDialog extends Component {
           <DialogTitle disableTypography>Keyboard shortcuts</DialogTitle>
           <div
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     height: "100%",
@@ -58,7 +58,7 @@ class ShortcutDialog extends Component {
           >
             <Paper
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? {
                       background: "#2f333d",
@@ -71,7 +71,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "#c1c2c5",
@@ -83,7 +83,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "#c1c2c5",
@@ -99,7 +99,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -111,7 +111,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -125,7 +125,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -137,7 +137,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -151,7 +151,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -163,7 +163,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -177,7 +177,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -189,7 +189,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -203,7 +203,7 @@ class ShortcutDialog extends Component {
                   <TableRow>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -215,7 +215,7 @@ class ShortcutDialog extends Component {
                     </TableCell>
                     <TableCell
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -234,7 +234,7 @@ class ShortcutDialog extends Component {
             <Button onClick={this.props.handleShortcutDialogClose}>
               <font
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? { color: "white" }
                     : {}

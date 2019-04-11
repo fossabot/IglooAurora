@@ -37,7 +37,7 @@ export default class AccountPopover extends Component {
       )[0]
 
     let content = (
-      <List>
+      <List style={{ overflowX: "hidden" }}>
         {typeof Storage !== undefined &&
           localStorage.getItem("accountList") &&
           JSON.parse(localStorage.getItem("accountList")).map(account => (
@@ -59,7 +59,6 @@ export default class AccountPopover extends Component {
                 primary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             backgroundColor: "transparent",
@@ -75,7 +74,6 @@ export default class AccountPopover extends Component {
                     {!account.token && (
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white", opacity: 0.72 }
                             : { color: "black", opacity: 0.72 }
@@ -90,7 +88,6 @@ export default class AccountPopover extends Component {
                 secondary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             backgroundColor: "transparent",
@@ -114,7 +111,6 @@ export default class AccountPopover extends Component {
           <ListItemAvatar>
             <Avatar
               style={
-                typeof Storage !== "undefined" &&
                 localStorage.getItem("nightMode") === "true"
                   ? { backgroundColor: "transparent", color: "white" }
                   : { backgroundColor: "transparent", color: "black" }
@@ -127,7 +123,6 @@ export default class AccountPopover extends Component {
             primary={
               <font
                 style={
-                  typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
                     ? { backgroundColor: "transparent", color: "white" }
                     : { backgroundColor: "transparent", color: "black" }
@@ -150,7 +145,6 @@ export default class AccountPopover extends Component {
           <ListItemAvatar>
             <Avatar
               style={
-                typeof Storage !== "undefined" &&
                 localStorage.getItem("nightMode") === "true"
                   ? { backgroundColor: "transparent", color: "white" }
                   : { backgroundColor: "transparent", color: "black" }
@@ -163,7 +157,6 @@ export default class AccountPopover extends Component {
             primary={
               <font
                 style={
-                  typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
                     ? { backgroundColor: "transparent", color: "white" }
                     : { backgroundColor: "transparent", color: "black" }
@@ -185,7 +178,6 @@ export default class AccountPopover extends Component {
           <ListItemAvatar>
             <Avatar
               style={
-                typeof Storage !== "undefined" &&
                 localStorage.getItem("nightMode") === "true"
                   ? { backgroundColor: "transparent", color: "white" }
                   : { backgroundColor: "transparent", color: "black" }
@@ -198,7 +190,6 @@ export default class AccountPopover extends Component {
             primary={
               <font
                 style={
-                  typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
                     ? { backgroundColor: "transparent", color: "white" }
                     : { backgroundColor: "transparent", color: "black" }
@@ -259,7 +250,7 @@ export default class AccountPopover extends Component {
               horizontal: "right",
             }}
             className="notSelectable"
-            style={{maxWidth:"300px"}}
+            style={{ maxWidth: "300px" }}
           >
             {content}
           </Popover>

@@ -189,6 +189,11 @@ const darkTheme = createMuiTheme({
         backgroundColor: "#2f333d",
       },
     },
+    MuiDrawer: {
+      paper: {
+        backgroundColor: "#2f333d",
+      },
+    },
     MuiListItemIcon: {
       root: {
         color: "white",
@@ -302,7 +307,7 @@ function setupWebPush(token) {
   function sendSubscriptionToServer(subscription) {
     // the server URL changes based on whether the server setting is set to auto or manual
     const serverUrl =
-      typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+      localStorage.getItem("server") !== ""
         ? (localStorage.getItem("serverUnsecure") === "true"
             ? "http://"
             : "https://") +
@@ -672,10 +677,7 @@ class App extends Component {
     return (
       <MuiThemeProvider
         theme={
-          typeof Storage !== "undefined" &&
-          localStorage.getItem("nightMode") === "true"
-            ? darkTheme
-            : lightTheme
+          localStorage.getItem("nightMode") === "true" ? darkTheme : lightTheme
         }
       >
         {/* this.forceUpdate makes sure that the application reacts to the changes of the stored variables */}
@@ -718,8 +720,7 @@ class App extends Component {
                       })
                   }
                   // the user is redirected to the log in screen if someone already logged in on their machine
-                  return typeof Storage !== "undefined" &&
-                    localStorage.getItem("accountList") ? (
+                  return localStorage.getItem("accountList") ? (
                     <Redirect to="/accounts" />
                   ) : (
                     <Redirect to="/signup" />
@@ -732,8 +733,7 @@ class App extends Component {
               render={() =>
                 this.state.bearer ? (
                   <Redirect to="/" />
-                ) : typeof Storage !== "undefined" &&
-                  !JSON.parse(localStorage.getItem("accountList"))[0] ? (
+                ) : !JSON.parse(localStorage.getItem("accountList"))[0] ? (
                   <Redirect to="/login" />
                 ) : (
                   <UnauthenticatedMain

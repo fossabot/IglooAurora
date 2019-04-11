@@ -109,7 +109,7 @@ class AuthenticationOptions extends Component {
     const { user } = this.props
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -126,7 +126,7 @@ class AuthenticationOptions extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -215,7 +215,7 @@ class AuthenticationOptions extends Component {
 
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -232,7 +232,7 @@ class AuthenticationOptions extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -345,7 +345,7 @@ class AuthenticationOptions extends Component {
 
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -362,7 +362,7 @@ class AuthenticationOptions extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -443,7 +443,7 @@ class AuthenticationOptions extends Component {
   ) => {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -460,7 +460,7 @@ class AuthenticationOptions extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -545,7 +545,7 @@ class AuthenticationOptions extends Component {
           primary={
             <font
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? { color: "white" }
                   : {}
@@ -583,7 +583,7 @@ class AuthenticationOptions extends Component {
           primary={
             <font
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? { color: "white" }
                   : {}
@@ -621,7 +621,7 @@ class AuthenticationOptions extends Component {
           primary={
             <font
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? { color: "white" }
                   : {}
@@ -683,7 +683,7 @@ class AuthenticationOptions extends Component {
           <DialogTitle disableTypography>Authentication methods</DialogTitle>
           <div
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     height: "100%",
@@ -699,7 +699,7 @@ class AuthenticationOptions extends Component {
                 variant="h5"
                 className="notSelectable defaultCursor"
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? {
                         textAlign: "center",
@@ -724,7 +724,7 @@ class AuthenticationOptions extends Component {
                   <ul style={{ padding: "0" }}>
                     <ListSubheader
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -763,7 +763,7 @@ class AuthenticationOptions extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? { color: "white" }
                                 : {}
@@ -780,7 +780,7 @@ class AuthenticationOptions extends Component {
                   <ul style={{ padding: "0" }}>
                     <ListSubheader
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               color: "white",
@@ -815,7 +815,7 @@ class AuthenticationOptions extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? { color: "white" }
                                 : {}
@@ -850,7 +850,7 @@ class AuthenticationOptions extends Component {
             >
               <font
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? { color: "white" }
                     : {}
@@ -1005,7 +1005,7 @@ class AuthenticationOptions extends Component {
                       variant="h5"
                       className="notSelectable defaultCursor"
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               textAlign: "center",
@@ -1192,7 +1192,7 @@ class AuthenticationOptions extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : {}
@@ -1227,7 +1227,7 @@ class AuthenticationOptions extends Component {
                 primary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : {}
@@ -1259,7 +1259,7 @@ class AuthenticationOptions extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : {}
@@ -1332,7 +1332,7 @@ class AuthenticationOptions extends Component {
                 <font
                   style={
                     !this.props.unauthenticated &&
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }
@@ -1376,7 +1376,7 @@ class AuthenticationOptions extends Component {
                   <font
                     style={
                       !this.props.unauthenticated &&
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : { color: "black" }
@@ -1420,7 +1420,7 @@ class AuthenticationOptions extends Component {
                   <font
                     style={
                       !this.props.unauthenticated &&
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : { color: "black" }
@@ -1470,7 +1470,7 @@ class AuthenticationOptions extends Component {
                   <font
                     style={
                       !this.props.unauthenticated &&
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : { color: "black" }

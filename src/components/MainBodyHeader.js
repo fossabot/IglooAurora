@@ -165,7 +165,7 @@ class MainBodyHeader extends Component {
             this.handleMenuClose()
           }}
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? { color: "white" }
               : { color: "black" }
@@ -181,7 +181,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -203,7 +203,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -226,7 +226,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -286,7 +286,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -309,7 +309,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -329,7 +329,7 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -434,7 +434,7 @@ class MainBodyHeader extends Component {
               showHiddenNotifications={this.props.showHiddenNotifications}
               notificationCount={device && device.notificationCount}
               nightMode={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
               }
               logOut={this.props.logOut}

@@ -77,6 +77,7 @@ class AddDevice extends Component {
         nameEmpty: "",
         code: "",
         codeEmpty: "",
+        codeError: "",
       })
     }
   }
@@ -125,7 +126,6 @@ class AddDevice extends Component {
                   primary={
                     <font
                       style={
-                        typeof Storage !== "undefined" &&
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : { color: "black" }
@@ -157,7 +157,6 @@ class AddDevice extends Component {
                   primary={
                     <font
                       style={
-                        typeof Storage !== "undefined" &&
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : { color: "black" }
@@ -189,7 +188,6 @@ class AddDevice extends Component {
           <DialogTitle disableTypography>Scan QR code</DialogTitle>
           <IconButton
             style={
-              typeof Storage !== "undefined" &&
               localStorage.getItem("nightMode") === "true"
                 ? {
                     marginTop: "-54px",
@@ -220,7 +218,6 @@ class AddDevice extends Component {
                 variant="h5"
                 className="notSelectable defaultCursor"
                 style={
-                  typeof Storage !== "undefined" &&
                   localStorage.getItem("nightMode") === "true"
                     ? {
                         textAlign: "center",
@@ -250,14 +247,13 @@ class AddDevice extends Component {
                     deviceDetailsOpen: true,
                     deviceId,
                   })
-                  this.props.close()
                 }
               }}
             />
           </div>
           <DialogActions>
             <Button onClick={() => this.setState({ qrOpen: false })}>
-              Close
+              Go back
             </Button>
           </DialogActions>
         </Dialog>
@@ -312,7 +308,11 @@ class AddDevice extends Component {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() =>
-                        this.setState({ code: "", codeEmpty: true })
+                        this.setState({
+                          code: "",
+                          codeEmpty: true,
+                          codeError: "",
+                        })
                       }
                       tabIndex="-1"
                     >
@@ -355,7 +355,11 @@ class AddDevice extends Component {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() =>
-                        this.setState({ name: "", nameEmpty: true })
+                        this.setState({
+                          name: "",
+                          nameEmpty: true,
+                          codeError: "",
+                        })
                       }
                       tabIndex="-1"
                     >
@@ -410,16 +414,27 @@ class AddDevice extends Component {
               label="Name"
               value={this.state.name}
               variant="outlined"
-              error={this.state.nameEmpty}
-              helperText={this.state.nameEmpty ? "This field is required" : " "}
+              error={this.state.nameEmpty || this.state.codeError}
+              helperText={
+                this.state.nameEmpty
+                  ? "This field is required"
+                  : this.state.codeError
+                  ? this.state.codeError
+                  : " "
+              }
               onChange={event =>
                 this.setState({
                   name: event.target.value,
                   nameEmpty: event.target.value === "",
+                  codeError: "",
                 })
               }
               onKeyPress={event => {
-                if (event.key === "Enter" && !this.state.nameEmpty) {
+                if (
+                  event.key === "Enter" &&
+                  !this.state.nameEmpty &&
+                  !this.state.codeError
+                ) {
                   this.claimDevice(
                     this.state.code,
                     this.state.name,
@@ -438,7 +453,11 @@ class AddDevice extends Component {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() =>
-                        this.setState({ name: "", nameEmpty: true })
+                        this.setState({
+                          name: "",
+                          nameEmpty: true,
+                          codeError: "",
+                        })
                       }
                       tabIndex="-1"
                     >
@@ -450,7 +469,11 @@ class AddDevice extends Component {
             />
           </div>
           <DialogActions>
-            <Button onClick={() => this.setState({ deviceDetailsOpen: false })}>
+            <Button
+              onClick={() =>
+                this.setState({ deviceDetailsOpen: false, qrOpen: true })
+              }
+            >
               Go back
             </Button>
             <Button
@@ -463,7 +486,11 @@ class AddDevice extends Component {
                 )
               }}
               color="primary"
-              disabled={!this.state.name || this.state.claimLoading}
+              disabled={
+                !this.state.name ||
+                this.state.claimLoading ||
+                this.state.codeError
+              }
             >
               Add
               {this.state.claimLoading && <CenteredSpinner isInButton />}

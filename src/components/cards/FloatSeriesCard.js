@@ -148,7 +148,7 @@ export default graphql(
           <Typography
             variant="h5"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     textAlign: "center",

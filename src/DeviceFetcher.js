@@ -119,7 +119,7 @@ function DeviceFetcher(props) {
         <Fragment>
           <div
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { background: "#2f333d" }
                 : { background: "white" }
@@ -128,7 +128,7 @@ function DeviceFetcher(props) {
           >
             <div
               className={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? "darkMainBodyBG"
                   : "mainBodyBG"
@@ -139,7 +139,7 @@ function DeviceFetcher(props) {
           <div
             className="statusBar"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { background: "#2f333d" }
                 : { background: "white" }

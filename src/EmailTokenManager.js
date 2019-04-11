@@ -19,7 +19,7 @@ import gql from "graphql-tag"
 function setUpClient(bearer) {
   const wsLink = new WebSocketLink({
     uri:
-      typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
         ? (localStorage.getItem("serverUnsecure") === "true"
             ? "ws://"
             : "wss://") +
@@ -36,7 +36,7 @@ function setUpClient(bearer) {
 
   const httpLink = new HttpLink({
     uri:
-      typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
         ? (localStorage.getItem("serverUnsecure") === "true"
             ? "http://"
             : "https://") +

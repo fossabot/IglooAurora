@@ -19,7 +19,7 @@ class AuthenticatedApp extends Component {
     const bearer = props.bearer
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -36,7 +36,7 @@ class AuthenticatedApp extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -75,7 +75,7 @@ class AuthenticatedApp extends Component {
       const bearer = nextProps.bearer
       const wsLink = new WebSocketLink({
         uri:
-          typeof Storage !== "undefined" &&
+
           localStorage.getItem("server") !== ""
             ? (localStorage.getItem("serverUnsecure") === "true"
                 ? "ws://"
@@ -93,7 +93,7 @@ class AuthenticatedApp extends Component {
 
       const httpLink = new HttpLink({
         uri:
-          typeof Storage !== "undefined" &&
+
           localStorage.getItem("server") !== ""
             ? (localStorage.getItem("serverUnsecure") === "true"
                 ? "http://"

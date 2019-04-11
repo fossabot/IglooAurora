@@ -138,7 +138,7 @@ class ShareEnvironment extends Component {
               <ul style={{ padding: "0" }}>
                 <ListSubheader
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           color: "#c1c2c5",
@@ -170,7 +170,7 @@ class ShareEnvironment extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? {
                                 color: "white",
@@ -189,7 +189,7 @@ class ShareEnvironment extends Component {
                     secondary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? {
                                 color: "#c1c2c5",
@@ -232,7 +232,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -245,7 +245,7 @@ class ShareEnvironment extends Component {
                             {item.receiver.name}
                             <font
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? {
                                       color: "white",
@@ -265,7 +265,7 @@ class ShareEnvironment extends Component {
                         secondary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "#c1c2c5",
@@ -307,7 +307,7 @@ class ShareEnvironment extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -337,7 +337,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -355,7 +355,7 @@ class ShareEnvironment extends Component {
                         secondary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "#c1c2c5",
@@ -410,7 +410,7 @@ class ShareEnvironment extends Component {
                             primary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "white",
@@ -423,7 +423,7 @@ class ShareEnvironment extends Component {
                                 {item.receiver.name}
                                 <font
                                   style={
-                                    typeof Storage !== "undefined" &&
+
                                     localStorage.getItem("nightMode") === "true"
                                       ? {
                                           color: "white",
@@ -443,7 +443,7 @@ class ShareEnvironment extends Component {
                             secondary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "#c1c2c5",
@@ -491,7 +491,7 @@ class ShareEnvironment extends Component {
                         >
                           <PersonAdd
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -507,7 +507,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -538,7 +538,7 @@ class ShareEnvironment extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -569,7 +569,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -587,7 +587,7 @@ class ShareEnvironment extends Component {
                         secondary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "#c1c2c5",
@@ -642,7 +642,7 @@ class ShareEnvironment extends Component {
                             primary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "white",
@@ -655,7 +655,7 @@ class ShareEnvironment extends Component {
                                 {item.receiver.name}
                                 <font
                                   style={
-                                    typeof Storage !== "undefined" &&
+
                                     localStorage.getItem("nightMode") === "true"
                                       ? {
                                           color: "white",
@@ -675,7 +675,7 @@ class ShareEnvironment extends Component {
                             secondary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "#c1c2c5",
@@ -723,7 +723,7 @@ class ShareEnvironment extends Component {
                         >
                           <PersonAdd
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -739,7 +739,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -770,7 +770,7 @@ class ShareEnvironment extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -801,7 +801,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -819,7 +819,7 @@ class ShareEnvironment extends Component {
                         secondary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "#c1c2c5",
@@ -874,7 +874,7 @@ class ShareEnvironment extends Component {
                             primary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "white",
@@ -887,7 +887,7 @@ class ShareEnvironment extends Component {
                                 {item.receiver.name}
                                 <font
                                   style={
-                                    typeof Storage !== "undefined" &&
+
                                     localStorage.getItem("nightMode") === "true"
                                       ? {
                                           color: "white",
@@ -907,7 +907,7 @@ class ShareEnvironment extends Component {
                             secondary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? {
                                         color: "#c1c2c5",
@@ -955,7 +955,7 @@ class ShareEnvironment extends Component {
                         >
                           <PersonAdd
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -971,7 +971,7 @@ class ShareEnvironment extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? {
                                     color: "white",
@@ -1017,7 +1017,7 @@ class ShareEnvironment extends Component {
                 primary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "white",
@@ -1071,7 +1071,7 @@ class ShareEnvironment extends Component {
                 primary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "white",

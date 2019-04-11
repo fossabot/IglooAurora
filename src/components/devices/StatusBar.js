@@ -34,7 +34,7 @@ export default class StatusBar extends Component {
     let statusBarContent = (
       <div
         style={
-          typeof Storage !== "undefined" &&
+
           localStorage.getItem("nightMode") === "true"
             ? { background: "#2f333d", color: "white" }
             : { background: "white", color: "black" }
@@ -222,7 +222,7 @@ export default class StatusBar extends Component {
           <AppBar position="static" color="default" style={{ height: "48px" }}>
             <div
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? {
                       background: "#2f333d",

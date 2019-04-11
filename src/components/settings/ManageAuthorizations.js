@@ -119,7 +119,7 @@ class AuthDialog extends Component {
   async getPermanentToken() {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -136,7 +136,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -201,7 +201,7 @@ class AuthDialog extends Component {
   async deletePermanentToken(tokenId) {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -218,7 +218,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -266,7 +266,7 @@ class AuthDialog extends Component {
   async regeneratePermanentToken(tokenId) {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -283,7 +283,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -419,7 +419,7 @@ class AuthDialog extends Component {
         <Typography
           variant="h5"
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -469,7 +469,7 @@ class AuthDialog extends Component {
                 primary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : { color: "black" }
@@ -481,7 +481,7 @@ class AuthDialog extends Component {
                 secondary={
                   <font
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "#c1c2c5" }
                         : { color: "#7a7a7a" }
@@ -534,7 +534,7 @@ class AuthDialog extends Component {
               primary={
                 <font
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }
@@ -759,7 +759,7 @@ class AuthDialog extends Component {
               <SvgIcon>
                 <svg
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { width: "24px", height: "24px", color: "white" }
                       : { width: "24px", height: "24px", color: "black" }
@@ -775,7 +775,7 @@ class AuthDialog extends Component {
               primary={
                 <font
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }

@@ -172,7 +172,7 @@ class MailingOptions extends Component {
                   <Typography
                     variant="h5"
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             textAlign: "center",

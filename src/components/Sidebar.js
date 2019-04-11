@@ -183,7 +183,6 @@ class Sidebar extends Component {
           sidebarContent = (
             <CenteredSpinner
               style={
-                typeof Storage !== "undefined" &&
                 localStorage.getItem("nightMode") === "true"
                   ? {
                       height: "calc(100% - 96px)",
@@ -231,10 +230,7 @@ class Sidebar extends Component {
                 invisibleDeviceTypes,
               })
             }}
-            nightMode={
-              typeof Storage !== "undefined" &&
-              localStorage.getItem("nightMode") === "true"
-            }
+            nightMode={localStorage.getItem("nightMode") === "true"}
           />
           <List
             style={{
@@ -347,7 +343,6 @@ class Sidebar extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -359,7 +354,6 @@ class Sidebar extends Component {
                     secondary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "#c1c2c5" }
                             : { color: "#7a7a7a" }
@@ -481,7 +475,6 @@ class Sidebar extends Component {
               color="primary"
               className="notSelectable"
               style={
-                typeof Storage !== "undefined" &&
                 localStorage.getItem("nightMode") === "true"
                   ? { color: "white" }
                   : { color: "black" }
@@ -506,7 +499,6 @@ class Sidebar extends Component {
                 <InputAdornment position="start" style={{ cursor: "default" }}>
                   <Search
                     style={
-                      typeof Storage !== "undefined" &&
                       localStorage.getItem("nightMode") === "true"
                         ? !(
                             environment &&
@@ -561,12 +553,36 @@ class Sidebar extends Component {
                 this.setState({ popoverOpen: true })
               }}
               disabled={
-                !(
-                  environment &&
-                  (environment.devices[0] || !environment.starredDevices[0])
-                )
+                !environment ||
+                (environment &&
+                  !environment.devices.length &&
+                  !environment.starredDevices.length)
               }
-              style={{ marginTop: "8px" }}
+              style={
+                localStorage.getItem("nightMode") === "true"
+                  ? !(
+                      environment &&
+                      mergedArray.filter(
+                        device =>
+                          this.state.invisibleDeviceTypes.indexOf(
+                            device.deviceType
+                          ) === -1
+                      )[1]
+                    )
+                    ? { color: "white", opacity: "0.54" ,marginTop: "8px"}
+                    : { color: "white",marginTop: "8px" }
+                  : !(
+                      environment &&
+                      mergedArray.filter(
+                        device =>
+                          this.state.invisibleDeviceTypes.indexOf(
+                            device.deviceType
+                          ) === -1
+                      )[1]
+                    )
+                  ? { color: "black", opacity: "0.54" ,marginTop: "8px"}
+                  : { color: "black" ,marginTop: "8px"}
+              }
             >
               <Tune />
             </IconButton>

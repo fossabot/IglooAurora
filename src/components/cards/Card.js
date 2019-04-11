@@ -78,7 +78,7 @@ class Card extends Component {
             value={value.floatValue}
             unitOfMeasurement={value.unitOfMeasurement}
             nightMode={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
             }
           />
@@ -166,7 +166,7 @@ class Card extends Component {
           className={value.cardSize.toLowerCase()}
           zDepth={2}
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? { background: "#2f333d" }
               : { background: "white" }
@@ -174,7 +174,7 @@ class Card extends Component {
         >
           <div
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     background: "#21252b",
@@ -194,7 +194,7 @@ class Card extends Component {
               variant="h6"
               className="notSelectable"
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? {
                       cursor: "default",

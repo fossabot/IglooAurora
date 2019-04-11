@@ -154,7 +154,7 @@ export default class EnvironmentsBody extends Component {
     let yourEnvironmentsList = ""
 
     let nightMode =
-      typeof Storage !== "undefined" &&
+
       localStorage.getItem("nightMode") === "true"
 
     if (user) {
@@ -184,7 +184,7 @@ export default class EnvironmentsBody extends Component {
               >
                 <Paper
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           backgroundColor: "#2f333d",
@@ -214,7 +214,7 @@ export default class EnvironmentsBody extends Component {
                     <Typography
                       variant="h5"
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : {}
@@ -245,7 +245,7 @@ export default class EnvironmentsBody extends Component {
               >
                 <Paper
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           backgroundColor: "#2f333d",
@@ -281,7 +281,7 @@ export default class EnvironmentsBody extends Component {
                     <Typography
                       variant="h5"
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : {}
@@ -425,7 +425,7 @@ export default class EnvironmentsBody extends Component {
                 variant="h5"
                 className="notSelectable defaultCursor"
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? {
                         textAlign: "center",
@@ -554,7 +554,7 @@ export default class EnvironmentsBody extends Component {
                     >
                       <Search
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? !(
                                 loading ||
@@ -630,7 +630,7 @@ export default class EnvironmentsBody extends Component {
                   variant="h5"
                   className="notSelectable defaultCursor"
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           textAlign: "center",
@@ -670,7 +670,7 @@ export default class EnvironmentsBody extends Component {
                     variant="h5"
                     className="notSelectable defaultCursor"
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             textAlign: "center",

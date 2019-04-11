@@ -20,7 +20,7 @@ class ReadOnlyStringCard extends Component {
           <Typography
             variant="h3"
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? {
                     color: "white",

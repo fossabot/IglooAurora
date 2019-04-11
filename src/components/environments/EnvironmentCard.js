@@ -151,7 +151,7 @@ class EnvironmentCard extends Component {
       <Fragment>
         <Paper
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? {
                   backgroundColor: "#2f333d",
@@ -205,7 +205,7 @@ class EnvironmentCard extends Component {
                     variant="h6"
                     className="notSelectable"
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "white",
@@ -477,7 +477,7 @@ class EnvironmentCard extends Component {
           environment={this.props.environment}
           userData={this.props.userData}
           nightMode={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
           }
           client={this.props.client}
@@ -488,7 +488,7 @@ class EnvironmentCard extends Component {
           environment={this.props.environment}
           userData={this.props.userData}
           nightMode={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
           }
         />

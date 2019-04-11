@@ -308,7 +308,7 @@ class SettingsDialog extends Component {
       >
         <div
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? !this.props.fullScreen
                 ? {
@@ -338,7 +338,7 @@ class SettingsDialog extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -365,7 +365,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -389,7 +389,7 @@ class SettingsDialog extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -416,7 +416,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -428,7 +428,7 @@ class SettingsDialog extends Component {
                       secondary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "#c1c2c5" }
                               : { color: "#7a7a7a" }
@@ -453,7 +453,7 @@ class SettingsDialog extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -479,7 +479,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -491,7 +491,7 @@ class SettingsDialog extends Component {
                       secondary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "#c1c2c5" }
                               : { color: "#7a7a7a" }
@@ -520,7 +520,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -532,7 +532,7 @@ class SettingsDialog extends Component {
                       secondary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "#c1c2c5" }
                               : { color: "#7a7a7a" }
@@ -561,7 +561,7 @@ class SettingsDialog extends Component {
                 <ul style={{ padding: "0" }}>
                   <ListSubheader
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "#c1c2c5",
@@ -584,7 +584,7 @@ class SettingsDialog extends Component {
                         primary={
                           <font
                             style={
-                              typeof Storage !== "undefined" &&
+
                               localStorage.getItem("nightMode") === "true"
                                 ? { color: "white" }
                                 : { color: "black" }
@@ -601,7 +601,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -619,7 +619,7 @@ class SettingsDialog extends Component {
         </div>
         <div
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? !this.props.fullScreen
                 ? {
@@ -648,7 +648,7 @@ class SettingsDialog extends Component {
               <ul style={{ padding: "0" }}>
                 <ListSubheader
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           color: "#c1c2c5",
@@ -674,7 +674,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -694,7 +694,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -712,7 +712,7 @@ class SettingsDialog extends Component {
               <ul style={{ padding: "0" }}>
                 <ListSubheader
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           color: "#c1c2c5",
@@ -738,7 +738,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -750,7 +750,7 @@ class SettingsDialog extends Component {
                     secondary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "#c1c2c5", cursor: "default" }
                             : { color: "#7a7a7a", cursor: "default" }
@@ -768,7 +768,7 @@ class SettingsDialog extends Component {
               <ul style={{ padding: "0" }}>
                 <ListSubheader
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           color: "#c1c2c5",
@@ -794,7 +794,7 @@ class SettingsDialog extends Component {
                       primary={
                         <font
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? { color: "white" }
                               : { color: "black" }
@@ -815,7 +815,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -835,7 +835,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -847,7 +847,7 @@ class SettingsDialog extends Component {
                     secondary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "#c1c2c5", cursor: "default" }
                             : { color: "#7a7a7a", cursor: "default" }
@@ -867,7 +867,7 @@ class SettingsDialog extends Component {
                     primary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "white" }
                             : { color: "black" }
@@ -879,7 +879,7 @@ class SettingsDialog extends Component {
                     secondary={
                       <font
                         style={
-                          typeof Storage !== "undefined" &&
+
                           localStorage.getItem("nightMode") === "true"
                             ? { color: "#c1c2c5", cursor: "default" }
                             : { color: "#7a7a7a", cursor: "default" }
@@ -970,7 +970,7 @@ class SettingsDialog extends Component {
               <DialogActions>
                 <Button
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { float: "right", color: "white" }
                       : { float: "right", color: "black" }
@@ -1030,7 +1030,7 @@ class SettingsDialog extends Component {
                   value={this.props.slideIndex}
                   showLabels
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           height: "64px",
@@ -1046,7 +1046,7 @@ class SettingsDialog extends Component {
                     icon={<Language />}
                     label="General"
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? this.props.slideIndex === 0
                           ? { color: "#fff" }
@@ -1060,7 +1060,7 @@ class SettingsDialog extends Component {
                     icon={<AccountBox />}
                     label="Account"
                     style={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? this.props.slideIndex === 1
                           ? { color: "#fff" }

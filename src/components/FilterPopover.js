@@ -161,7 +161,7 @@ export default class FilterPopover extends Component {
           <ul style={{ padding: 0, margin: 0 }}>
             <ListSubheader
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? { backgroundColor: "#2f333d", padding: 0 }
                   : { backgroundColor: "white", padding: 0 }
@@ -178,7 +178,7 @@ export default class FilterPopover extends Component {
                   variant="h6"
                   className="defaultCursor"
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           marginLeft: "-8px",
@@ -195,7 +195,7 @@ export default class FilterPopover extends Component {
                 {localStorage.getItem("sortDirection") === "descending" ? (
                   <IconButton
                     onClick={() => {
-                      typeof Storage !== "undefined" &&
+
                         localStorage.setItem("sortDirection", "ascending")
                       this.props.forceUpdate()
                     }}
@@ -217,7 +217,7 @@ export default class FilterPopover extends Component {
                 ) : (
                   <IconButton
                     onClick={() => {
-                      typeof Storage !== "undefined" &&
+
                         localStorage.setItem("sortDirection", "descending")
                       this.props.forceUpdate()
                     }}
@@ -249,18 +249,18 @@ export default class FilterPopover extends Component {
               <ListItem
                 button
                 selected={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("sortBy") === "name"
                 }
                 onClick={() => {
-                  typeof Storage !== "undefined" &&
+
                     localStorage.setItem("sortBy", "name")
                   this.props.forceUpdate()
                 }}
               >
                 <ListItemIcon
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }
@@ -272,7 +272,7 @@ export default class FilterPopover extends Component {
                   primary={
                     <font
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : { color: "black" }
@@ -286,18 +286,18 @@ export default class FilterPopover extends Component {
               <ListItem
                 button
                 selected={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("sortBy") === "index"
                 }
                 onClick={() => {
-                  typeof Storage !== "undefined" &&
+
                     localStorage.setItem("sortBy", "index")
                   this.props.forceUpdate()
                 }}
               >
                 <ListItemIcon
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }
@@ -316,7 +316,7 @@ export default class FilterPopover extends Component {
                   primary={
                     <font
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? { color: "white" }
                           : { color: "black" }
@@ -332,7 +332,7 @@ export default class FilterPopover extends Component {
           <ul style={{ padding: 0, margin: 0 }}>
             <ListSubheader
               style={
-                typeof Storage !== "undefined" &&
+
                 localStorage.getItem("nightMode") === "true"
                   ? { backgroundColor: "#2f333d", padding: 0 }
                   : { backgroundColor: "white", padding: 0 }
@@ -343,7 +343,7 @@ export default class FilterPopover extends Component {
                   variant="h6"
                   className="defaultCursor"
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? {
                           marginLeft: "-8px",
@@ -385,7 +385,7 @@ export default class FilterPopover extends Component {
                       variant="h5"
                       className="notSelectable defaultCursor"
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               textAlign: "center",
@@ -471,7 +471,7 @@ export default class FilterPopover extends Component {
                             primary={
                               <font
                                 style={
-                                  typeof Storage !== "undefined" &&
+
                                   localStorage.getItem("nightMode") === "true"
                                     ? { color: "white" }
                                     : { color: "black" }
@@ -495,7 +495,7 @@ export default class FilterPopover extends Component {
                                 ) : (
                                   <ExpandMore
                                     style={
-                                      typeof Storage !== "undefined" &&
+
                                       localStorage.getItem("nightMode") ===
                                         "true"
                                         ? {
@@ -552,7 +552,7 @@ export default class FilterPopover extends Component {
                                     primary={
                                       <font
                                         style={
-                                          typeof Storage !== "undefined" &&
+
                                           localStorage.getItem("nightMode") ===
                                             "true"
                                             ? {

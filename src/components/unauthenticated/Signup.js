@@ -257,7 +257,7 @@ export default class Signup extends Component {
   enablePassword = async () => {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -274,7 +274,7 @@ export default class Signup extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -382,7 +382,7 @@ export default class Signup extends Component {
   enableWebAuthn = async () => {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -399,7 +399,7 @@ export default class Signup extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -528,7 +528,7 @@ export default class Signup extends Component {
   enableMailAuthentication = () => {
     const wsLink = new WebSocketLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -545,7 +545,7 @@ export default class Signup extends Component {
 
     const httpLink = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +

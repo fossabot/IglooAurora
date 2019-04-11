@@ -18,7 +18,7 @@ export default function ReadOnlyFloatCard(props) {
         <Typography
           variant="h3"
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? {
                   color: "white",
@@ -34,7 +34,7 @@ export default function ReadOnlyFloatCard(props) {
           {props.value}{" "}
           <font
             style={
-              typeof Storage !== "undefined" &&
+
               localStorage.getItem("nightMode") === "true"
                 ? { color: "#c1c2c5" }
                 : { color: "#7a7a7a" }

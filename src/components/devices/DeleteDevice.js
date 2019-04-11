@@ -114,7 +114,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
                       variant="h5"
                       className="notSelectable defaultCursor"
                       style={
-                        typeof Storage !== "undefined" &&
+
                         localStorage.getItem("nightMode") === "true"
                           ? {
                               textAlign: "center",
@@ -159,7 +159,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
                           <SvgIcon style={{ marginRight: "8px" }}>
                             <svg
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? {
                                       width: "24px",
@@ -191,7 +191,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
                           <SvgIcon style={{ marginRight: "8px" }}>
                             <svg
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? {
                                       width: "24px",
@@ -219,7 +219,7 @@ export default withMobileDialog({ breakpoint: "xs" })(function DeleteDevice(
                       <SvgIcon style={{ marginRight: "8px" }}>
                         <svg
                           style={
-                            typeof Storage !== "undefined" &&
+
                             localStorage.getItem("nightMode") === "true"
                               ? {
                                   width: "24px",

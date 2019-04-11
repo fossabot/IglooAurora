@@ -83,7 +83,7 @@ export default class UnAuthenticatedMain extends Component {
 
     let link = new HttpLink({
       uri:
-        typeof Storage !== "undefined" && localStorage.getItem("server") !== ""
+          localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +

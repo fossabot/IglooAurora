@@ -381,7 +381,7 @@ const PendingSharesContent = graphql(
                 variant="h5"
                 className="notSelectable defaultCursor"
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? {
                         textAlign: "center",
@@ -419,7 +419,7 @@ const PendingSharesContent = graphql(
                           primary={
                             <font
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "white" }
                                   : { color: "black" }
@@ -431,7 +431,7 @@ const PendingSharesContent = graphql(
                           secondary={
                             <font
                               style={
-                                typeof Storage !== "undefined" &&
+
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "#c1c2c5" }
                                   : { color: "#7a7a7a" }

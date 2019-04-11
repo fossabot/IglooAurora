@@ -296,7 +296,7 @@ export default class MainBody extends Component {
           variant="h5"
           className="notSelectable defaultCursor"
           style={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -322,7 +322,7 @@ export default class MainBody extends Component {
           value={value}
           key={value.id}
           nightMode={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
           }
           environmentData={this.props.environmentData}
@@ -357,7 +357,7 @@ export default class MainBody extends Component {
     return (
       <div
         style={
-          typeof Storage !== "undefined" &&
+
           localStorage.getItem("nightMode") === "true"
             ? { background: "#2f333d" }
             : { background: "white" }
@@ -365,7 +365,7 @@ export default class MainBody extends Component {
       >
         <div
           className={
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("nightMode") === "true"
               ? this.props.isMobile
                 ? "mainBody mobileDarkMainBodyBG"

@@ -525,7 +525,7 @@ class Main extends Component {
     }
 
     nightMode =
-      typeof Storage !== "undefined" &&
+
       localStorage.getItem("nightMode") === "true"
 
     return (
@@ -685,7 +685,7 @@ class Main extends Component {
                 />
                 <div
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { background: "#2f333d" }
                       : { background: "white" }
@@ -694,7 +694,7 @@ class Main extends Component {
                 >
                   <div
                     className={
-                      typeof Storage !== "undefined" &&
+
                       localStorage.getItem("nightMode") === "true"
                         ? "darkMainBodyBG"
                         : "mainBodyBG"
@@ -705,7 +705,7 @@ class Main extends Component {
                 <div
                   className="statusBar"
                   style={
-                    typeof Storage !== "undefined" &&
+
                     localStorage.getItem("nightMode") === "true"
                       ? { background: "#2f333d" }
                       : { background: "white" }

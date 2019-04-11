@@ -140,7 +140,7 @@ class ChangeServer extends Component {
       )
 
     if (
-      typeof Storage !== "undefined" &&
+
       localStorage.getItem("server") !== "bering.igloo.ooo" &&
       localStorage.getItem("server") === url
     )
@@ -151,7 +151,7 @@ class ChangeServer extends Component {
 
   serverListContainsItem = () => {
     return (
-      typeof Storage !== "undefined" &&
+
       JSON.parse(localStorage.getItem("serverList")) &&
       JSON.parse(localStorage.getItem("serverList")).some(
         server =>
@@ -164,14 +164,14 @@ class ChangeServer extends Component {
 
   render() {
     const dialogList =
-      typeof Storage !== "undefined" &&
+
       localStorage.getItem("serverList") &&
       JSON.parse(localStorage.getItem("serverList")).map(server => (
         <ListItem
           button
           selected={localStorage.getItem("server") === server.url}
           onClick={() =>
-            typeof Storage !== "undefined" &&
+
             localStorage.getItem("server") !== server.url &&
             this.selectUrl(server.url, server.unsecure)
           }
@@ -269,7 +269,7 @@ class ChangeServer extends Component {
       >
         <Dialog
           open={
-            typeof Storage !== "undefined" &&
+
             this.props.open &&
             !this.state.newServerOpen &&
             !this.state.editServerOpen
@@ -295,11 +295,11 @@ class ChangeServer extends Component {
               <ListItem
                 button
                 selected={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("server") === "bering.igloo.ooo"
                 }
                 onClick={() =>
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("server") !== "bering.igloo.ooo" &&
                   this.selectUrl("bering.igloo.ooo", false)
                 }
@@ -381,7 +381,7 @@ class ChangeServer extends Component {
                   event.key === "Enter" &&
                   this.state.name &&
                   this.state.url &&
-                  typeof Storage !== "undefined" &&
+
                   !this.serverListContainsItem() &&
                   this.isUrl(this.state.url) &&
                   this.state.url !== "https://bering.igloo.ooo" &&
@@ -447,7 +447,7 @@ class ChangeServer extends Component {
                   event.key === "Enter" &&
                   this.state.name &&
                   this.state.url &&
-                  typeof Storage !== "undefined" &&
+
                   !this.serverListContainsItem() &&
                   this.isUrl(this.state.url) &&
                   this.state.url !== "https://bering.igloo.ooo" &&
@@ -605,7 +605,7 @@ class ChangeServer extends Component {
                   event.key === "Enter" &&
                   this.state.editName &&
                   this.state.editUrl &&
-                  typeof Storage !== "undefined" &&
+
                   this.isUrl(this.state.editUrl) &&
                   this.state.editUrl !== "https://bering.igloo.ooo" &&
                   this.state.editUrl !== "bering.igloo.ooo" &&
@@ -670,7 +670,7 @@ class ChangeServer extends Component {
                   event.key === "Enter" &&
                   this.state.editName &&
                   this.state.editUrl &&
-                  typeof Storage !== "undefined" &&
+
                   this.isUrl(this.state.editUrl) &&
                   this.state.editUrl !== "https://bering.igloo.ooo" &&
                   this.state.editUrl !== "bering.igloo.ooo" &&

@@ -325,7 +325,7 @@ export default class VerifyAuthentication extends Component {
                   )
                 }
                 style={
-                  typeof Storage !== "undefined" &&
+
                   localStorage.getItem("nightMode") === "true"
                     ? {
                         color: "white",
