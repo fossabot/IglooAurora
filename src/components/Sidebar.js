@@ -460,6 +460,7 @@ class Sidebar extends Component {
             close={() => this.setState({ addDeviceOpen: false })}
             userData={this.props.userData}
             environment={environment.id}
+            client={this.props.client}
           />
         </Fragment>
       )

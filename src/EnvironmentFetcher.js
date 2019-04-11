@@ -584,6 +584,7 @@ class Main extends Component {
                     searchText={this.props.devicesSearchText}
                     snackbarOpen={this.props.snackbarOpen}
                     userData={this.props.userData}
+                    client={this.props.client}
                   />
                 </div>
                 <AppBar
@@ -653,6 +654,7 @@ class Main extends Component {
                 searchDevices={this.props.searchDevices}
                 searchText={this.props.devicesSearchText}
                 userData={this.props.userData}
+                client={this.props.client}
               />
             </div>
             {this.props.selectedDevice !== null ? (

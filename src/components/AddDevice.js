@@ -53,8 +53,19 @@ class AddDevice extends Component {
         },
       })
 
-      this.setState({ deviceDetailsOpen: false })
+      this.setState({ manualCodeOpen: false, deviceDetailsOpen: false })
+
+      this.props.close()
     } catch (e) {
+      if (
+        e.message === "GraphQL error: claimCode is not correct" ||
+        e.message === "GraphQL error: This id is not valid"
+      ) {
+        this.setState({ codeError: "Enter a valid code" })
+      } else {
+        this.setState({ codeError: "Error" })
+      }
+    } finally {
       this.setState({ claimLoading: false })
     }
   }
@@ -234,12 +245,13 @@ class AddDevice extends Component {
               onError={() => this.setState({ qrError: true })}
               onScan={deviceId => {
                 if (deviceId) {
-                this.setState({
-                  qrOpen: false,
-                  authDialogOpen: true,
-                  deviceId,
-                })
-                this.props.close()}
+                  this.setState({
+                    qrOpen: false,
+                    deviceDetailsOpen: true,
+                    deviceId,
+                  })
+                  this.props.close()
+                }
               }}
             />
           </div>
@@ -280,19 +292,19 @@ class AddDevice extends Component {
                 this.setState({
                   code: event.target.value,
                   codeEmpty: event.target.value === "",
+                  codeError: "",
                 })
               }
               onKeyPress={event => {
                 if (event.key === "Enter" && !this.state.codeEmpty) {
                   this.setState(oldState => ({
-                    deviceDetailsOpen: true,
                     deviceId: oldState.code,
                   }))
                 }
               }}
               style={{
                 width: "calc(100% - 48px)",
-                margin: "0 24px",
+                margin: "0 24px 16px 24px",
               }}
               InputLabelProps={this.state.code && { shrink: true }}
               InputProps={{
@@ -301,6 +313,49 @@ class AddDevice extends Component {
                     <IconButton
                       onClick={() =>
                         this.setState({ code: "", codeEmpty: true })
+                      }
+                      tabIndex="-1"
+                    >
+                      <Clear />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              id="claim-device-name"
+              label="Name"
+              value={this.state.name}
+              variant="outlined"
+              error={this.state.nameEmpty}
+              helperText={this.state.nameEmpty ? "This field is required" : " "}
+              onChange={event =>
+                this.setState({
+                  name: event.target.value,
+                  nameEmpty: event.target.value === "",
+                })
+              }
+              onKeyPress={event => {
+                if (event.key === "Enter" && !this.state.nameEmpty) {
+                  this.claimDevice(
+                    this.state.code,
+                    this.state.name,
+                    this.props.environment
+                  )
+                  this.setState({ deviceDetailsOpen: false })
+                }
+              }}
+              style={{
+                width: "calc(100% - 48px)",
+                margin: "0 24px",
+              }}
+              InputLabelProps={this.state.name && { shrink: true }}
+              InputProps={{
+                endAdornment: this.state.name && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() =>
+                        this.setState({ name: "", nameEmpty: true })
                       }
                       tabIndex="-1"
                     >
@@ -322,15 +377,17 @@ class AddDevice extends Component {
             <Button
               variant="contained"
               onClick={() => {
-                this.setState(oldState => ({
-                  deviceDetailsOpen: true,
-                  deviceId: oldState.code,
-                }))
+                this.claimDevice(
+                  this.state.code,
+                  this.state.name,
+                  this.props.environment
+                )
               }}
               color="primary"
-              disabled={this.state.codeEmpty || this.state.codeLoading}
+              disabled={!this.state.name || this.state.claimLoading}
             >
-              Next
+              Add
+              {this.state.claimLoading && <CenteredSpinner isInButton />}
             </Button>
           </DialogActions>
         </Dialog>
@@ -364,7 +421,7 @@ class AddDevice extends Component {
               onKeyPress={event => {
                 if (event.key === "Enter" && !this.state.nameEmpty) {
                   this.claimDevice(
-                    this.state.deviceId,
+                    this.state.code,
                     this.state.name,
                     this.props.environment
                   )
@@ -400,7 +457,7 @@ class AddDevice extends Component {
               variant="contained"
               onClick={() => {
                 this.claimDevice(
-                  this.state.deviceId,
+                  this.state.code,
                   this.state.name,
                   this.props.environment
                 )
