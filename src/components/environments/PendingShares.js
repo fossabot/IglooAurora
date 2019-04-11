@@ -3,6 +3,7 @@ import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
+import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import Button from "@material-ui/core/Button"
 import Grow from "@material-ui/core/Grow"
@@ -56,9 +57,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Pending share requests</DialogTitle>
-          <div style={{ height: "100%" }}>
-            {this.state.hasReceivedOpen && <PendingSharesContent />}
-          </div>
+          {this.state.hasReceivedOpen && <PendingSharesContent />}
           <DialogActions>
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
@@ -155,61 +154,6 @@ const PendingSharesContent = graphql(
               },
             },
           })
-
-        queryMore = async () => {
-          if (
-            !this.queryMore.locked &&
-            this.props.pendingEnvironmentShareCount >
-              this.props.pendingEnvironmentSharesData.user
-                .pendingEnvironmentShares.length
-          ) {
-            this.queryMore.locked = true
-
-            try {
-              this.setState({ fetchMoreLoading: true })
-              await this.props.pendingEnvironmentSharesData.fetchMore(
-                {
-                  variables: {
-                    offset: this.props
-                      .pendingEnvironmentSharesData.user
-                      .pendingEnvironmentShares.length,
-                    limit:
-                      this.props.pendingEnvironmentShareCount -
-                        this.props.pendingEnvironmentSharesData
-                          .user.pendingEnvironmentShares.length >=
-                      20
-                        ? 20
-                        : this.props.pendingEnvironmentShareCount %
-                          20,
-                  },
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev
-                    }
-
-                    const newDevices = [
-                      ...prev.environment.devices,
-                      ...fetchMoreResult.environment.devices,
-                    ]
-
-                    return {
-                      environment: {
-                        ...prev.environment,
-                        devices: newDevices,
-                      },
-                    }
-                  },
-                }
-              )
-            } finally {
-              this.setState(() => {
-                this.queryMore.locked = false
-
-                return { fetchMoreLoading: false }
-              })
-            }
-          }
-        }
 
         componentDidMount() {
           const pendingEnvironmentShareReceivedSubscription = gql`
@@ -368,41 +312,112 @@ const PendingSharesContent = graphql(
           })
         }
 
+        queryMore = async () => {
+          console.log(
+            this.props.pendingEnvironmentSharesData.user
+              .pendingEnvironmentShareCount,
+            this.props.pendingEnvironmentSharesData.user
+              .pendingEnvironmentShares.length,
+            this.props.pendingEnvironmentSharesData.user
+              .pendingEnvironmentShareCount >
+              this.props.pendingEnvironmentSharesData.user
+                .pendingEnvironmentShares.length
+          )
+          if (
+            !this.queryMore.locked &&
+            this.props.pendingEnvironmentSharesData.user
+              .pendingEnvironmentShareCount >
+              this.props.pendingEnvironmentSharesData.user
+                .pendingEnvironmentShares.length
+          ) {
+            this.queryMore.locked = true
+            console.log("a")
+            try {
+              this.setState({ fetchMoreLoading: true })
+              await this.props.pendingEnvironmentSharesData.fetchMore({
+                variables: {
+                  offset: this.props.pendingEnvironmentSharesData.user
+                    .pendingEnvironmentShares.length,
+                  limit:
+                    this.props.pendingEnvironmentSharesData.user
+                      .pendingEnvironmentShareCount -
+                      this.props.pendingEnvironmentSharesData.user
+                        .pendingEnvironmentShares.length >=
+                    20
+                      ? 20
+                      : this.props.pendingEnvironmentSharesData.user
+                          .pendingEnvironmentShareCount % 20,
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return prev
+                  }
+
+                  const newShares = [
+                    ...prev.user.pendingEnvironmentShares,
+                    ...fetchMoreResult.user.pendingEnvironmentShares,
+                  ]
+
+                  return {
+                    user: {
+                      ...prev.user,
+                      pendingEnvironmentShares: newShares,
+                    },
+                  }
+                },
+              })
+            } finally {
+              this.setState(() => {
+                this.queryMore.locked = false
+
+                return { fetchMoreLoading: false }
+              })
+            }
+          }
+        }
+
         render() {
           const {
             pendingEnvironmentSharesData: { error, loading, user },
           } = this.props
 
-          if (loading) return <CenteredSpinner />
+          if (loading)
+            return (
+              <div style={{ height: "100%" }}>
+                <CenteredSpinner />
+              </div>
+            )
 
           if (error)
             return (
-              <Typography
-                variant="h5"
-                className="notSelectable defaultCursor"
-                style={
-
-                  localStorage.getItem("nightMode") === "true"
-                    ? {
-                        textAlign: "center",
-                        marginTop: "32px",
-                        marginBottom: "32px",
-                        color: "white",
-                      }
-                    : {
-                        textAlign: "center",
-                        marginTop: "32px",
-                        marginBottom: "32px",
-                      }
-                }
-              >
-                Error
-              </Typography>
+              <div style={{ height: "100%" }}>
+                <Typography
+                  variant="h5"
+                  className="notSelectable defaultCursor"
+                  style={
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                          color: "white",
+                        }
+                      : {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                        }
+                  }
+                >
+                  Error
+                </Typography>
+              </div>
             )
 
           if (user)
             return (
-              <div
+              <DialogContent
+                style={{ padding: 0 }}
                 onScroll={event => {
                   if (
                     event.target.scrollTop + event.target.clientHeight >=
@@ -419,7 +434,6 @@ const PendingSharesContent = graphql(
                           primary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "white" }
                                   : { color: "black" }
@@ -431,7 +445,6 @@ const PendingSharesContent = graphql(
                           secondary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "#c1c2c5" }
                                   : { color: "#7a7a7a" }
@@ -471,7 +484,7 @@ const PendingSharesContent = graphql(
                     )
                   )}
                 </List>
-              </div>
+              </DialogContent>
             )
         }
       }

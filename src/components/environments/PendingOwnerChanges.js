@@ -3,6 +3,7 @@ import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
+import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import Button from "@material-ui/core/Button"
 import Grow from "@material-ui/core/Grow"
@@ -56,9 +57,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Pending transfer requests</DialogTitle>
-          <div style={{ height: "100%" }}>
             {this.state.hasReceivedOpen && <PendingSharesContent />}
-          </div>
           <DialogActions>
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
@@ -157,7 +156,7 @@ const PendingSharesContent = graphql(
         queryMore = async () => {
           if (
             !this.queryMore.locked &&
-            this.props.pendingOwnerChangeCount >
+            this.props.pendingOwnerChangesData.user.pendingOwnerChangeCount >
               this.props.pendingOwnerChangesData.user.pendingOwnerChanges.length
           ) {
             this.queryMore.locked = true
@@ -169,27 +168,29 @@ const PendingSharesContent = graphql(
                   offset: this.props.pendingOwnerChangesData.user
                     .pendingOwnerChanges.length,
                   limit:
-                    this.props.pendingOwnerChangeCount -
+                    this.props.pendingOwnerChangesData.user
+                      .pendingOwnerChangeCount -
                       this.props.pendingOwnerChangesData.user
                         .pendingOwnerChanges.length >=
                     20
                       ? 20
-                      : this.props.pendingOwnerChangeCount % 20,
+                      : this.props.pendingOwnerChangesData.user
+                          .pendingOwnerChangeCount % 20,
                 },
                 updateQuery: (prev, { fetchMoreResult }) => {
                   if (!fetchMoreResult) {
                     return prev
                   }
 
-                  const newDevices = [
-                    ...prev.environment.devices,
-                    ...fetchMoreResult.environment.devices,
+                  const newOwnerChanges = [
+                    ...prev.user.pendingOwnerChanges,
+                    ...fetchMoreResult.user.pendingOwnerChanges,
                   ]
 
                   return {
-                    environment: {
-                      ...prev.environment,
-                      devices: newDevices,
+                    user: {
+                      ...prev.user,
+                      pendingOwnerChanges: newOwnerChanges,
                     },
                   }
                 },
@@ -366,36 +367,42 @@ const PendingSharesContent = graphql(
             pendingOwnerChangesData: { error, loading, user },
           } = this.props
 
-          if (loading) return <CenteredSpinner />
+          if (loading)
+            return (
+              <div style={{ height: "100%" }}>
+                <CenteredSpinner />
+              </div>
+            )
 
           if (error)
             return (
-              <Typography
-                variant="h5"
-                className="notSelectable defaultCursor"
-                style={
-
-                  localStorage.getItem("nightMode") === "true"
-                    ? {
-                        textAlign: "center",
-                        marginTop: "32px",
-                        marginBottom: "32px",
-                        color: "white",
-                      }
-                    : {
-                        textAlign: "center",
-                        marginTop: "32px",
-                        marginBottom: "32px",
-                      }
-                }
-              >
-                Error
-              </Typography>
+              <div style={{ height: "100%" }}>
+                <Typography
+                  variant="h5"
+                  className="notSelectable defaultCursor"
+                  style={
+                    localStorage.getItem("nightMode") === "true"
+                      ? {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                          color: "white",
+                        }
+                      : {
+                          textAlign: "center",
+                          marginTop: "32px",
+                          marginBottom: "32px",
+                        }
+                  }
+                >
+                  Error
+                </Typography>
+              </div>
             )
 
           if (user)
             return (
-              <div
+          <DialogContent style={{ padding: 0 }}
                 onScroll={event => {
                   if (
                     event.target.scrollTop + event.target.clientHeight >=
@@ -412,7 +419,6 @@ const PendingSharesContent = graphql(
                           primary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "white" }
                                   : { color: "black" }
@@ -424,7 +430,6 @@ const PendingSharesContent = graphql(
                           secondary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "#c1c2c5" }
                                   : { color: "#7a7a7a" }
@@ -464,7 +469,7 @@ const PendingSharesContent = graphql(
                     )
                   )}
                 </List>
-              </div>
+              </DialogContent>
             )
         }
       }

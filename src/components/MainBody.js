@@ -275,7 +275,7 @@ export default class MainBody extends Component {
       }
 
       if (
-        error.message === "GraphQL error: This id is not valid" ||
+        error.message === "GraphQL error: This ID is not valid" ||
         error.message ===
           "GraphQL error: The requested resource does not exist" ||
         error.message ===

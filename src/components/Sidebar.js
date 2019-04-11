@@ -175,7 +175,7 @@ class Sidebar extends Component {
 
     if (error) {
       if (
-        error.message === "GraphQL error: This id is not valid" ||
+        error.message === "GraphQL error: This ID is not valid" ||
         error.message === "GraphQL error: The requested resource does not exist"
       ) {
         if (querystringify.parse(window.location.search).device) {

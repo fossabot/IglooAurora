@@ -59,7 +59,7 @@ class AddDevice extends Component {
     } catch (e) {
       if (
         e.message === "GraphQL error: claimCode is not correct" ||
-        e.message === "GraphQL error: This id is not valid"
+        e.message === "GraphQL error: This ID is not valid"
       ) {
         this.setState({ codeError: "Enter a valid code" })
       } else {

@@ -23,8 +23,9 @@ import CenteredSpinner from "../CenteredSpinner"
 import moment from "moment"
 import Moment from "react-moment"
 import Dialog from "@material-ui/core/Dialog"
-import DialogActions from "@material-ui/core/DialogActions"
 import DialogTitle from "@material-ui/core/DialogTitle"
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogActions from "@material-ui/core/DialogActions"
 import Grow from "@material-ui/core/Grow"
 import Slide from "@material-ui/core/Slide"
 import InputAdornment from "@material-ui/core/InputAdornment"
@@ -119,7 +120,7 @@ class AuthDialog extends Component {
   async getPermanentToken() {
     const wsLink = new WebSocketLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -136,7 +137,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -201,7 +202,7 @@ class AuthDialog extends Component {
   async deletePermanentToken(tokenId) {
     const wsLink = new WebSocketLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -218,7 +219,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -266,7 +267,7 @@ class AuthDialog extends Component {
   async regeneratePermanentToken(tokenId) {
     const wsLink = new WebSocketLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "ws://"
               : "wss://") +
@@ -283,7 +284,7 @@ class AuthDialog extends Component {
 
     const httpLink = new HttpLink({
       uri:
-          localStorage.getItem("server") !== ""
+        localStorage.getItem("server") !== ""
           ? (localStorage.getItem("serverUnsecure") === "true"
               ? "http://"
               : "https://") +
@@ -419,7 +420,6 @@ class AuthDialog extends Component {
         <Typography
           variant="h5"
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -460,6 +460,29 @@ class AuthDialog extends Component {
             padding: "0",
           }}
         >
+          <ListItem
+            button
+            onClick={() =>
+              this.setState({ nameOpen: true, authDialogOpen: false })
+            }
+          >
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <font
+                  style={
+                    localStorage.getItem("nightMode") === "true"
+                      ? { color: "white" }
+                      : { color: "black" }
+                  }
+                >
+                  Get a new permanent token
+                </font>
+              }
+            />
+          </ListItem>
           {this.props.tokenData.user.permanentTokens.map(token => (
             <ListItem>
               <ListItemIcon>
@@ -469,7 +492,6 @@ class AuthDialog extends Component {
                 primary={
                   <font
                     style={
-
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "white" }
                         : { color: "black" }
@@ -481,7 +503,6 @@ class AuthDialog extends Component {
                 secondary={
                   <font
                     style={
-
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "#c1c2c5" }
                         : { color: "#7a7a7a" }
@@ -521,30 +542,6 @@ class AuthDialog extends Component {
               </ListItemSecondaryAction>
             </ListItem>
           ))}
-          <ListItem
-            button
-            onClick={() =>
-              this.setState({ nameOpen: true, authDialogOpen: false })
-            }
-          >
-            <ListItemIcon>
-              <Add />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <font
-                  style={
-
-                    localStorage.getItem("nightMode") === "true"
-                      ? { color: "white" }
-                      : { color: "black" }
-                  }
-                >
-                  Get a new permanent token
-                </font>
-              }
-            />
-          </ListItem>
         </List>
       )
 
@@ -578,13 +575,14 @@ class AuthDialog extends Component {
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Manage authorizations</DialogTitle>
-          <div
-            style={{
-              height: "100%",
-            }}
-          >
-            {tokenList}
-          </div>
+          <DialogContent style={{ padding: 0 }}
+                onScroll={event => {
+                  if (
+                    event.target.scrollTop + event.target.clientHeight >=
+                    event.target.scrollHeight - 600
+                  )
+                    this.queryMore()
+                }}>{tokenList}</DialogContent>
           <DialogActions>
             <Button onClick={this.closeAuthDialog}>Close</Button>
           </DialogActions>
@@ -759,7 +757,6 @@ class AuthDialog extends Component {
               <SvgIcon>
                 <svg
                   style={
-
                     localStorage.getItem("nightMode") === "true"
                       ? { width: "24px", height: "24px", color: "white" }
                       : { width: "24px", height: "24px", color: "black" }
@@ -775,7 +772,6 @@ class AuthDialog extends Component {
               primary={
                 <font
                   style={
-
                     localStorage.getItem("nightMode") === "true"
                       ? { color: "white" }
                       : { color: "black" }

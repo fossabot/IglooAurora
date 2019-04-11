@@ -108,7 +108,7 @@ class ChangeOwner extends Component {
         <div style={{ height: "100%" }}>
           <TextField
             id="owner-email"
-            label="Owner email"
+            label="New owner email"
             value={this.state.email}
             variant="outlined"
             error={this.state.emailEmpty || this.state.emailError}
@@ -157,7 +157,7 @@ class ChangeOwner extends Component {
             onClick={() => {
               this.changeOwner()
             }}
-            disabled={this.state.email === "" || this.state.emailError}
+            disabled={this.state.email === "" || this.state.emailError || this.state.showLoading}
           >
             Change owner
             {this.state.showLoading && <CenteredSpinner isInButton />}
