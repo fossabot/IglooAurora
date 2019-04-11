@@ -6,6 +6,9 @@ import Button from "@material-ui/core/Button"
 import Grow from "@material-ui/core/Grow"
 import Slide from "@material-ui/core/Slide"
 import withMobileDialog from "@material-ui/core/withMobileDialog"
+import { downloadText } from "download.js"
+import Query from "react-apollo/Query"
+import gql from "graphql-tag"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -14,6 +17,8 @@ function GrowTransition(props) {
 function SlideTransition(props) {
   return <Slide direction="up" {...props} />
 }
+
+let user = ""
 
 class GDPRDataDownload extends Component {
   render() {
@@ -46,15 +51,43 @@ class GDPRDataDownload extends Component {
             <Button onClick={this.props.close} style={{ marginRight: "4px" }}>
               Never mind
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              label="Download"
-              primary={true}
-              buttonStyle={{ backgroundColor: "#0083ff" }}
+            <Query
+              query={gql`
+                {
+                  user {
+                    id
+                    name
+                    email
+                    profileIconColor
+                  }
+                }
+              `}
+              skip={!this.props.open}
             >
-              Download
-            </Button>
+              {({ data }) => {
+                if (data) {
+                  user = data.user
+                }
+
+                return (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    label="Download"
+                    primary={true}
+                    buttonStyle={{ backgroundColor: "#0083ff" }}
+                    onClick={() =>
+                      downloadText(
+                        "Igloo personal data.json",
+                        JSON.stringify(user)
+                      )
+                    }
+                  >
+                    Download
+                  </Button>
+                )
+              }}
+            </Query>
           </DialogActions>
         </Dialog>
       </Fragment>
