@@ -37,7 +37,13 @@ export default class AccountPopover extends Component {
       )[0]
 
     let content = (
-      <List style={{ overflowX: "hidden" }}>
+      <List
+        style={{
+          overflowX: "hidden",
+          width: "calc(100vw - 32px)",
+          maxWidth: "256px",
+        }}
+      >
         {typeof Storage !== undefined &&
           localStorage.getItem("accountList") &&
           JSON.parse(localStorage.getItem("accountList")).map(account => (
@@ -250,7 +256,6 @@ export default class AccountPopover extends Component {
               horizontal: "right",
             }}
             className="notSelectable"
-            style={{ maxWidth: "300px" }}
           >
             {content}
           </Popover>

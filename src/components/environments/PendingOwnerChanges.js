@@ -18,6 +18,7 @@ import CenteredSpinner from "../CenteredSpinner"
 import Done from "@material-ui/icons/Done"
 import Close from "@material-ui/icons/Close"
 import Typography from "@material-ui/core/Typography"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -57,7 +58,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Pending transfer requests</DialogTitle>
-            {this.state.hasReceivedOpen && <PendingSharesContent />}
+          {this.state.hasReceivedOpen && <PendingSharesContent />}
           <DialogActions>
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
@@ -402,7 +403,8 @@ const PendingSharesContent = graphql(
 
           if (user)
             return (
-          <DialogContent style={{ padding: 0 }}
+              <DialogContent
+                style={{ padding: 0 }}
                 onScroll={event => {
                   if (
                     event.target.scrollTop + event.target.clientHeight >=
@@ -469,6 +471,7 @@ const PendingSharesContent = graphql(
                     )
                   )}
                 </List>
+                {this.state.fetchMoreLoading && <LinearProgress />}
               </DialogContent>
             )
         }

@@ -5,33 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch localhost",
+      "name": "Launch localhost in Microsoft Edge Canary",
       "type": "edge",
       "request": "launch",
-      "url": "http://localhost:3000",
+      "version": "canary",
+      "url": "http://localhost:3000/",
       "webRoot": "${workspaceFolder}/wwwroot"
-    },
-    {
-      "name": "Launch index.html (disable sourcemaps)",
-      "type": "edge",
-      "request": "launch",
-      "sourceMaps": false,
-      "file": "${workspaceFolder}/index.html"
-    },
-
-    {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "type": "chrome",
-      "request": "attach",
-      "name": "Attach to Chrome",
-      "port": 9222,
-      "webRoot": "${workspaceFolder}"
     }
   ]
 }

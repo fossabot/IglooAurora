@@ -18,6 +18,7 @@ import CenteredSpinner from "../CenteredSpinner"
 import Done from "@material-ui/icons/Done"
 import Close from "@material-ui/icons/Close"
 import Typography from "@material-ui/core/Typography"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 function GrowTransition(props) {
   return <Grow {...props} />
@@ -127,6 +128,12 @@ const PendingSharesContent = graphql(
       }
     )(
       class PendingSharesDialogContent extends Component {
+        constructor(props) {
+          super(props)
+
+          this.state = { fetchMoreLoading: false }
+        }
+
         AcceptPendingEnvironmentShare = id =>
           this.props.AcceptPendingEnvironmentShare({
             variables: {
@@ -313,16 +320,6 @@ const PendingSharesContent = graphql(
         }
 
         queryMore = async () => {
-          console.log(
-            this.props.pendingEnvironmentSharesData.user
-              .pendingEnvironmentShareCount,
-            this.props.pendingEnvironmentSharesData.user
-              .pendingEnvironmentShares.length,
-            this.props.pendingEnvironmentSharesData.user
-              .pendingEnvironmentShareCount >
-              this.props.pendingEnvironmentSharesData.user
-                .pendingEnvironmentShares.length
-          )
           if (
             !this.queryMore.locked &&
             this.props.pendingEnvironmentSharesData.user
@@ -331,7 +328,7 @@ const PendingSharesContent = graphql(
                 .pendingEnvironmentShares.length
           ) {
             this.queryMore.locked = true
-            console.log("a")
+
             try {
               this.setState({ fetchMoreLoading: true })
               await this.props.pendingEnvironmentSharesData.fetchMore({
@@ -484,6 +481,7 @@ const PendingSharesContent = graphql(
                     )
                   )}
                 </List>
+                {this.state.fetchMoreLoading && <LinearProgress />}
               </DialogContent>
             )
         }
