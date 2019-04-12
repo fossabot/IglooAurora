@@ -126,6 +126,14 @@ const PendingSharesContent = graphql(
       }
     )(
       class PendingSharesDialogContent extends Component {
+        constructor(props) {
+          super(props)
+
+          this.state = {
+            fetchMoreLoading: false,
+          }
+        }
+
         AcceptPendingEnvironmentShare = id =>
           this.props.AcceptPendingEnvironmentShare({
             variables: {

@@ -38,11 +38,15 @@ export default class AccountPopover extends Component {
 
     let content = (
       <List
-        style={{
-          overflowX: "hidden",
-          width: "calc(100vw - 32px)",
-          maxWidth: "256px",
-        }}
+        style={
+          this.props.mobile
+            ? { overflowX: "hidden" }
+            : {
+                overflowX: "hidden",
+                width: "calc(100vw - 32px)",
+                maxWidth: "256px",
+              }
+        }
       >
         {typeof Storage !== undefined &&
           localStorage.getItem("accountList") &&
