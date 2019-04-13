@@ -58,7 +58,9 @@ export default withMobileDialog({ breakpoint: "xs" })(
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Pending transfer requests</DialogTitle>
-          {this.state.hasReceivedOpen && <PendingSharesContent />}
+          {this.state.hasReceivedOpen && (
+            <PendingSharesContent close={this.props.close} />
+          )}
           <DialogActions>
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
@@ -101,8 +103,8 @@ const PendingSharesContent = graphql(
 )(
   graphql(
     gql`
-      mutation AcceptPendingEnvironmentShare($pendingOwnerChangeId: ID!) {
-        acceptPendingEnvironmentShare(
+      mutation AcceptPendingOwnerChange($pendingOwnerChangeId: ID!) {
+        acceptPendingOwnerChange(
           pendingOwnerChangeId: $pendingOwnerChangeId
         ) {
           id
@@ -110,19 +112,19 @@ const PendingSharesContent = graphql(
       }
     `,
     {
-      name: "AcceptPendingEnvironmentShare",
+      name: "AcceptPendingOwnerChange",
     }
   )(
     graphql(
       gql`
-        mutation DeclinePendingEnvironmentShare($pendingOwnerChangeId: ID!) {
-          declinePendingEnvironmentShare(
+        mutation declinePendingOwnerChange($pendingOwnerChangeId: ID!) {
+          declinePendingOwnerChange(
             pendingOwnerChangeId: $pendingOwnerChangeId
           )
         }
       `,
       {
-        name: "DeclinePendingEnvironmentShare",
+        name: "DeclinePendingOwnerChange",
       }
     )(
       class PendingSharesDialogContent extends Component {
@@ -134,8 +136,8 @@ const PendingSharesContent = graphql(
           }
         }
 
-        AcceptPendingEnvironmentShare = id =>
-          this.props.AcceptPendingEnvironmentShare({
+        AcceptPendingOwnerChange = id =>
+          this.props.AcceptPendingOwnerChange({
             variables: {
               pendingOwnerChangeId: id,
             },
@@ -143,13 +145,13 @@ const PendingSharesContent = graphql(
               __typename: "Mutation",
               pendingOwnerChanges: {
                 pendingOwnerChangeId: id,
-                __typename: "EnvironmentShares",
+                __typename: "PendingOwnerChanges",
               },
             },
           })
 
-        DeclinePendingEnvironmentShare = id =>
-          this.props.DeclinePendingEnvironmentShare({
+        DeclinePendingOwnerChange = id =>
+          this.props.DeclinePendingOwnerChange({
             variables: {
               pendingOwnerChangeId: id,
             },
@@ -157,7 +159,7 @@ const PendingSharesContent = graphql(
               __typename: "Mutation",
               pendingOwnerChanges: {
                 pendingOwnerChangeId: id,
-                __typename: "EnvironmentShares",
+                __typename: "PendingOwnerChanges",
               },
             },
           })
@@ -244,7 +246,7 @@ const PendingSharesContent = graphql(
                 return prev
               }
 
-              const newPendingEnvironmentShares = [
+              const newPendingOwnerChanges = [
                 ...prev.user.pendingOwnerChanges,
                 subscriptionData.data.pendingOwnerChangeReceived,
               ]
@@ -252,7 +254,7 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
-                  pendingOwnerChanges: newPendingEnvironmentShares,
+                  pendingOwnerChanges: newPendingOwnerChanges,
                 },
               }
             },
@@ -297,7 +299,7 @@ const PendingSharesContent = graphql(
                 return prev
               }
 
-              const newPendingEnvironmentShares = prev.user.pendingOwnerChanges.filter(
+              const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
                 pendingOwnerChange =>
                   pendingOwnerChange.id !==
                   subscriptionData.data.pendingOwnerChangeDeclined
@@ -306,7 +308,7 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
-                  pendingOwnerChanges: newPendingEnvironmentShares,
+                  pendingOwnerChanges: newPendingOwnerChanges,
                 },
               }
             },
@@ -325,7 +327,7 @@ const PendingSharesContent = graphql(
                 return prev
               }
 
-              const newPendingEnvironmentShares = prev.user.pendingOwnerChanges.filter(
+              const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
                 pendingOwnerChange =>
                   pendingOwnerChange.id !==
                   subscriptionData.data.pendingOwnerChangeRevoked
@@ -334,7 +336,7 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
-                  pendingOwnerChanges: newPendingEnvironmentShares,
+                  pendingOwnerChanges: newPendingOwnerChanges,
                 },
               }
             },
@@ -355,7 +357,7 @@ const PendingSharesContent = graphql(
                 return prev
               }
 
-              const newPendingEnvironmentShares = prev.user.pendingOwnerChanges.filter(
+              const newPendingOwnerChanges = prev.user.pendingOwnerChanges.filter(
                 pendingOwnerChange =>
                   pendingOwnerChange.id !==
                   subscriptionData.data.pendingOwnerChangeAccepted.id
@@ -364,11 +366,20 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
-                  pendingOwnerChanges: newPendingEnvironmentShares,
+                  pendingOwnerChanges: newPendingOwnerChanges,
                 },
               }
             },
           })
+        }
+
+        componentWillReceiveProps(nextProps) {
+          if (nextProps.pendingOwnerChangesData.user && this.props.pendingOwnerChangesData.user &&
+            nextProps.pendingOwnerChangesData.user.pendingOwnerChanges.length !== this.props.pendingOwnerChangesData.user.pendingOwnerChanges.length &&   !nextProps.pendingOwnerChangesData.user
+              .pendingOwnerChanges[0]
+          ) {
+            this.props.close()
+          }
         }
 
         render() {
@@ -409,7 +420,7 @@ const PendingSharesContent = graphql(
               </div>
             )
 
-          if (user)
+          if (user) {
             return (
               <DialogContent
                 style={{ padding: 0 }}
@@ -458,7 +469,7 @@ const PendingSharesContent = graphql(
                         <ListItemSecondaryAction>
                           <IconButton
                             onClick={() =>
-                              this.AcceptPendingEnvironmentShare(
+                              this.AcceptPendingOwnerChange(
                                 pendingOwnerChange.id
                               )
                             }
@@ -467,7 +478,7 @@ const PendingSharesContent = graphql(
                           </IconButton>
                           <IconButton
                             onClick={() =>
-                              this.DeclinePendingEnvironmentShare(
+                              this.DeclinePendingOwnerChange(
                                 pendingOwnerChange.id
                               )
                             }
@@ -482,6 +493,7 @@ const PendingSharesContent = graphql(
                 {this.state.fetchMoreLoading && <LinearProgress />}
               </DialogContent>
             )
+          }
         }
       }
     )

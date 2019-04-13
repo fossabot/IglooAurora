@@ -58,7 +58,9 @@ export default withMobileDialog({ breakpoint: "xs" })(
           maxWidth="xs"
         >
           <DialogTitle disableTypography>Pending share requests</DialogTitle>
-          {this.state.hasReceivedOpen && <PendingSharesContent />}
+          {this.state.hasReceivedOpen && (
+            <PendingSharesContent close={this.props.close} />
+          )}
           <DialogActions>
             <Button onClick={this.props.close}>Close</Button>
           </DialogActions>
@@ -143,7 +145,7 @@ const PendingSharesContent = graphql(
               __typename: "Mutation",
               pendingEnvironmentShares: {
                 pendingEnvironmentShareId: id,
-                __typename: "EnvironmentShares",
+                __typename: "PendingEnvironmentShares",
               },
             },
           })
@@ -157,7 +159,7 @@ const PendingSharesContent = graphql(
               __typename: "Mutation",
               pendingEnvironmentShares: {
                 pendingEnvironmentShareId: id,
-                __typename: "EnvironmentShares",
+                __typename: "PendingEnvironmentShares",
               },
             },
           })
@@ -373,6 +375,21 @@ const PendingSharesContent = graphql(
           }
         }
 
+        componentWillReceiveProps(nextProps) {
+          if (
+            nextProps.pendingEnvironmentSharesData.user &&
+            this.props.pendingEnvironmentSharesData.user &&
+            nextProps.pendingEnvironmentSharesData.user.pendingEnvironmentShares
+              .length !==
+              this.props.pendingEnvironmentSharesData.user
+                .pendingEnvironmentShares.length &&
+            !nextProps.pendingEnvironmentSharesData.user
+              .pendingEnvironmentShares[0]
+          ) {
+            this.props.close()
+          }
+        }
+
         render() {
           const {
             pendingEnvironmentSharesData: { error, loading, user },
@@ -411,7 +428,7 @@ const PendingSharesContent = graphql(
               </div>
             )
 
-          if (user)
+          if (user) {
             return (
               <DialogContent
                 style={{ padding: 0 }}
@@ -484,6 +501,7 @@ const PendingSharesContent = graphql(
                 {this.state.fetchMoreLoading && <LinearProgress />}
               </DialogContent>
             )
+          }
         }
       }
     )
