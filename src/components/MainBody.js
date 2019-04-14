@@ -126,7 +126,7 @@ export default class MainBody extends Component {
 
     const valueCreatedSubscription = gql`
       subscription {
-        valueCreated(visibility:VISIBLE) {
+        valueCreated(visibility: VISIBLE) {
           id
           visibility
           cardSize
@@ -187,7 +187,7 @@ export default class MainBody extends Component {
 
     const subscribeToValueUpdates = gql`
       subscription {
-        valueUpdated(visibility:VISIBLE) {
+        valueUpdated(visibility: VISIBLE) {
           id
           visibility
           cardSize
@@ -216,12 +216,7 @@ export default class MainBody extends Component {
             boolValue: value
             permission
           }
-          ... on PlotValue {
-            plotValue: value {
-              id
-              value
-              timestamp
-            }
+          ... on FloatSeriesValue {
             unitOfMeasurement
             threshold
           }
@@ -235,7 +230,7 @@ export default class MainBody extends Component {
 
     const subscribeToValuesDeletes = gql`
       subscription {
-        valueDeleted(visibility:VISIBLE)
+        valueDeleted(visibility: VISIBLE)
       }
     `
 
@@ -296,7 +291,6 @@ export default class MainBody extends Component {
           variant="h5"
           className="notSelectable defaultCursor"
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -321,10 +315,7 @@ export default class MainBody extends Component {
         <Card
           value={value}
           key={value.id}
-          nightMode={
-
-            localStorage.getItem("nightMode") === "true"
-          }
+          nightMode={localStorage.getItem("nightMode") === "true"}
           environmentData={this.props.environmentData}
           userData={this.props.userData}
           environments={this.props.environments}
@@ -357,7 +348,6 @@ export default class MainBody extends Component {
     return (
       <div
         style={
-
           localStorage.getItem("nightMode") === "true"
             ? { background: "#2f333d" }
             : { background: "white" }
@@ -365,7 +355,6 @@ export default class MainBody extends Component {
       >
         <div
           className={
-
             localStorage.getItem("nightMode") === "true"
               ? this.props.isMobile
                 ? "mainBody mobileDarkMainBodyBG"

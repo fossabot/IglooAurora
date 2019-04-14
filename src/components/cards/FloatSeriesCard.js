@@ -13,6 +13,8 @@ import CenteredSpinner from "../CenteredSpinner"
 
 const format = () => tick => tick
 
+const SHOWN_NODES = 20
+
 export default graphql(
   gql`
     query($id: ID!, $offset: Int, $limit: PositiveInt!) {
@@ -32,7 +34,7 @@ export default graphql(
   `,
   {
     name: "floatSeriesData",
-    options: ({ id }) => ({ variables: { offset: 0, limit: 20, id } }),
+    options: ({ id }) => ({ variables: { offset: 0, limit: SHOWN_NODES, id } }),
   }
 )(
   class FloatSeriesCard extends Component {
@@ -47,12 +49,14 @@ export default graphql(
         this.props.floatSeriesData.floatSeriesValue !==
         nextProps.floatSeriesData.floatSeriesValue
       ) {
-        nextProps.floatSeriesData.floatSeriesValue.nodes.forEach(value =>
-          this.state.chartData.unshift({
-            time: value.timestamp,
-            value: value.value,
-          })
-        )
+        this.setState(({ chartData }) => {
+          let newChartData = nextProps.floatSeriesData.floatSeriesValue.nodes
+            .map(value => ({ time: value.timestamp, value: value.value }))
+            .sort((a, b) => new Date(a.time) - new Date(b.time))
+            .slice(-SHOWN_NODES)
+
+          return { chartData: newChartData }
+        })
       }
     }
 
@@ -148,7 +152,6 @@ export default graphql(
           <Typography
             variant="h5"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? {
                     textAlign: "center",
