@@ -576,7 +576,7 @@ class Main extends Component {
                     }}
                     selectedDevice={this.props.selectedDevice}
                     changeDrawerState={this.changeDrawerState}
-                    isMobile={true}
+                    isMobile
                     environmentData={this.props.environmentData}
                     nightMode={nightMode}
                     selectedEnvironment={this.props.environmentId}
@@ -600,7 +600,7 @@ class Main extends Component {
                     selectedEnvironment={this.props.environmentId}
                     environments={this.props.environments}
                     snackbarOpen={this.props.snackbarOpen}
-                    mobile={true}
+                    mobile
                   />
                 </AppBar>
               </Fragment>
@@ -615,7 +615,7 @@ class Main extends Component {
                 showHiddenNotifications={this.showHiddenNotifications}
                 nightMode={nightMode}
                 environmentData={this.props.environmentData}
-                isMobile={true}
+                isMobile
                 logOut={this.props.logOut}
                 environments={this.props.environments}
                 userData={this.props.userData}

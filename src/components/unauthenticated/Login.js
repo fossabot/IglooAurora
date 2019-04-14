@@ -653,8 +653,8 @@ export default class Login extends Component {
                   >
                     <Button
                       variant={this.props.mobile ? "outlined" : "contained"}
-                      primary={true}
-                      fullWidth={true}
+                      primary
+                      fullWidth
                       onClick={this.goToPassword}
                       style={{ margin: "8px 0" }}
                       color="primary"
@@ -706,7 +706,7 @@ export default class Login extends Component {
                       )}
                     >
                       <Button
-                        fullWidth={true}
+                        fullWidth
                         color="primary"
                         disabled={this.state.showLoading}
                         component={Link}
@@ -1029,8 +1029,8 @@ export default class Login extends Component {
                             variant={
                               this.props.mobile ? "outlined" : "contained"
                             }
-                            primary={true}
-                            fullWidth={true}
+                            primary
+                            fullWidth
                             onClick={() => {
                               this.setState({ showLoading: true })
                               this.verifyPassword()
@@ -1089,7 +1089,7 @@ export default class Login extends Component {
                       )}
                     >
                       <Button
-                        fullWidth={true}
+                        fullWidth
                         color="primary"
                         disabled={this.state.showLoading}
                         component={Link}
@@ -1521,8 +1521,8 @@ export default class Login extends Component {
                                   variant={
                                     this.props.mobile ? "outlined" : "contained"
                                   }
-                                  primary={true}
-                                  fullWidth={true}
+                                  primary
+                                  fullWidth
                                   onClick={() => {
                                     this.setState({
                                       showLoading: true,
@@ -1592,7 +1592,7 @@ export default class Login extends Component {
                             )}
                           >
                             <Button
-                              fullWidth={true}
+                              fullWidth
                               color="primary"
                               disabled={this.state.showLoading}
                               component={Link}
@@ -1902,8 +1902,8 @@ export default class Login extends Component {
                       >
                         <Button
                           variant={this.props.mobile ? "outlined" : "contained"}
-                          primary={true}
-                          fullWidth={true}
+                          primary
+                          fullWidth
                           onClick={() => {
                             this.setState({ showSecondFactorLoading: true })
                             if (
@@ -1988,7 +1988,7 @@ export default class Login extends Component {
                     )}
                   >
                     <Button
-                      fullWidth={true}
+                      fullWidth
                       color="primary"
                       disabled={this.state.showSecondFactorLoading}
                       onClick={() => this.setState({ showSecondFactor: false })}

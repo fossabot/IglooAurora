@@ -74,7 +74,7 @@ class GDPRDataDownload extends Component {
                     variant="contained"
                     color="primary"
                     label="Download"
-                    primary={true}
+                    primary
                     buttonStyle={{ backgroundColor: "#0083ff" }}
                     onClick={() =>
                       downloadText(

@@ -174,7 +174,7 @@ class ChangeNameDialog extends Component {
               variant="contained"
               color="primary"
               label="Change"
-              primary={true}
+              primary
               disabled={!this.state.name}
               onClick={() => {
                 changeName(this.state.name)

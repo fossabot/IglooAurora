@@ -31,7 +31,7 @@ function SlideTransition(props) {
 }
 
 class AddDevice extends Component {
-  state = { authDialogOpen: false, camera: "environment" }
+  state = { qrOpen:false,manualCodeOpen:false,deviceDetailsOpen:false, camera: "environment" }
 
   async claimDevice(deviceId, name, environmentId) {
     try {

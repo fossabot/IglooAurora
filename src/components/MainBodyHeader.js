@@ -165,7 +165,6 @@ class MainBodyHeader extends Component {
             this.handleMenuClose()
           }}
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? { color: "white" }
               : { color: "black" }
@@ -181,7 +180,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -203,7 +201,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -226,7 +223,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -286,7 +282,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -309,7 +304,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -329,7 +323,6 @@ class MainBodyHeader extends Component {
           <MenuItem
             className="notSelectable"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? { color: "white" }
                 : { color: "black" }
@@ -433,10 +426,7 @@ class MainBodyHeader extends Component {
               hiddenNotifications={this.props.hiddenNotifications}
               showHiddenNotifications={this.props.showHiddenNotifications}
               notificationCount={device && device.notificationCount}
-              nightMode={
-
-                localStorage.getItem("nightMode") === "true"
-              }
+              nightMode={localStorage.getItem("nightMode") === "true"}
               logOut={this.props.logOut}
               isMobile={this.props.isMobile}
               deviceId={this.props.deviceId}
@@ -492,10 +482,9 @@ class MainBodyHeader extends Component {
             variant="temporary"
             anchor="bottom"
             open={this.state.anchorEl}
+            onOpen={() => this.setState({ anchorEl: true })}
             onClose={this.handleMenuClose}
-            swipeAreaWidth={0}
             disableBackdropTransition={false}
-            disableDiscovery={true}
           >
             {content}
           </SwipeableDrawer>

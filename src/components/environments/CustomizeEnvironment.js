@@ -261,7 +261,7 @@ class CustomizeEnvironment extends Component {
           <Button
             variant="contained"
             color="primary"
-            primary={true}
+            primary
             buttonStyle={{ backgroundColor: "#0083ff" }}
             onClick={this.rename}
             disabled={!this.state.name}

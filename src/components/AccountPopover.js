@@ -238,10 +238,9 @@ export default class AccountPopover extends Component {
             variant="temporary"
             anchor="bottom"
             open={this.state.popoverOpen}
+            onOpen={() => this.setState({ popoverOpen: true })}
             onClose={() => this.setState({ popoverOpen: false })}
-            swipeAreaWidth={0}
             disableBackdropTransition={false}
-            disableDiscovery={true}
           >
             {content}
           </SwipeableDrawer>

@@ -18,7 +18,7 @@ export default props =>
       />
     ) : (
       <Fade
-        in={true}
+        in
         style={{
           transitionDelay: "800ms",
         }}
@@ -57,7 +57,7 @@ export default props =>
         />
       ) : (
         <Fade
-          in={true}
+          in
           style={{
             transitionDelay: "800ms",
           }}

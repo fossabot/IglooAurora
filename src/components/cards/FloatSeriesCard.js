@@ -1,17 +1,9 @@
 import React, { Component } from "react"
-import {
-  Chart,
-  ArgumentAxis,
-  ValueAxis,
-  LineSeries,
-} from "@devexpress/dx-react-chart-material-ui"
-import { Animation } from "@devexpress/dx-react-chart"
+import ReactApexChart from "react-apexcharts"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Typography from "@material-ui/core/Typography"
 import CenteredSpinner from "../CenteredSpinner"
-
-const format = () => tick => tick
 
 const SHOWN_NODES = 20
 
@@ -20,6 +12,7 @@ export default graphql(
     query($id: ID!, $offset: Int, $limit: PositiveInt!) {
       floatSeriesValue(id: $id) {
         id
+        name
         nodeCount
         min
         max
@@ -41,7 +34,58 @@ export default graphql(
     constructor(props) {
       super(props)
 
-      this.state = { chartData: [] }
+      this.state = {
+        options: {
+          chart: {
+            zoom: {
+              enabled: false,
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            curve: "smooth",
+            color: ["#0083ff"],
+          },
+          grid: {
+            row: {
+              colors: ["#f2f2f2", "transparent"], // takes an array which will be repeated on columns
+              opacity: 0.5,
+            },
+          },
+          xaxis: {
+            categories: [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+            ],
+          },
+        },
+        series: [
+          {
+            name: "",
+            data: [],
+          },
+        ],
+      }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -49,13 +93,20 @@ export default graphql(
         this.props.floatSeriesData.floatSeriesValue !==
         nextProps.floatSeriesData.floatSeriesValue
       ) {
-        this.setState(({ chartData }) => {
-          let newChartData = nextProps.floatSeriesData.floatSeriesValue.nodes
-            .map(value => ({ time: value.timestamp, value: value.value }))
-            .sort((a, b) => new Date(a.time) - new Date(b.time))
+        this.setState(({ series }) => {
+          let floatSeriesData = nextProps.floatSeriesData.floatSeriesValue.nodes
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+            .map(value => value.value)
             .slice(-SHOWN_NODES)
 
-          return { chartData: newChartData }
+          return {
+            series: [
+              {
+                name: nextProps.floatSeriesData.floatSeriesValue.name,
+                data: floatSeriesData,
+              },
+            ],
+          }
         })
       }
     }
@@ -180,31 +231,14 @@ export default graphql(
         this.props.floatSeriesData.floatSeriesValue.nodes[0]
       )
         return (
-          <Chart data={this.state.chartData}>
-            <ArgumentAxis tickFormat={format} />
-            <ValueAxis
-              labelComponent={props => {
-                const { text } = props
-                return (
-                  <ValueAxis.Label
-                    {...props}
-                    text={
-                      this.props.unitOfMeasurement
-                        ? text + " " + this.props.unitOfMeasurement
-                        : text
-                    }
-                  />
-                )
-              }}
+          <div style={{ height: "calc(100% - 64px)" }}>
+            <ReactApexChart
+              options={this.state.options}
+              series={this.state.series}
+              type="line"
+              height="100%"
             />
-            <LineSeries
-              name="Value"
-              valueField="value"
-              argumentField="time"
-              color="#0083ff"
-            />
-            <Animation />
-          </Chart>
+          </div>
         )
 
       return "This plot is empty"

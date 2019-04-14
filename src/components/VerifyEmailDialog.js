@@ -57,7 +57,7 @@ class VerifyEmail extends Component {
           <Button
             variant="contained"
             color="primary"
-            primary={true}
+            primary
             onClick={() => {
               this.props.ResendVerificationEmail()
               this.props.close()

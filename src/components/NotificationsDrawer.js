@@ -251,7 +251,6 @@ class NotificationsDrawer extends Component {
           variant="h5"
           className="notSelectable defaultCursor"
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? {
                   textAlign: "center",
@@ -378,7 +377,6 @@ class NotificationsDrawer extends Component {
               <li>
                 <ListSubheader
                   style={
-
                     localStorage.getItem("nightMode") === "true"
                       ? { backgroundColor: "#2f333d" }
                       : { backgroundColor: "white" }
@@ -386,7 +384,6 @@ class NotificationsDrawer extends Component {
                 >
                   <font
                     style={
-
                       localStorage.getItem("nightMode") === "true"
                         ? { color: "#c1c2c5" }
                         : { color: "#7a7a7a" }
@@ -410,7 +407,6 @@ class NotificationsDrawer extends Component {
                           primary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "white" }
                                   : { color: "black" }
@@ -422,7 +418,6 @@ class NotificationsDrawer extends Component {
                           secondary={
                             <font
                               style={
-
                                 localStorage.getItem("nightMode") === "true"
                                   ? { color: "#c1c2c5" }
                                   : { color: "#7a7a7a" }
@@ -462,7 +457,6 @@ class NotificationsDrawer extends Component {
           <Typography
             variant="h5"
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? {
                     textAlign: "center",
@@ -566,16 +560,16 @@ class NotificationsDrawer extends Component {
           variant="temporary"
           anchor="right"
           open={this.props.drawer}
+          onOpen={() => {
+            this.props.changeDrawerState()
+          }}
           onClose={() => {
             this.props.changeDrawerState()
           }}
-          swipeAreaWidth={0}
           disableBackdropTransition={false}
-          disableDiscovery={true}
         >
           <div
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? {
                     background: "#2f333d",

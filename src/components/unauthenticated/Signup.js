@@ -963,7 +963,7 @@ export default class Signup extends Component {
                       <Button
                         variant={this.props.mobile ? "outlined" : "contained"}
                         color="primary"
-                        fullWidth={true}
+                        fullWidth
                         onClick={this.signUp}
                         style={{ marginBottom: "8px" }}
                         buttonStyle={{ backgroundColor: "#0083ff" }}
@@ -1018,7 +1018,7 @@ export default class Signup extends Component {
                         )}
                       >
                         <Button
-                          fullWidth={true}
+                          fullWidth
                           color="primary"
                           disabled={this.state.showLoading}
                           component={Link}
@@ -1478,8 +1478,8 @@ export default class Signup extends Component {
                     <Button
                       variant={this.props.mobile ? "outlined" : "contained"}
                       color="primary"
-                      fullWidth={true}
-                      primary={true}
+                      fullWidth
+                      primary
                       onClick={() => {
                         if (
                           this.props.password === this.state.confirmPassword

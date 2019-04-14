@@ -81,6 +81,7 @@ class ChangeEnvironment extends Component {
                     value={environment.id}
                     label={environment.name}
                     className="notSelectable"
+                    key={environment.id}
                   />
                 ))}
           </RadioGroup>
