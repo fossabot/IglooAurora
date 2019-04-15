@@ -37,14 +37,21 @@ export default graphql(
       this.state = {
         options: {
           chart: {
+            animations: {
+              enabled: false,
+            },
             zoom: {
               enabled: false,
+            },
+            toolbar: {
+              show: false,
             },
           },
           dataLabels: {
             enabled: false,
           },
           stroke: {
+            width: 4,
             curve: "smooth",
             color: ["#0083ff"],
           },
@@ -55,28 +62,11 @@ export default graphql(
             },
           },
           xaxis: {
-            categories: [
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-            ],
+            type: "datetime",
+          },
+          yaxis: {
+            min: 0,
+            max: 0,
           },
         },
         series: [
@@ -93,17 +83,33 @@ export default graphql(
         this.props.floatSeriesData.floatSeriesValue !==
         nextProps.floatSeriesData.floatSeriesValue
       ) {
-        this.setState(({ series }) => {
-          let floatSeriesData = nextProps.floatSeriesData.floatSeriesValue.nodes
+        this.setState(({ series, options }) => {
+          let nodes = nextProps.floatSeriesData.floatSeriesValue.nodes
             .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-            .map(value => value.value)
+            .map(value => [value.timestamp, value.value])
             .slice(-SHOWN_NODES)
 
           return {
+            options: {
+              ...options,
+              yaxis: {
+                //adds a 10% margin between the stroke and the plot border on both the top and the bottom of the chart
+                min:
+                  Math.min(...nodes.map(node => node[1])) -
+                  (Math.max(...nodes.map(node => node[1])) -
+                    Math.min(...nodes.map(node => node[1]))) /
+                    10,
+                max:
+                  Math.max(...nodes.map(node => node[1])) +
+                  (Math.max(...nodes.map(node => node[1])) -
+                    Math.min(...nodes.map(node => node[1]))) /
+                    10,
+              },
+            },
             series: [
               {
                 name: nextProps.floatSeriesData.floatSeriesValue.name,
-                data: floatSeriesData,
+                data: nodes,
               },
             ],
           }
@@ -227,8 +233,7 @@ export default graphql(
         )
 
       if (
-        this.props.floatSeriesData.floatSeriesValue &&
-        this.props.floatSeriesData.floatSeriesValue.nodes[0]
+        this.props.floatSeriesData.floatSeriesValue
       )
         return (
           <div style={{ height: "calc(100% - 64px)" }}>
