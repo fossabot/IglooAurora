@@ -23,7 +23,7 @@ self.addEventListener("push", function(event) {
       break
 
     case "SHARE_ACCEPTED_NOTIFICATION":
-      title = "You share was accepted"
+      title = "Your share got accepted"
       break
 
     case "CHANGE_OWNER_RECEIVED_NOTIFICATION":
@@ -41,7 +41,7 @@ self.addEventListener("push", function(event) {
       break
 
     case "OWNER_CHANGE_ACCEPTED_NOTIFICATION":
-      title = "Your ownership transfer was accepted"
+      title = "Your ownership transfer got accepted"
       break
 
     default:

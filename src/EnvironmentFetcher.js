@@ -524,9 +524,7 @@ class Main extends Component {
       this.setState({ deselectDevice: false })
     }
 
-    nightMode =
-
-      localStorage.getItem("nightMode") === "true"
+    nightMode = localStorage.getItem("nightMode") === "true"
 
     return (
       <Fragment>
@@ -597,8 +595,10 @@ class Main extends Component {
                   <SidebarHeader
                     logOut={this.props.logOut}
                     key="sidebarHeader"
-                    selectedEnvironment={this.props.environmentId}
-                    environments={this.props.environments}
+                    environmentName={
+                      this.props.environmentData.environment &&
+                      this.props.environmentData.environment.name
+                    }
                     snackbarOpen={this.props.snackbarOpen}
                     mobile
                   />
@@ -629,8 +629,10 @@ class Main extends Component {
             <SidebarHeader
               logOut={this.props.logOut}
               key="sidebarHeader"
-              selectedEnvironment={this.props.environmentId}
-              environments={this.props.environments}
+              environmentName={
+                this.props.environmentData.environment &&
+                this.props.environmentData.environment.name
+              }
             />
             <div
               className="sidebar"
@@ -685,7 +687,6 @@ class Main extends Component {
                 />
                 <div
                   style={
-
                     localStorage.getItem("nightMode") === "true"
                       ? { background: "#2f333d" }
                       : { background: "white" }
@@ -694,7 +695,6 @@ class Main extends Component {
                 >
                   <div
                     className={
-
                       localStorage.getItem("nightMode") === "true"
                         ? "darkMainBodyBG"
                         : "mainBodyBG"
@@ -705,7 +705,6 @@ class Main extends Component {
                 <div
                   className="statusBar"
                   style={
-
                     localStorage.getItem("nightMode") === "true"
                       ? { background: "#2f333d" }
                       : { background: "white" }

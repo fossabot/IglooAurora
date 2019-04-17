@@ -78,13 +78,7 @@ class SidebarHeader extends Component {
             width: "calc(100% - 128px)",
           }}
         >
-          {this.props.environments &&
-            this.props.environments.filter(
-              environment => environment.id === this.props.selectedEnvironment
-            )[0] &&
-            this.props.environments.filter(
-              environment => environment.id === this.props.selectedEnvironment
-            )[0].name}
+          {this.props.environmentName}
         </Typography>
         {this.state.goToEnvironments && <Redirect push to="/" />}
       </div>

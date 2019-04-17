@@ -256,6 +256,8 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
+                  pendingEnvironmentShareCount:
+                    prev.user.pendingEnvironmentShareCount - 1,
                   pendingEnvironmentShares: newPendingEnvironmentShares,
                 },
               }
@@ -284,6 +286,8 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
+                  pendingEnvironmentShareCount:
+                    prev.user.pendingEnvironmentShareCount - 1,
                   pendingEnvironmentShares: newPendingEnvironmentShares,
                 },
               }
@@ -314,6 +318,8 @@ const PendingSharesContent = graphql(
               return {
                 user: {
                   ...prev.user,
+                  pendingEnvironmentShareCount:
+                    prev.user.pendingEnvironmentShareCount - 1,
                   pendingEnvironmentShares: newPendingEnvironmentShares,
                 },
               }
