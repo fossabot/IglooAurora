@@ -13,7 +13,6 @@ import FloatSeriesCard from "./FloatSeriesCard"
 import FullScreenCard from "./FullScreenCard"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
-import Divider from "@material-ui/core/Divider"
 import DeleteValue from "./DeleteValue"
 import CardInfo from "./CardInfo.js"
 import Typography from "@material-ui/core/Typography"
@@ -27,8 +26,8 @@ import ListItemText from "@material-ui/core/ListItemText"
 import CardSize from "./CardSize"
 import MoreVert from "@material-ui/icons/MoreVert"
 import Info from "@material-ui/icons/Info"
+import InfoOutlined from "@material-ui/icons/InfoOutlined"
 import AspectRatio from "@material-ui/icons/AspectRatio"
-import Create from "@material-ui/icons/Create"
 
 class Card extends Component {
   state = {
@@ -71,10 +70,7 @@ class Card extends Component {
           <ReadOnlyFloatCard
             value={value.floatValue}
             unitOfMeasurement={value.unitOfMeasurement}
-            nightMode={
-
-              localStorage.getItem("nightMode") === "true"
-            }
+            nightMode={localStorage.getItem("nightMode") === "true"}
           />
         )
       } else {
@@ -149,7 +145,7 @@ class Card extends Component {
         />
       )
     } else if (value.__typename === "FloatSeriesValue") {
-      specificCard = <FloatSeriesCard id={value.id}/>
+      specificCard = <FloatSeriesCard id={value.id} />
     } else {
       specificCard = ""
     }
@@ -160,7 +156,6 @@ class Card extends Component {
           className={value.cardSize.toLowerCase()}
           zDepth={2}
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? { background: "#2f333d" }
               : { background: "white" }
@@ -168,7 +163,6 @@ class Card extends Component {
         >
           <div
             style={
-
               localStorage.getItem("nightMode") === "true"
                 ? {
                     background: "#21252b",
@@ -188,7 +182,6 @@ class Card extends Component {
               variant="h6"
               className="notSelectable"
               style={
-
                 localStorage.getItem("nightMode") === "true"
                   ? {
                       cursor: "default",
@@ -246,15 +239,32 @@ class Card extends Component {
                   </IconButton>
                 </Tooltip>
               ) : null}
-              <Tooltip id="tooltip-more" title="More" placement="bottom">
-                <IconButton
-                  onClick={event =>
-                    this.setState({ anchorEl: event.currentTarget })
-                  }
+              {value.myRole === "SPECTATOR" ? (
+                <Tooltip
+                  id="tooltip-more"
+                  title="Information"
+                  placement="bottom"
                 >
-                  <MoreVert />
-                </IconButton>
-              </Tooltip>
+                  <IconButton
+                    onClick={() => {
+                      this.setState({ infoOpen: true })
+                      this.handleMenuClose()
+                    }}
+                  >
+                    <InfoOutlined />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Tooltip id="tooltip-more" title="More" placement="bottom">
+                  <IconButton
+                    onClick={event =>
+                      this.setState({ anchorEl: event.currentTarget })
+                    }
+                  >
+                    <MoreVert />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Menu
                 id="simple-menu"
                 anchorEl={this.state.anchorEl}
