@@ -57,7 +57,6 @@ export default graphql(
           },
           grid: {
             row: {
-              colors: ["#f2f2f2", "transparent"], // takes an array which will be repeated on columns
               opacity: 0.5,
             },
           },
@@ -233,7 +232,8 @@ export default graphql(
         )
 
       if (
-        this.props.floatSeriesData.floatSeriesValue
+        this.props.floatSeriesData.floatSeriesValue &&
+        this.props.floatSeriesData.floatSeriesValue.nodes[0]
       )
         return (
           <div style={{ height: "calc(100% - 64px)" }}>
@@ -246,7 +246,32 @@ export default graphql(
           </div>
         )
 
-      return "This plot is empty"
+      return (
+        <Typography
+          variant="h5"
+          style={
+            localStorage.getItem("nightMode") === "true"
+              ? {
+                  textAlign: "center",
+                  color: "white",
+                  height: "calc(100% - 64px)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }
+              : {
+                  textAlign: "center",
+                  height: "calc(100% - 64px)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }
+          }
+          className="notSelectable defaultCursor"
+        >
+          I'm an empty plot
+        </Typography>
+      )
     }
   }
 )

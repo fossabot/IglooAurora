@@ -14,7 +14,6 @@ import FullScreenCard from "./FullScreenCard"
 import { graphql } from "react-apollo"
 import gql from "graphql-tag"
 import Divider from "@material-ui/core/Divider"
-import RenameCardDialog from "./RenameCard"
 import DeleteValue from "./DeleteValue"
 import CardInfo from "./CardInfo.js"
 import Typography from "@material-ui/core/Typography"
@@ -34,15 +33,10 @@ import Create from "@material-ui/icons/Create"
 class Card extends Component {
   state = {
     isCardFullScreen: false,
-    renameCardOpen: false,
     infoOpen: false,
     anchorEl: null,
     cardSizeOpen: false,
     deleteOpen: false,
-  }
-
-  handleRenameCardDialogClose = () => {
-    this.setState({ renameCardOpen: false })
   }
 
   dataVisualizationDialogOpen = () => {
@@ -286,7 +280,6 @@ class Card extends Component {
                   </ListItemIcon>
                   <ListItemText inset primary="Information" disableTypography />
                 </MenuItem>
-                <Divider />
                 <MenuItem
                   primaryText="Resize"
                   onClick={() => {
@@ -299,20 +292,6 @@ class Card extends Component {
                   </ListItemIcon>
                   <ListItemText inset primary="Resize" disableTypography />
                 </MenuItem>
-                {value.myRole !== "SPECTATOR" && (
-                  <MenuItem
-                    primaryText="Rename"
-                    onClick={() => {
-                      this.setState({ renameCardOpen: true })
-                      this.handleMenuClose()
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Create />
-                    </ListItemIcon>
-                    <ListItemText inset primary="Rename" disableTypography />
-                  </MenuItem>
-                )}
               </Menu>
             </div>
           </div>
@@ -325,12 +304,6 @@ class Card extends Component {
           }}
           value={value}
           specificCard={specificCard}
-        />
-        <RenameCardDialog
-          renameCardOpen={this.state.renameCardOpen}
-          handleRenameCardDialogClose={this.handleRenameCardDialogClose}
-          cardName={valueTitle}
-          value={value}
         />
         <CardInfo
           infoOpen={this.state.infoOpen}
