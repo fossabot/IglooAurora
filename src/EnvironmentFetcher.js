@@ -743,7 +743,7 @@ export default graphql(
             $id: ID!
             $offset: Int!
             $filter: [DeviceFilter!]
-            $limit: PositiveInt!
+            $limit: NaturalNumber!
           ) {
             environment(id: $id) {
               id
@@ -818,7 +818,7 @@ export default graphql(
             $id: ID!
             $offset: Int!
             $filter: [DeviceFilter!]
-            $limit: PositiveInt!
+            $limit: NaturalNumber!
           ) {
             environment(id: $id) {
               id
@@ -893,7 +893,7 @@ export default graphql(
           $id: ID!
           $offset: Int!
           $filter: DeviceFilter
-          $limit: PositiveInt!
+          $limit: NaturalNumber!
         ) {
           environment(id: $id) {
             id

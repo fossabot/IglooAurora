@@ -72,7 +72,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
 
 const PendingSharesContent = graphql(
   gql`
-    query($limit: PositiveInt!, $offset: Int) {
+    query($limit: NaturalNumber!, $offset: Int) {
       user {
         id
         pendingEnvironmentShareCount
@@ -446,7 +446,7 @@ const PendingSharesContent = graphql(
                     this.queryMore()
                 }}
               >
-                <List style={{ width: "100%" }}>
+                <List style={{ height: "100%", padding: "0" }}>
                   {this.props.pendingEnvironmentSharesData.user.pendingEnvironmentShares.map(
                     pendingEnvironmentShare => (
                       <ListItem style={{ paddingLeft: "24px" }}>

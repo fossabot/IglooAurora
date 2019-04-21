@@ -9,7 +9,7 @@ const SHOWN_NODES = 20
 
 export default graphql(
   gql`
-    query($id: ID!, $offset: Int, $limit: PositiveInt!) {
+    query($id: ID!, $offset: Int, $limit: NaturalNumber!) {
       floatSeriesValue(id: $id) {
         id
         name

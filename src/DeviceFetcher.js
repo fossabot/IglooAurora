@@ -153,7 +153,7 @@ function DeviceFetcher(props) {
 
 export default graphql(
   gql`
-    query($id: ID!, $offset: Int, $limit: PositiveInt!) {
+    query($id: ID!, $offset: Int, $limit: NaturalNumber!) {
       device(id: $id) {
         id
         name

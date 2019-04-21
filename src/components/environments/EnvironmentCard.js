@@ -151,7 +151,6 @@ class EnvironmentCard extends Component {
       <Fragment>
         <Paper
           style={
-
             localStorage.getItem("nightMode") === "true"
               ? {
                   backgroundColor: "#2f333d",
@@ -205,7 +204,6 @@ class EnvironmentCard extends Component {
                     variant="h6"
                     className="notSelectable"
                     style={
-
                       localStorage.getItem("nightMode") === "true"
                         ? {
                             color: "white",
@@ -225,9 +223,9 @@ class EnvironmentCard extends Component {
                           }
                     }
                   >
-                    {(this.props.environment.admins[0] ||
-                      this.props.environment.editors[0] ||
-                      this.props.environment.spectators[0]) && (
+                    {(this.props.environment.adminCount ||
+                      this.props.environment.editorCount ||
+                      this.props.environment.spectatorCount) && (
                       <Group
                         style={{ marginRight: "8px", marginBottom: "-5px" }}
                       />
@@ -352,9 +350,8 @@ class EnvironmentCard extends Component {
             </ListItemIcon>
             <ListItemText inset primary="Share" disableTypography />
           </MenuItem>
-          {!(
-            this.props.userData.user.email ===
-            this.props.environment.owner.email
+          {(
+            this.props.environment.myRole !=="OWNER"
           ) && (
             <MenuItem
               onClick={() => {
@@ -476,10 +473,7 @@ class EnvironmentCard extends Component {
           close={() => this.setState({ shareOpen: false })}
           environment={this.props.environment}
           userData={this.props.userData}
-          nightMode={
-
-            localStorage.getItem("nightMode") === "true"
-          }
+          nightMode={localStorage.getItem("nightMode") === "true"}
           client={this.props.client}
         />
         <LeaveEnvironment
@@ -487,10 +481,7 @@ class EnvironmentCard extends Component {
           close={() => this.setState({ leaveOpen: false })}
           environment={this.props.environment}
           userData={this.props.userData}
-          nightMode={
-
-            localStorage.getItem("nightMode") === "true"
-          }
+          nightMode={localStorage.getItem("nightMode") === "true"}
         />
       </Fragment>
     )

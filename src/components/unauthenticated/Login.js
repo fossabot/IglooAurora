@@ -1194,8 +1194,7 @@ export default class Login extends Component {
                         <Typography
                           variant="h5"
                           style={
-
-                            localStorage.getItem("nightMode") === "true"
+this.props.mobile
                               ? {
                                   textAlign: "center",
                                   marginTop: "32px",

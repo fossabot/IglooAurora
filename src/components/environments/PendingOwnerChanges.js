@@ -72,7 +72,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
 
 const PendingSharesContent = graphql(
   gql`
-    query($limit: PositiveInt!, $offset: Int) {
+    query($limit: NaturalNumber!, $offset: Int) {
       user {
         id
         pendingOwnerChangeCount

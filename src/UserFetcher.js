@@ -690,63 +690,9 @@ export default graphql(
           muted
           picture
           myRole
-          pendingOwnerChanges {
-            id
-            receiver {
-              id
-              profileIconColor
-              name
-              email
-            }
-            sender {
-              id
-              profileIconColor
-              name
-              email
-            }
-          }
-          pendingEnvironmentShares {
-            id
-            role
-            receiver {
-              id
-              profileIconColor
-              name
-              email
-            }
-            sender {
-              id
-              name
-            }
-            environment {
-              id
-              name
-            }
-          }
-          owner {
-            id
-            email
-            name
-            profileIconColor
-          }
-          admins {
-            id
-            email
-            name
-            profileIconColor
-          }
-          editors {
-            id
-            email
-            name
-            profileIconColor
-          }
-          spectators {
-            id
-            email
-            name
-            profileIconColor
-          }
+          adminCount
+          editorCount
+          spectatorCount
         }
       }
     }

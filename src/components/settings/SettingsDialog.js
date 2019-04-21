@@ -304,7 +304,7 @@ class SettingsDialog extends Component {
     let settingsContent = (
       <SwipeableViews
         index={this.props.slideIndex}
-        onChangeIndex={this.props.handleChange}
+        onChangeIndex={this.props.handleSwipe}
       >
         <div
           style={

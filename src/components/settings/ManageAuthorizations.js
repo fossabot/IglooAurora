@@ -410,7 +410,7 @@ export default withMobileDialog({ breakpoint: "xs" })(
 
 const TokenContent = graphql(
   gql`
-    query($limit: PositiveInt!, $offset: Int!) {
+    query($limit: NaturalNumber!, $offset: Int!) {
       user {
         id
         permanentTokenCount
