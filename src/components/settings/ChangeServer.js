@@ -48,13 +48,10 @@ class ChangeServer extends Component {
   }
 
   selectUrl = (url, unsecure) => {
-    if (typeof Storage !== "undefined") {
       localStorage.setItem("server", url)
-      localStorage.setItem("accountList", "")
       localStorage.setItem("serverUnsecure", unsecure)
       localStorage.setItem("accountList", "[]")
       this.props.forceUpdate()
-    }
 
     this.setState({ redirectToAccounts: true })
   }
@@ -83,7 +80,6 @@ class ChangeServer extends Component {
     }).substr(7)
     let unsecure = this.state.unsecure
 
-    if (typeof Storage !== "undefined") {
       localStorage.setItem("server", url)
       localStorage.setItem("serverUnsecure", unsecure)
 
@@ -100,7 +96,8 @@ class ChangeServer extends Component {
               "serverList",
               JSON.stringify([{ name: this.state.name, url, unsecure }])
             ))
-    }
+    localStorage.setItem("accountList", "[]")
+    this.props.forceUpdate()
   }
 
   editServer = () => {
@@ -108,7 +105,6 @@ class ChangeServer extends Component {
       stripProtocol: true,
       removeTrailingSlash: false,
     })
-    if (typeof Storage !== "undefined") {
       if (this.isUrl(url) && localStorage.getItem("serverList")) {
         let tempList = JSON.parse(localStorage.getItem("serverList"))
         tempList.forEach(server => {
@@ -125,7 +121,7 @@ class ChangeServer extends Component {
 
         localStorage.setItem("serverList", JSON.stringify(tempList))
       }
-    }
+    localStorage.setItem("accountList", "[]")
   }
 
   deleteServer = url => {
